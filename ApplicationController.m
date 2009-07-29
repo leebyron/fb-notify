@@ -185,7 +185,8 @@ enum {
       title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
     }
     if ([[notification isUnread] isEqualToString:@"1"]) {
-      [bubbleManager addBubbleWithText:title duration:20.0];
+      NSImage *pic = [profilePics objectForKey:[notification senderId]];
+      [bubbleManager addBubbleWithText:title image:pic duration:20.0];
     }
 
     NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
@@ -232,6 +233,7 @@ enum {
                                 kInfoQueryName, notifQuery, kNotifQueryName,
                                 picQuery, kChainedPicQueryName, nil]];
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
+                             image:nil
                           duration:10.0];
 }
 

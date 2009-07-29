@@ -15,12 +15,7 @@
 
 @implementation BubbleWindow
 
-- (id)initWithFrame:(NSRect)frame text:(NSString *)text
-{
-  [self initWithFrame:frame text:text image:nil];
-}
-
-- (id)initWithFrame:(NSRect)frame text:(NSString *)text image:(NSURL *)image
+- (id)initWithFrame:(NSRect)frame image:(NSImage *)image text:(NSString *)text
 {
   self = [super initWithContentRect:frame
                           styleMask:NSBorderlessWindowMask
@@ -30,7 +25,7 @@
     // Set up the BubbleView, which draws the black rounded-rect background
     NSRect viewFrame = frame;
     viewFrame.origin = NSZeroPoint;
-    view = [[BubbleView alloc] initWithFrame:frame text:text];
+    view = [[BubbleView alloc] initWithFrame:frame image:image text:text];
     [self setContentView:view];
     [view release];
 

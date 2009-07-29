@@ -29,7 +29,9 @@
   [super dealloc];
 }
 
-- (void)addBubbleWithText:(NSString *)text duration:(NSTimeInterval)secs
+- (void)addBubbleWithText:(NSString *)text
+                    image:(NSImage *)image
+                 duration:(NSTimeInterval)secs
 {
   float windowHeight = [BubbleView totalHeightWithText:text inWidth:kBUBBLE_WIDTH];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
@@ -39,6 +41,7 @@
 
   NSRect windowRect = NSMakeRect(windowX, windowY, kBUBBLE_WIDTH, windowHeight);
   BubbleWindow *window = [[BubbleWindow alloc] initWithFrame:windowRect
+                                                       image:image
                                                         text:text];
 
   for (BubbleWindow *w in windows) {

@@ -10,11 +10,14 @@
 
 @interface BubbleView : NSView {
   NSString *text;
+  NSImage *image;
 }
 
 + (float)heightOfText:(NSString *)text inWidth:(float)width;
 + (float)totalHeightWithText:(NSString *)text inWidth:(float)width;
 
-- (id)initWithFrame:(NSRect)frame text:(NSString *)aString;
+- (id)initWithFrame:(NSRect)frame
+              image:(NSImage *)image
+               text:(NSString *)aString;
 
 @end

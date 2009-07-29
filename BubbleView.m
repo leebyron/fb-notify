@@ -36,11 +36,14 @@ static NSDictionary *attrs = nil;
           : textHeight);
 }
 
-- (id)initWithFrame:(NSRect)frame text:(NSString *)aString
+- (id)initWithFrame:(NSRect)frame
+              image:(NSImage *)img
+               text:(NSString *)aString
 {
   self = [super initWithFrame:frame];
   if (self) {
     text = [aString retain];
+    image = [img retain];
   }
   return self;
 }
@@ -48,7 +51,7 @@ static NSDictionary *attrs = nil;
 - (void)dealloc
 {
   [text release];
-  [attrs release];
+  [image release];
   [super dealloc];
 }
 
@@ -62,10 +65,14 @@ static NSDictionary *attrs = nil;
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] set];
   [roundedRect fill];
 
-  [[NSColor grayColor] set];
-  NSRectFill(NSMakeRect(kBUBBLE_PADDING,
-                        [self bounds].size.height - kBUBBLE_PADDING - kBUBBLE_ICON_SIZE,
-                        kBUBBLE_ICON_SIZE, kBUBBLE_ICON_SIZE));
+  NSRect imageRect = NSMakeRect(kBUBBLE_PADDING,
+                                [self bounds].size.height - kBUBBLE_PADDING
+                                  - kBUBBLE_ICON_SIZE,
+                                kBUBBLE_ICON_SIZE, kBUBBLE_ICON_SIZE);
+  [image drawInRect:imageRect
+           fromRect:NSZeroRect
+          operation:NSCompositeSourceOver
+           fraction:1.0];
 
   [[NSColor whiteColor] set];
   NSRect textRect;

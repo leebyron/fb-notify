@@ -16,8 +16,7 @@
   CAKeyframeAnimation *moveAnim;
 }
 
-- (id)initWithFrame:(NSRect)frame text:(NSString *)text;
-- (id)initWithFrame:(NSRect)frame text:(NSString *)text image:(NSURL *)url;
+- (id)initWithFrame:(NSRect)frame image:(NSImage *)image text:(NSString *)text;
 - (void)appear;
 - (void)disappear;
 - (void)slideDown:(float)distance;

@@ -12,6 +12,8 @@
   NSMutableArray *windows;
 }
 
-- (void)addBubbleWithText:(NSString *)text duration:(NSTimeInterval)secs;
+- (void)addBubbleWithText:(NSString *)text
+                    image:(NSImage *)image
+                 duration:(NSTimeInterval)secs;
 
 @end
