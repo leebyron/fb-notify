@@ -9,7 +9,7 @@
 #import "BubbleWindow.h"
 #import "BubbleView.h"
 
-#define kBUBBLE_WIDTH 400.0
+#define kBUBBLE_MAX_WIDTH 400.0
 #define kSPACING 10.0
 
 @implementation BubbleManager
@@ -33,19 +33,20 @@
                     image:(NSImage *)image
                  duration:(NSTimeInterval)secs
 {
-  float windowHeight = [BubbleView totalHeightWithText:text inWidth:kBUBBLE_WIDTH];
+  NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];  
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
-  float windowY = screen.height - menuBarHeight - windowHeight - kSPACING;
-  float windowX = screen.width - kBUBBLE_WIDTH - kSPACING;
+  float windowY = screen.height - menuBarHeight - windowSize.height - kSPACING;
+  float windowX = screen.width - windowSize.width - kSPACING;
 
-  NSRect windowRect = NSMakeRect(windowX, windowY, kBUBBLE_WIDTH, windowHeight);
+  NSRect windowRect = NSMakeRect(windowX, windowY, windowSize.width, windowSize.height);
+
   BubbleWindow *window = [[BubbleWindow alloc] initWithFrame:windowRect
                                                        image:image
                                                         text:text];
 
   for (BubbleWindow *w in windows) {
-    [w slideDown:windowHeight + kSPACING];
+    [w slideDown:windowSize.height + kSPACING];
   }
 
   [window appear];

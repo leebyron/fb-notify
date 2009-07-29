@@ -40,6 +40,7 @@ enum {
 - (void)constructMenu;
 - (void)makeStatusItem;
 - (void)swooshWindow;
+- (void)addQuitItem;
 
 @end
 
@@ -79,14 +80,19 @@ enum {
   [progressWindow center];
   [progressIndicator startAnimation:self];
   [fbSession startLogin];
+  [self makeStatusItem];
 }
 
 
 #pragma mark Private methods
 - (void)constructMenu
 {
-  statusItemMenu = [[NSMenu alloc] init];
+  // remove old
+  while ([statusItemMenu numberOfItems] > 0) {
+    [statusItemMenu removeItemAtIndex:0];
+  }
 
+  // add new
   NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
                                                         action:@selector(menuShowNewsFeed:)
                                                  keyEquivalent:@""];
@@ -118,6 +124,25 @@ enum {
   [statusItemMenu addItem:logoutItem];
   [logoutItem release];
   
+  [self addQuitItem];
+}
+
+- (void)makeStatusItem
+{
+  NSStatusBar *bar = [NSStatusBar systemStatusBar];
+  statusItem = [[bar statusItemWithLength:NSVariableStatusItemLength] retain];
+  
+  statusItemMenu = [[NSMenu alloc] init];
+
+  [statusItem setMenu:statusItemMenu];
+  [statusItem setHighlightMode:YES];
+  [statusItem setTitle:@"F"];
+  
+  [self addQuitItem];
+}
+
+- (void)addQuitItem
+{
   NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
                                                     action:@selector(terminate:)
                                              keyEquivalent:@""];
@@ -126,30 +151,9 @@ enum {
   [quitItem release];
 }
 
-- (void)makeStatusItem
-{
-  NSStatusBar *bar = [NSStatusBar systemStatusBar];
-  statusItem = [[bar statusItemWithLength:NSVariableStatusItemLength] retain];
-
-  [self constructMenu];
-  [self swooshWindow];
-  [statusItem setMenu:statusItemMenu];
-  [statusItem setHighlightMode:YES];
-  [statusItem setTitle:@"Facebook"];
-}
-
 - (void)swooshWindow
 {
-  // Put a view into the status item temporarily so we know where it is on screen
-  NSView *v = [[NSView alloc] initWithFrame:NSZeroRect];
-  NSRect destRect;
-  [statusItem setView:v];
-  destRect = [[v window] frame];
-  // Compensate for the width of the item
-  destRect.origin.x -= 20.0;
-  [statusItem setView:nil];
-
-  [progressWindow setFrame:destRect display:YES animate:YES];
+  [progressWindow orderOut:self];
 }
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
@@ -264,22 +268,14 @@ enum {
   }
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
-  [self makeStatusItem];
+  [self constructMenu];
+  [self swooshWindow];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error
 {
   [progressWindow orderOut:self];
   NSLog(@"%@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
-}
-
-
-#pragma mark Animation delegate methods
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
-{
-  if (flag) {
-    [progressWindow orderOut:self];
-  }
 }
 
 @end

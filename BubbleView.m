@@ -7,7 +7,8 @@
 
 #import "BubbleView.h"
 
-#define kBUBBLE_PADDING 6.0
+#define kBUBBLE_PADDING 5.0
+#define kBUBBLE_RADIUS 4.0
 #define kBUBBLE_ICON_SIZE 32.0
 
 static NSDictionary *attrs = nil;
@@ -21,19 +22,39 @@ static NSDictionary *attrs = nil;
             NSForegroundColorAttributeName, nil] retain];
 }
 
-+ (float)heightOfText:(NSString *)text inWidth:(float)width
++ (float)heightOfText:(NSString *)text maxWidth:(float)width
 {
-  return [text boundingRectWithSize:NSMakeSize(width, 1.0)
-                            options:NSStringDrawingUsesLineFragmentOrigin
-                         attributes:attrs].size.height;
+  NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
+                     options:NSStringDrawingUsesLineFragmentOrigin
+                  attributes:attrs].size;
+  return size.height;
 }
 
-+ (float)totalHeightWithText:(NSString *)text inWidth:(float)width
++ (float)widthOfText:(NSString *)text maxWidth:(float)width
 {
-  float textHeight = [self heightOfText:text inWidth:width];
-  return (textHeight < kBUBBLE_ICON_SIZE + 2 * kBUBBLE_PADDING
-          ? kBUBBLE_ICON_SIZE + 2 * kBUBBLE_PADDING
-          : textHeight);
+  NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
+                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:attrs].size;
+  return size.width;
+}
+
++ (NSSize)totalSizeWithText:(NSString *)text withImage:(BOOL)hasImage maxWidth:(float)maxWidth
+{
+  float textHeight = [self heightOfText:text maxWidth:maxWidth];
+  float totalHeight;
+  if (hasImage) {
+    totalHeight = MAX(textHeight, kBUBBLE_ICON_SIZE) + 2 * kBUBBLE_PADDING;
+  } else {
+    totalHeight = textHeight + 4 * kBUBBLE_PADDING;
+  }
+  
+  float textWidth = [self widthOfText:text maxWidth:(maxWidth - (hasImage?(kBUBBLE_ICON_SIZE + kBUBBLE_PADDING):0))];
+  float totalWidth = textWidth + 4 * kBUBBLE_PADDING;  
+  if (hasImage) {
+    totalWidth += kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
+  }
+  
+  return NSMakeSize(totalWidth, totalHeight);
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -60,8 +81,8 @@ static NSDictionary *attrs = nil;
   NSRectFill([self bounds]);
 
   NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:[self bounds]
-                                                              xRadius:kBUBBLE_PADDING
-                                                              yRadius:kBUBBLE_PADDING];
+                                                              xRadius:kBUBBLE_RADIUS
+                                                              yRadius:kBUBBLE_RADIUS];
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] set];
   [roundedRect fill];
 
@@ -75,17 +96,22 @@ static NSDictionary *attrs = nil;
            fraction:1.0];
 
   [[NSColor whiteColor] set];
+  
   NSRect textRect;
-  textRect.origin.x = kBUBBLE_PADDING + kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
+  textRect.origin.x = 2 * kBUBBLE_PADDING;
+  if (image != nil) {
+    textRect.origin.x += kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
+  }
   textRect.size.width = [self bounds].size.width - textRect.origin.x;
   textRect.size.height = [BubbleView heightOfText:text
-                                          inWidth:textRect.size.width];
+                                         maxWidth:textRect.size.width];
+  
   if (textRect.size.height < kBUBBLE_ICON_SIZE) {
     textRect.origin.y = ([self bounds].size.height - textRect.size.height) / 2;
   } else {
     textRect.origin.y = [self bounds].size.height - textRect.size.height;
   }
-  textRect.origin.y += 2.0;
+  textRect.origin.y += 1.0;
 
   [text drawInRect:textRect withAttributes:attrs];
 }
