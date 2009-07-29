@@ -154,16 +154,23 @@ enum {
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
 {
+  NSImage *silhouette = nil;
   for (NSXMLNode *xml in [fqlResultSet children]) {
     NSString *picUrl = [[xml childWithName:@"pic_square"] stringValue];
     if ([picUrl length] == 0) {
-      picUrl = kSilhouettePic;
+      if (silhouette == nil) {
+        NSURL *url = [NSURL URLWithString:kSilhouettePic];
+        silhouette = [[NSImage alloc] initWithContentsOfURL:url];
+      }
+      [profilePics setObject:silhouette forKey:[[xml childWithName:@"uid"] stringValue]];
+    } else {
+      NSURL *url = [NSURL URLWithString:picUrl];
+      NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
+      [profilePics setObject:pic forKey:[[xml childWithName:@"uid"] stringValue]];
+      [pic release];
     }
-    NSURL *url = [NSURL URLWithString:picUrl];
-    NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
-    [profilePics setObject:pic forKey:[[xml childWithName:@"uid"] stringValue]];
-    [pic release];
   }
+  [silhouette release];
 }
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
