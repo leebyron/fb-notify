@@ -73,7 +73,9 @@ static NSDictionary *attrs = nil;
 - (void)dealloc
 {
   [text release];
-  [image release];
+  if (image != nil) {
+    [image release];
+  }
   [super dealloc];
 }
 

@@ -29,11 +29,12 @@
   if (self) {
     manager      = mngr;
     disappearing = NO;
-    notification = [notif retain];
+    
+    if (notif) {
+      notification = [notif retain];
+    }
 
     // Set up the BubbleView, which draws the black rounded-rect background
-    NSRect viewFrame = frame;
-    viewFrame.origin = NSZeroPoint;
     view = [[BubbleView alloc] initWithFrame:frame image:image text:text];
     [self setContentView:view];
     [view release];
@@ -70,7 +71,10 @@
 
 - (void)dealloc
 {
-  [notification release];
+  NSLog(@"deallocing the bub window for %@", notification);
+  if (notification != nil) {
+    [notification release];
+  }
   [super dealloc];
 }
 
@@ -114,7 +118,9 @@
 
 - (void)mouseExited:(NSEvent *)event
 {
-  [notification markAsRead];
+  if (notification != nil) {
+    [notification markAsRead];
+  }
   [self disappear];
 }
 
@@ -132,7 +138,7 @@
   // as part of the window going away.
   if ([self alphaValue] < 0.01) {
     [[manager windows] removeObject:self];
-    [self orderOut:self];
+    [self close];
   }
 }
 

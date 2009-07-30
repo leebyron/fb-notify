@@ -5,7 +5,8 @@
 //  Copyright 2009 Facebook Inc. All rights reserved.
 //
 
-#import "secret.h"
+#import "secret.h" // defines kAppKey and kAppSecret. Fill in for your own app!
+
 #import "ApplicationController.h"
 #import "BubbleWindow.h"
 #import "FBNotification.h"
