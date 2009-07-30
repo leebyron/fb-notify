@@ -14,6 +14,8 @@
 
 @implementation BubbleManager
 
+@synthesize windows;
+
 - (id)init
 {
   self = [super init];
@@ -31,7 +33,7 @@
 
 - (void)addBubbleWithText:(NSString *)text
                     image:(NSImage *)image
-                 duration:(NSTimeInterval)secs
+             notification:(FBNotification *)notif
 {
   NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];  
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
@@ -44,21 +46,14 @@
   }
   NSRect windowRect = NSMakeRect(windowX, windowY, windowSize.width, windowSize.height);
 
-  BubbleWindow *window = [[BubbleWindow alloc] initWithFrame:windowRect
-                                                       image:image
-                                                        text:text];
+  BubbleWindow *window = [[BubbleWindow alloc] initWithManager:self
+                                                         frame:windowRect
+                                                         image:image
+                                                          text:text
+                                                  notification:notif];
   [window appear];
   [windows addObject:window];
-  [self performSelector:@selector(killWindow:)
-             withObject:window
-             afterDelay:secs];
   [window release];
-}
-
-- (void)killWindow:(BubbleWindow *)window
-{
-  [window disappear];
-  [windows removeObject:window];
 }
 
 @end

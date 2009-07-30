@@ -6,22 +6,31 @@
 //
 
 #import "BubbleWindow.h"
+#import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
 #define kANIMATION_DURATION 0.2
 #define kCLOSE_SLIDE_DISTANCE 5
-
+#define kDisplayTime 6
 
 @implementation BubbleWindow
 
-- (id)initWithFrame:(NSRect)frame image:(NSImage *)image text:(NSString *)text
+- (id)initWithManager:(BubbleManager *)mngr
+                frame:(NSRect)frame
+                image:(NSImage *)image
+                 text:(NSString *)text
+         notification:(FBNotification *)notif
 {
   self = [super initWithContentRect:frame
                           styleMask:NSBorderlessWindowMask
                             backing:NSBackingStoreBuffered
                               defer:YES];
   if (self) {
+    manager      = mngr;
+    disappearing = NO;
+    notification = [notif retain];
+
     // Set up the BubbleView, which draws the black rounded-rect background
     NSRect viewFrame = frame;
     viewFrame.origin = NSZeroPoint;
@@ -48,8 +57,21 @@
     [self setLevel:NSFloatingWindowLevel];
     [self setOpaque:NO];
     [self setAlphaValue:1.0];
+    
+    [view addTrackingRect:[view bounds] owner:self userData:nil assumeInside:NO];
+    
+    // Prep to remove it
+    [self performSelector:@selector(disappear)
+               withObject:nil
+               afterDelay:kDisplayTime];
   }
   return self;
+}
+
+- (void)dealloc
+{
+  [notification release];
+  [super dealloc];
 }
 
 - (void)appear
@@ -62,6 +84,13 @@
 
 - (void)disappear
 {
+  if (disappearing) {
+    return;
+  }
+  disappearing = YES;
+  [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                           selector:@selector(disappear)
+                                             object:nil];
   [self setAlphaValue:1.0];
   [[self animator] setAlphaValue:0.0];
 }
@@ -76,17 +105,34 @@
   [[self animator] setFrameOrigin:[self frame].origin];
 }
 
+- (void)mouseEntered:(NSEvent *)event
+{
+  [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                           selector:@selector(disappear)
+                                             object:nil];
+}
+
+- (void)mouseExited:(NSEvent *)event
+{
+  [notification markAsRead];
+  [self disappear];
+}
+
 - (void)mouseUp:(NSEvent *)event
 {
+  if (notification != nil) {
+    [[NSApp delegate] readNotification:notification];
+  }
   [self disappear];
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-  // If the alpha value is 0, this means the "fade out" animation just finished
+  // If the alpha value is near 0, this means the "fade out" animation just finished
   // as part of the window going away.
-  if ([self alphaValue] == 0.0) {
+  if ([self alphaValue] < 0.01) {
     [self orderOut:self];
+    [[manager windows] removeObject:self];
   }
 }
 

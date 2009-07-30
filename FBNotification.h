@@ -6,14 +6,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "NotificationManager.h"
 
 @interface FBNotification : NSObject {
+  NotificationManager *manager;
   NSMutableDictionary *fields;
 }
 
-+ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node;
-- (id)initWithXMLNode:(NSXMLNode *)node;
++ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
+- (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
 
 - (void)markAsRead;
 - (NSString *)uidForKey:(NSString *)key;

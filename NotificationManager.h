@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "FBNotification.h"
 
 @interface NotificationManager : NSObject {
   NSMutableDictionary *allDict;
@@ -20,7 +19,6 @@
 @property(retain) NSMutableArray *unreadNotifications;
 
 -(NSMutableArray *)addNotificationsFromXML:(NSXMLNode *)xml;
--(void)markAsRead:(FBNotification *)notification;
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
 

@@ -7,7 +7,7 @@
 //
 
 #import "NotificationManager.h"
-#import <FBCocoa/FBCocoa.h>
+#import "FBNotification.h"
 
 @implementation NotificationManager
 
@@ -40,7 +40,7 @@
 
   for (NSXMLNode *node in [xml children]) {
     
-    FBNotification *notification = [FBNotification notificationWithXMLNode:node];
+    FBNotification *notification = [FBNotification notificationWithXMLNode:node manager:self];
     if ([notification boolForKey:@"isHidden"]) {
       continue;
     }
@@ -75,17 +75,6 @@
   }
 
   return newNotifications;
-}
-
--(void)markAsRead:(FBNotification *)notification {
-  NSString *notificationID = [notification uidForKey:@"notificationId"];
-  FBNotification *existingNotification = [allDict objectForKey:notificationID];
-  [unreadNotifications removeObject:existingNotification];
-  [existingNotification markAsRead];
-
-  [[FBSession session] callMethod:@"notifications.markRead"
-                    withArguments:[NSDictionary dictionaryWithObject:notificationID
-                                                              forKey:@"notification_ids"]];
 }
 
 -(int)unreadCount {

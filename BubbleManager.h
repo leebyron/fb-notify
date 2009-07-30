@@ -6,14 +6,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "FBNotification.h"
 
 @interface BubbleManager : NSObject {
   NSMutableArray *windows;
 }
 
+@property(retain) NSMutableArray *windows;
+
 - (void)addBubbleWithText:(NSString *)text
                     image:(NSImage *)image
-                 duration:(NSTimeInterval)secs;
+             notification:(FBNotification *)notif;
 
 @end

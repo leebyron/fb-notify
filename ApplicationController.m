@@ -9,10 +9,11 @@
 #import "ApplicationController.h"
 #import "BubbleWindow.h"
 #import "FBNotification.h"
+#import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-#define kQueryInterval 10
+#define kQueryInterval 30
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
@@ -76,19 +77,7 @@
 - (IBAction)menuShowNotification:(id)sender
 {
   FBNotification *notification = [sender representedObject];
-
-  // load action url
-  NSURL *url = [notification urlForKey:@"href"];
-  [[NSWorkspace sharedWorkspace] openURL:url];
-
-  // mark this notification as read
-  if ([notification boolForKey:@"isUnread"]) {
-    [notifications markAsRead:notification];
-
-    // update menu and icon
-    [menu setIconByAreUnread:[notifications unreadCount] > 0];
-    [menu constructWithNotifications:[notifications allNotifications]];
-  }
+  [self readNotification:notification];
 }
 
 - (IBAction)menuShowAllNotifications:(id)sender
@@ -97,6 +86,22 @@
 }
 
 #pragma mark Private methods
+- (void)readNotification:(FBNotification *)notification
+{
+  // load action url
+  NSURL *url = [notification urlForKey:@"href"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
+  
+  // mark this notification as read
+  if ([notification boolForKey:@"isUnread"]) {
+    [notification markAsRead];
+    
+    // update menu and icon
+    [menu setIconByAreUnread:[notifications unreadCount] > 0];
+    [menu constructWithNotifications:[notifications allNotifications]];
+  }  
+}
+
 - (void)query
 {
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt, [fbSession uid], [notifications mostRecentUpdateTime]];
@@ -145,7 +150,7 @@
       NSImage *pic = [profilePics objectForKey:[notification uidForKey:@"senderId"]];
       [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
                                  image:pic
-                              duration:6.0];
+                          notification:notification];
     }
   }
 
@@ -158,7 +163,7 @@
 {
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
                              image:nil
-                          duration:3.0];
+                      notification:nil];
   [self query];
 }
 

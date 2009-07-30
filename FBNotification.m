@@ -7,18 +7,20 @@
 
 #import "FBNotification.h"
 #import "NSString-XML.h"
+#import <FBCocoa/FBCocoa.h>
 
 @implementation FBNotification
 
-+ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node
++ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr
 {
-  return [[[self alloc] initWithXMLNode:node] autorelease];
+  return [[[self alloc] initWithXMLNode:node manager:mngr] autorelease];
 }
 
-- (id)initWithXMLNode:(NSXMLNode *)node
+- (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr
 {
   self = [super init];
   if (self) {
+    manager = mngr;
     fields = [[NSMutableDictionary alloc] init];
     for (NSXMLNode *child in [node children]) {
       // Convert from underscore_words to camelCase
@@ -44,6 +46,13 @@
 - (void)markAsRead
 {
   [fields setObject:@"0" forKey:@"isUnread"];
+
+  NSString *notificationID = [self uidForKey:@"notificationId"];
+  [[manager unreadNotifications] removeObject:self];
+
+  [[FBSession session] callMethod:@"notifications.markRead"
+                    withArguments:[NSDictionary dictionaryWithObject:notificationID
+                                                              forKey:@"notification_ids"]];
 }
 
 - (NSString *)uidForKey:(NSString *)key
