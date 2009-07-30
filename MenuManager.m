@@ -55,8 +55,10 @@ enum {
 
 - (void)dealloc
 {
-  [userName release];
-  [profileURL release];
+  if (userName != nil) {
+    [userName release];
+    [profileURL release];
+  }
   [statusItem release];
   [statusItemMenu release];
   [super dealloc];
