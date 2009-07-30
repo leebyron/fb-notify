@@ -21,7 +21,7 @@
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
   @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
   @"href, app_id, is_unread, is_hidden FROM notification "\
-  @"WHERE recipient_id = %@ AND updated_time > %i" \
+  @"WHERE recipient_id = %@ AND (notification_id IN (%@) OR updated_time > %i) " \
   @"ORDER BY created_time ASC"
 #define kChainedPicQueryName @"pic"
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
@@ -104,7 +104,15 @@
 
 - (void)query
 {
-  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt, [fbSession uid], [notifications mostRecentUpdateTime]];
+  NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
+  for (FBNotification *notification in [notifications unreadNotifications]) {
+    [unreadIDs addObject:[notification uidForKey:@"notificationId"]];
+  }
+  
+  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
+                          [fbSession uid],
+                          [unreadIDs componentsJoinedByString:@","],
+                          [notifications mostRecentUpdateTime]];
   NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
 
   NSDictionary *multiQuery;
