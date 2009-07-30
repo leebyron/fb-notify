@@ -145,7 +145,7 @@
       NSImage *pic = [profilePics objectForKey:[notification uidForKey:@"senderId"]];
       [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
                                  image:pic
-                              duration:20.0];
+                              duration:6.0];
     }
   }
 
@@ -158,7 +158,7 @@
 {
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
                              image:nil
-                          duration:10.0];
+                          duration:3.0];
   [self query];
 }
 
