@@ -6,7 +6,6 @@
 //
 
 #import "secret.h"
-#import "NSString-XML.h"
 #import "ApplicationController.h"
 #import "BubbleWindow.h"
 #import "FBNotification.h"
@@ -70,8 +69,8 @@
 - (IBAction)menuShowNotification:(id)sender
 {
   FBNotification *notification = [sender representedObject];
-  NSString *url = [notification href];
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+  NSURL *url = [notification urlForKey:@"href"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
 #pragma mark Private methods
@@ -102,14 +101,14 @@
   for (NSXMLNode *xml in [fqlResultSet children]) {
 
     FBNotification *notification = [FBNotification notificationWithXMLNode:xml];
-    if ([[notification isHidden] isEqualToString:@"1"]) {
+    if ([notification boolForKey:@"isHidden"]) {
       continue;
     }
 
-    if ([[notification isUnread] isEqualToString:@"1"]) {
+    if ([notification boolForKey:@"isUnread"]) {
       areUnread = YES;
-      NSImage *pic = [profilePics objectForKey:[notification senderId]];
-      [bubbleManager addBubbleWithText:[[notification titleText] stringByDecodingXMLEntities]
+      NSImage *pic = [profilePics objectForKey:[notification uidForKey:@"senderId"]];
+      [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
                                  image:pic
                               duration:20.0];
     }

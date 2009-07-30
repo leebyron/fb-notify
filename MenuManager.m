@@ -85,7 +85,7 @@ enum {
   [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
   [statusItemMenu addItem:newsFeedItem];
   [newsFeedItem release];
-  
+
   NSMenuItem *profileItem = [[NSMenuItem alloc] initWithTitle:userName
                                                        action:@selector(menuShowProfile:)
                                                 keyEquivalent:@""];
@@ -104,7 +104,7 @@ enum {
         break;
       }
 
-      NSString *title = [[notification titleText] stringByDecodingXMLEntities];
+      NSString *title = [notification stringForKey:@"titleText"];
       if ([title length] > kMaxNotificationStringLen) {
         title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
       }

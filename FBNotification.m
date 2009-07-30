@@ -6,7 +6,7 @@
 //
 
 #import "FBNotification.h"
-
+#import "NSString-XML.h"
 
 @implementation FBNotification
 
@@ -41,29 +41,24 @@
   [super dealloc];
 }
 
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
+- (NSString *)uidForKey:(NSString *)key
 {
-  // Small sanity check: make sure it's a no-parameter method
-  NSString *name = NSStringFromSelector(sel);
-  if ([[name componentsSeparatedByString:@":"] count] > 1) {
-    return nil;
-  }
-
-  return [super methodSignatureForSelector:@selector(thing)];
+  return [fields objectForKey:key];
 }
 
-- (id)thing {
-  return nil;
+- (NSString *)stringForKey:(NSString *)key
+{
+  return [[fields objectForKey:key] stringByDecodingXMLEntities];
 }
 
-- (void)forwardInvocation:(NSInvocation *)invocation
+- (BOOL)boolForKey:(NSString *)key
 {
-  // Kids, don't try this at home
-  NSString *name = NSStringFromSelector([invocation selector]);
+  return [[fields objectForKey:key] isEqualToString:@"1"];
+}
 
-  // Look up the key
-  id content = [fields objectForKey:name];
-  [invocation setReturnValue:&content];
+- (NSURL *)urlForKey:(NSString *)key
+{
+  return [NSURL URLWithString:[fields objectForKey:key]];
 }
 
 @end
