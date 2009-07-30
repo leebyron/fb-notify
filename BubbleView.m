@@ -8,7 +8,8 @@
 #import "BubbleView.h"
 
 #define kBUBBLE_PADDING 5.0
-#define kBUBBLE_RADIUS 4.0
+#define kBUBBLE_RADIUS 5.0
+#define kPIC_RADIUS 3.0
 #define kBUBBLE_ICON_SIZE 32.0
 
 static NSDictionary *attrs = nil;
@@ -77,26 +78,16 @@ static NSDictionary *attrs = nil;
 }
 
 - (void)drawRect:(NSRect)rect {
+  // draw background space
   [[NSColor clearColor] set];
   NSRectFill([self bounds]);
-
   NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:[self bounds]
                                                               xRadius:kBUBBLE_RADIUS
                                                               yRadius:kBUBBLE_RADIUS];
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] set];
   [roundedRect fill];
-
-  NSRect imageRect = NSMakeRect(kBUBBLE_PADDING,
-                                [self bounds].size.height - kBUBBLE_PADDING
-                                  - kBUBBLE_ICON_SIZE,
-                                kBUBBLE_ICON_SIZE, kBUBBLE_ICON_SIZE);
-  [image drawInRect:imageRect
-           fromRect:NSZeroRect
-          operation:NSCompositeSourceOver
-           fraction:1.0];
-
-  [[NSColor whiteColor] set];
   
+  // draw white notify text
   NSRect textRect;
   textRect.origin.x = 2 * kBUBBLE_PADDING;
   if (image != nil) {
@@ -113,7 +104,24 @@ static NSDictionary *attrs = nil;
   }
   textRect.origin.y += 1.0;
 
+  [[NSColor whiteColor] set];
   [text drawInRect:textRect withAttributes:attrs];
+  
+  // draw rounded profile pic
+  [NSGraphicsContext saveGraphicsState];
+  NSRect imageRect = NSMakeRect(kBUBBLE_PADDING,
+                                [self bounds].size.height - kBUBBLE_PADDING - kBUBBLE_ICON_SIZE,
+                                kBUBBLE_ICON_SIZE,
+                                kBUBBLE_ICON_SIZE);
+  NSBezierPath *imgRoundedRect = [NSBezierPath bezierPathWithRoundedRect:imageRect
+                                                                 xRadius:kPIC_RADIUS
+                                                                 yRadius:kPIC_RADIUS];
+  [imgRoundedRect addClip];
+  [image drawInRect:imageRect
+           fromRect:NSZeroRect
+          operation:NSCompositeSourceOver
+           fraction:1.0];
+  [NSGraphicsContext restoreGraphicsState];
 }
 
 @end
