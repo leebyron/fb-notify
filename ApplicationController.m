@@ -73,6 +73,11 @@
   [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
+- (IBAction)menuShowAllNotifications:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
+}
+
 #pragma mark Private methods
 - (void)processPics:(NSXMLNode *)fqlResultSet
 {

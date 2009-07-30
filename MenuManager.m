@@ -9,13 +9,15 @@
 #import "MenuManager.h"
 #import "FBNotification.h"
 
-#define kMaxNotificationsInMenu 20
-#define kMaxNotificationStringLen 60
+#define kMaxNotifications 12
+#define kMinNotifications 5
+#define kMaxStringLen 60
 #define kEllipsis @"\u2026"
 
 enum {
   NEWS_FEED_LINK_TAG,
   PROFILE_LINK_TAG,
+  MORE_LINK_TAG,
   LOGOUT_TAG,
   QUIT_TAG
 };
@@ -98,23 +100,44 @@ enum {
   
   if ([notifications count] > 0) {
     // display the latest few notifications in the menu
-    int notifCount = 0;
+    int addedNotifications = 0;
+    int extraNotifications = 0;
     for (FBNotification *notification in notifications) {
-      if (notifCount++ >= kMaxNotificationsInMenu) {
-        break;
+      
+      // maintain between kMinNotifications and kMaxNotifications
+      if (addedNotifications >= kMinNotifications &&
+          (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {
+        if ([notification boolForKey:@"isUnread"]) {
+          extraNotifications++;
+        }
+        continue;
       }
 
+      // add item to menu
       NSString *title = [notification stringForKey:@"titleText"];
-      if ([title length] > kMaxNotificationStringLen) {
-        title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
+      if ([title length] > kMaxStringLen) {
+        title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
       }
-
       NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
                                                     action:@selector(menuShowNotification:)
                                              keyEquivalent:@""];
       [item setRepresentedObject:notification];
       [statusItemMenu addItem:item];
       [item release];
+      addedNotifications++;
+    }
+    
+    if (extraNotifications > 0) {
+      NSString *more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
+      if (extraNotifications > 1) {
+        more = [more stringByAppendingString:@"s"];
+      }
+      NSMenuItem *moreItem = [[NSMenuItem alloc] initWithTitle:more
+                                                        action:@selector(menuShowAllNotifications:)
+                                                 keyEquivalent:@""];
+      [moreItem setTag:MORE_LINK_TAG];
+      [statusItemMenu addItem:moreItem];
+      [moreItem release];
     }
 
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
