@@ -13,6 +13,7 @@
 		53F6FCBB1021355C00CAE806 /* fb_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCBA1021355C00CAE806 /* fb_active.png */; };
 		53F6FCBD1021356600CAE806 /* fb_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCBC1021356600CAE806 /* fb_empty.png */; };
 		53F6FCD5102136A300CAE806 /* MenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F6FCD4102136A300CAE806 /* MenuManager.m */; };
+		53F6FDEB10215E4000CAE806 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F6FDEA10215E4000CAE806 /* NotificationManager.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -74,6 +75,8 @@
 		53F6FCBC1021356600CAE806 /* fb_empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_empty.png; sourceTree = "<group>"; };
 		53F6FCD3102136A300CAE806 /* MenuManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuManager.h; sourceTree = "<group>"; };
 		53F6FCD4102136A300CAE806 /* MenuManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuManager.m; sourceTree = "<group>"; };
+		53F6FDE910215E4000CAE806 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
+		53F6FDEA10215E4000CAE806 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Facebook Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Facebook Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		931F2013101E7A5F00ED25F6 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBNotification.h; sourceTree = "<group>"; };
@@ -122,6 +125,8 @@
 				9353434410192D17002C6CBD /* BubbleView.m */,
 				53F6FCD3102136A300CAE806 /* MenuManager.h */,
 				53F6FCD4102136A300CAE806 /* MenuManager.m */,
+				53F6FDE910215E4000CAE806 /* NotificationManager.h */,
+				53F6FDEA10215E4000CAE806 /* NotificationManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 				53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */,
 				931F2015101E7A5F00ED25F6 /* FBNotification.m in Sources */,
 				53F6FCD5102136A300CAE806 /* MenuManager.m in Sources */,
+				53F6FDEB10215E4000CAE806 /* NotificationManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

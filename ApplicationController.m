@@ -12,13 +12,15 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
+#define kQueryInterval 10
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
 #define kNotifQueryName @"notif"
-#define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id," \
-  @"created_time, updated_time, title_html, title_text, body_html, body_text," \
-  @"href, app_id, is_unread, is_hidden FROM notification WHERE recipient_id = %@"
+#define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
+  @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
+  @"href, app_id, is_unread, is_hidden FROM notification "\
+  @"WHERE recipient_id = %@ AND updated_time > %i"
 #define kChainedPicQueryName @"pic"
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
   @"SELECT sender_id FROM #%@)"
@@ -29,11 +31,11 @@
 {
   self = [super init];
   if (self) {
-    fbSession = [[FBSession alloc] initWithAPIKey:kAppKey
-                                           secret:kAppSecret
-                                         delegate:self];
+    fbSession = [FBSession sessionWithAPIKey:kAppKey
+                                      secret:kAppSecret
+                                    delegate:self];
     [fbSession setPersistentSessionUserDefaultsKey:@"PersistentSession"];
-    notificationMenuItems = [[NSMutableArray alloc] init];
+    notifications = [[NotificationManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics = [[NSMutableDictionary alloc] init];
     menu = [[MenuManager alloc] init];
@@ -44,9 +46,10 @@
 - (void)dealloc
 {
   [fbSession release];
-  [notificationMenuItems release];
-  [profilePics release];
+  [notifications release];
+  [bubbleManager release];
   [menu release];
+  [profilePics release];
   [super dealloc];
 }
 
@@ -69,8 +72,19 @@
 - (IBAction)menuShowNotification:(id)sender
 {
   FBNotification *notification = [sender representedObject];
+
+  // load action url
   NSURL *url = [notification urlForKey:@"href"];
   [[NSWorkspace sharedWorkspace] openURL:url];
+
+  // mark this notification as read
+  if ([notification boolForKey:@"isUnread"]) {
+    [notifications markAsRead:notification];
+
+    // update menu and icon
+    [menu setIconByAreUnread:[notifications unreadCount] > 0];
+    [menu constructWithNotifications:[notifications allNotifications]];
+  }
 }
 
 - (IBAction)menuShowAllNotifications:(id)sender
@@ -79,6 +93,25 @@
 }
 
 #pragma mark Private methods
+- (void)query
+{
+  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt, [fbSession uid], [notifications mostRecentUpdateTime]];
+  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
+
+  NSDictionary *multiQuery;
+  if ([menu profileURL] == nil) {
+    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [fbSession uid]];
+    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
+                  kInfoQueryName, notifQuery, kNotifQueryName,
+                  picQuery, kChainedPicQueryName, nil];
+  } else {
+    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:notifQuery,
+                  kNotifQueryName, picQuery, kChainedPicQueryName, nil];
+  }
+
+  [fbSession sendFQLMultiquery:multiQuery];
+}
+
 - (void)processPics:(NSXMLNode *)fqlResultSet
 {
   for (NSXMLNode *xml in [fqlResultSet children]) {
@@ -102,47 +135,33 @@
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
 {
-  BOOL areUnread = NO;
-  for (NSXMLNode *xml in [fqlResultSet children]) {
-
-    FBNotification *notification = [FBNotification notificationWithXMLNode:xml];
-    if ([notification boolForKey:@"isHidden"]) {
-      continue;
-    }
-
+  NSMutableArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
+  
+  for (FBNotification *notification in newNotifications) {
     if ([notification boolForKey:@"isUnread"]) {
-      areUnread = YES;
       NSImage *pic = [profilePics objectForKey:[notification uidForKey:@"senderId"]];
       [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
                                  image:pic
                               duration:20.0];
     }
-
-    [notificationMenuItems addObject:notification];
   }
-
-  [menu setIconByAreUnread:areUnread];
-  [menu constructWithNotifications:notificationMenuItems];
+  
+  [menu setIconByAreUnread:[notifications unreadCount] > 0];
+  [menu constructWithNotifications:[notifications allNotifications]];
 }
 
 #pragma mark Session delegate methods
 - (void)sessionCompletedLogin:(FBSession *)s
 {
-  NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [s uid]];
-  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt, [s uid]];
-  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
-
-  [fbSession sendFQLMultiquery:[NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
-                                kInfoQueryName, notifQuery, kNotifQueryName,
-                                picQuery, kChainedPicQueryName, nil]];
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
                              image:nil
                           duration:10.0];
+  [self query];
 }
 
 - (void)session:(FBSession *)session completedMultiquery:(NSXMLDocument *)response
 {
-  NSLog(@"%@", response);
+  //NSLog(@"%@", response);
   NSXMLNode *node = [response rootElement];
   while (![[node name] isEqualToString:@"fql_result"]) {
     node = [node nextNode];
@@ -167,11 +186,24 @@
   }
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
+  
+  // get ready to query again shortly...
+  NSTimer *timer = [NSTimer timerWithTimeInterval:kQueryInterval
+                                           target:self
+                                         selector:@selector(query)
+                                         userInfo:nil
+                                          repeats:NO];
+  [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error
 {
-  NSLog(@"%@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+}
+
+- (void)session:(FBSession *)session failedCallMethod:(NSError *)error
+{
+  NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 @end

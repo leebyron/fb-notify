@@ -55,8 +55,8 @@ enum {
 
 - (void)dealloc
 {
-  self.userName = nil;
-  self.profileURL = nil;
+  [userName release];
+  [profileURL release];
   [statusItem release];
   [statusItemMenu release];
   [super dealloc];
@@ -64,8 +64,8 @@ enum {
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url
 {
-  userName   = name;
-  profileURL = url;
+  userName   = [name retain];
+  profileURL = [url retain];
 }
 
 - (void)setIconByAreUnread:(BOOL)areUnread
@@ -79,7 +79,7 @@ enum {
   while ([statusItemMenu numberOfItems] > 0) {
     [statusItemMenu removeItemAtIndex:0];
   }
-  
+
   // add new
   NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
                                                         action:@selector(menuShowNewsFeed:)
@@ -103,7 +103,6 @@ enum {
     int addedNotifications = 0;
     int extraNotifications = 0;
     for (FBNotification *notification in notifications) {
-      
       // maintain between kMinNotifications and kMaxNotifications
       if (addedNotifications >= kMinNotifications &&
           (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {

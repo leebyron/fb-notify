@@ -28,7 +28,7 @@ static NSDictionary *attrs = nil;
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                      options:NSStringDrawingUsesLineFragmentOrigin
                   attributes:attrs].size;
-  return size.height;
+  return ceil(size.height);
 }
 
 + (float)widthOfText:(NSString *)text maxWidth:(float)width
@@ -36,7 +36,7 @@ static NSDictionary *attrs = nil;
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                                    options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:attrs].size;
-  return size.width;
+  return ceil(size.width);
 }
 
 + (NSSize)totalSizeWithText:(NSString *)text withImage:(BOOL)hasImage maxWidth:(float)maxWidth

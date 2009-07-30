@@ -41,6 +41,11 @@
   [super dealloc];
 }
 
+- (void)markAsRead
+{
+  [fields setObject:@"0" forKey:@"isUnread"];
+}
+
 - (NSString *)uidForKey:(NSString *)key
 {
   return [fields objectForKey:key];

@@ -15,6 +15,7 @@
 + (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node;
 - (id)initWithXMLNode:(NSXMLNode *)node;
 
+- (void)markAsRead;
 - (NSString *)uidForKey:(NSString *)key;
 - (NSString *)stringForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)key;
