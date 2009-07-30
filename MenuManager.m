@@ -104,7 +104,8 @@ enum {
     // display the latest few notifications in the menu
     int addedNotifications = 0;
     int extraNotifications = 0;
-    for (FBNotification *notification in notifications) {
+    for (int i = [notifications count] - 1; i >= 0; i--) {
+      FBNotification *notification = [notifications objectAtIndex:i];
       // maintain between kMinNotifications and kMaxNotifications
       if (addedNotifications >= kMinNotifications &&
           (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {

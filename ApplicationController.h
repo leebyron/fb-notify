@@ -15,7 +15,7 @@
   NSImage *silhouette;
 
   FBSession *fbSession;
-  
+
   MenuManager *menu;
   NotificationManager *notifications;
 
