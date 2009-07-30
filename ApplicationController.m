@@ -39,7 +39,6 @@ enum {
 
 - (void)constructMenu;
 - (void)makeStatusItem;
-- (void)swooshWindow;
 - (void)addQuitItem;
 
 @end
@@ -77,8 +76,6 @@ enum {
 
 - (void)awakeFromNib
 {
-  [progressWindow center];
-  [progressIndicator startAnimation:self];
   [fbSession startLogin];
   [self makeStatusItem];
 }
@@ -151,26 +148,21 @@ enum {
   [quitItem release];
 }
 
-- (void)swooshWindow
-{
-  [progressWindow orderOut:self];
-}
-
 - (void)processPics:(NSXMLNode *)fqlResultSet
 {
-  NSImage *silhouette = nil;
   for (NSXMLNode *xml in [fqlResultSet children]) {
+    NSString *uid = [[xml childWithName:@"uid"] stringValue];
     NSString *picUrl = [[xml childWithName:@"pic_square"] stringValue];
     if ([picUrl length] == 0) {
       if (silhouette == nil) {
         NSURL *url = [NSURL URLWithString:kSilhouettePic];
         silhouette = [[NSImage alloc] initWithContentsOfURL:url];
       }
-      [profilePics setObject:silhouette forKey:[[xml childWithName:@"uid"] stringValue]];
+      [profilePics setObject:silhouette forKey:uid];
     } else {
       NSURL *url = [NSURL URLWithString:picUrl];
       NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
-      [profilePics setObject:pic forKey:[[xml childWithName:@"uid"] stringValue]];
+      [profilePics setObject:pic forKey:uid];
       [pic release];
     }
   }
@@ -196,7 +188,8 @@ enum {
       title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
     }
     if ([[notification isUnread] isEqualToString:@"1"]) {
-      NSImage *pic = [profilePics objectForKey:[notification senderId]];
+      NSString *uid = [notification senderId];
+      NSImage *pic = [profilePics objectForKey:uid];
       [bubbleManager addBubbleWithText:title image:pic duration:20.0];
     }
 
@@ -276,12 +269,10 @@ enum {
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
   [self constructMenu];
-  [self swooshWindow];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error
 {
-  [progressWindow orderOut:self];
   NSLog(@"%@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 

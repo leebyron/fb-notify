@@ -10,7 +10,7 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #define kANIMATION_DURATION 0.2
-#define kCLOSE_SLIDE_DISTANCE 20
+#define kCLOSE_SLIDE_DISTANCE 5
 
 
 @implementation BubbleWindow
@@ -57,25 +57,23 @@
   [self setAlphaValue:0.0];
   [self makeKeyAndOrderFront:self];
   [[self animator] setAlphaValue:1.0];
+  [self slideDown:kCLOSE_SLIDE_DISTANCE];
 }
 
 - (void)disappear
 {
   [self setAlphaValue:1.0];
   [[self animator] setAlphaValue:0.0];
-  [self slideDown:kCLOSE_SLIDE_DISTANCE];
 }
 
 - (void)slideDown:(float)distance
 {
-  NSPoint point = [self frame].origin;
-  point.y -= distance;
   CGMutablePathRef path = CGPathCreateMutable();
-  CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y);
-  CGPathAddLineToPoint(path, NULL, point.x, point.y);
+  CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + distance);
+  CGPathAddLineToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y);
   [moveAnim setPath:path];
   CGPathRelease(path);
-  [[self animator] setFrameOrigin:point];
+  [[self animator] setFrameOrigin:[self frame].origin];
 }
 
 - (void)mouseUp:(NSEvent *)event

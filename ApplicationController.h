@@ -10,8 +10,7 @@
 #import "BubbleManager.h"
 
 @interface ApplicationController : NSObject {
-  IBOutlet NSWindow *progressWindow;
-  IBOutlet NSProgressIndicator *progressIndicator;
+  NSImage *silhouette;
 
   FBSession *fbSession;
   NSString *userName;
