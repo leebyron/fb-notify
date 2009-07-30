@@ -40,7 +40,7 @@ enum {
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
 
-    statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:30] retain];
+    statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
     statusItemMenu = [[NSMenu alloc] init];
 
     [statusItem setMenu:statusItemMenu];
@@ -55,6 +55,9 @@ enum {
 
 - (void)dealloc
 {
+  [fbActiveIcon release];
+  [fbEmptyIcon release];
+  [fbFullIcon release];
   if (userName != nil) {
     [userName release];
     [profileURL release];
@@ -123,6 +126,10 @@ enum {
       NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
                                                     action:@selector(menuShowNotification:)
                                              keyEquivalent:@""];
+      if ([notification boolForKey:@"isUnread"]) {
+        [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
+        [item setState:NSOnState];
+      }
       [item setRepresentedObject:notification];
       [statusItemMenu addItem:item];
       [item release];

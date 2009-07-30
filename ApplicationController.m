@@ -46,6 +46,9 @@
 
 - (void)dealloc
 {
+  if (silhouette != nil) {
+    [silhouette release];
+  }
   [fbSession release];
   [notifications release];
   [bubbleManager release];
@@ -131,7 +134,6 @@
       [pic release];
     }
   }
-  [silhouette release];
 }
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
