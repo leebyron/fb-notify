@@ -36,7 +36,7 @@
   NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];  
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
-  
+
   float windowX = screen.width - windowSize.width - kSPACING;
   float windowY = screen.height - menuBarHeight - windowSize.height - kSPACING;
   for (BubbleWindow *w in windows) {

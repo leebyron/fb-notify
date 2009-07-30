@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53700DFD101E7C8C00BAD55B /* NSString-XML.m */; };
+		53F6FCB91021355700CAE806 /* fb_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCB81021355700CAE806 /* fb_full.png */; };
+		53F6FCBB1021355C00CAE806 /* fb_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCBA1021355C00CAE806 /* fb_active.png */; };
+		53F6FCBD1021356600CAE806 /* fb_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCBC1021356600CAE806 /* fb_empty.png */; };
+		53F6FCD5102136A300CAE806 /* MenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F6FCD4102136A300CAE806 /* MenuManager.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -65,6 +69,11 @@
 		53700DFB101E7C1300BAD55B /* NSString-XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-XML.h"; sourceTree = "<group>"; };
 		53700DFD101E7C8C00BAD55B /* NSString-XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-XML.m"; sourceTree = "<group>"; };
 		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
+		53F6FCB81021355700CAE806 /* fb_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_full.png; sourceTree = "<group>"; };
+		53F6FCBA1021355C00CAE806 /* fb_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_active.png; sourceTree = "<group>"; };
+		53F6FCBC1021356600CAE806 /* fb_empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_empty.png; sourceTree = "<group>"; };
+		53F6FCD3102136A300CAE806 /* MenuManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuManager.h; sourceTree = "<group>"; };
+		53F6FCD4102136A300CAE806 /* MenuManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuManager.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Facebook Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Facebook Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		931F2013101E7A5F00ED25F6 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBNotification.h; sourceTree = "<group>"; };
@@ -111,6 +120,8 @@
 				9353430410192BB1002C6CBD /* BubbleWindow.m */,
 				9353434310192D17002C6CBD /* BubbleView.h */,
 				9353434410192D17002C6CBD /* BubbleView.m */,
+				53F6FCD3102136A300CAE806 /* MenuManager.h */,
+				53F6FCD4102136A300CAE806 /* MenuManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -146,6 +157,7 @@
 		29B97314FDCFA39411CA2CEA /* Facebook */ = {
 			isa = PBXGroup;
 			children = (
+				53F6FCA1102133FA00CAE806 /* Icons */,
 				53700DFC101E7C6300BAD55B /* Categories */,
 				93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -192,6 +204,16 @@
 				53700DFD101E7C8C00BAD55B /* NSString-XML.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		53F6FCA1102133FA00CAE806 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				53F6FCBC1021356600CAE806 /* fb_empty.png */,
+				53F6FCBA1021355C00CAE806 /* fb_active.png */,
+				53F6FCB81021355700CAE806 /* fb_full.png */,
+			);
+			name = Icons;
 			sourceTree = "<group>";
 		};
 		93533ECE1017AD0C002C6CBD /* Products */ = {
@@ -265,6 +287,9 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				53F6FCB91021355700CAE806 /* fb_full.png in Resources */,
+				53F6FCBB1021355C00CAE806 /* fb_active.png in Resources */,
+				53F6FCBD1021356600CAE806 /* fb_empty.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +307,7 @@
 				935344ED101A253B002C6CBD /* BubbleManager.m in Sources */,
 				53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */,
 				931F2015101E7A5F00ED25F6 /* FBNotification.m in Sources */,
+				53F6FCD5102136A300CAE806 /* MenuManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

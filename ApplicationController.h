@@ -8,24 +8,20 @@
 #import <Cocoa/Cocoa.h>
 #import <FBCocoa/FBCocoa.h>
 #import "BubbleManager.h"
+#import "MenuManager.h"
 
 @interface ApplicationController : NSObject {
   NSImage *silhouette;
 
   FBSession *fbSession;
-  NSString *userName;
-  NSString *profileURL;
+  
+  MenuManager *menu;
 
-  NSMenu *statusItemMenu;
-  NSStatusItem *statusItem;
   NSMutableArray *notificationMenuItems;
 
   NSMutableDictionary *profilePics;
 
   BubbleManager *bubbleManager;
 }
-
-@property(retain) NSString *userName;
-@property(retain) NSString *profileURL;
 
 @end

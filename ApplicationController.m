@@ -27,26 +27,7 @@
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
   @"SELECT sender_id FROM #%@)"
 
-enum {
-  NEWS_FEED_LINK_TAG,
-  PROFILE_LINK_TAG,
-  LOGOUT_TAG,
-  QUIT_TAG
-};
-
-
-@interface ApplicationController (Private)
-
-- (void)constructMenu;
-- (void)makeStatusItem;
-- (void)addQuitItem;
-
-@end
-
-
 @implementation ApplicationController
-
-@synthesize userName, profileURL;
 
 - (id)init
 {
@@ -59,6 +40,7 @@ enum {
     notificationMenuItems = [[NSMutableArray alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics = [[NSMutableDictionary alloc] init];
+    menu = [[MenuManager alloc] init];
   }
   return self;
 }
@@ -66,88 +48,19 @@ enum {
 - (void)dealloc
 {
   [fbSession release];
-  [statusItemMenu release];
   [notificationMenuItems release];
   [profilePics release];
-  self.userName = nil;
-  self.profileURL = nil;
+  [menu release];
   [super dealloc];
 }
 
 - (void)awakeFromNib
 {
   [fbSession startLogin];
-  [self makeStatusItem];
 }
 
 
 #pragma mark Private methods
-- (void)constructMenu
-{
-  // remove old
-  while ([statusItemMenu numberOfItems] > 0) {
-    [statusItemMenu removeItemAtIndex:0];
-  }
-
-  // add new
-  NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
-                                                        action:@selector(menuShowNewsFeed:)
-                                                 keyEquivalent:@""];
-  [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
-  [statusItemMenu addItem:newsFeedItem];
-  [newsFeedItem release];
-
-  NSMenuItem *profileItem = [[NSMenuItem alloc] initWithTitle:userName
-                                                        action:@selector(menuShowProfile:)
-                                                 keyEquivalent:@""];
-  [profileItem setTag:PROFILE_LINK_TAG];
-  [statusItemMenu addItem:profileItem];
-  [profileItem release];
-
-  [statusItemMenu addItem:[NSMenuItem separatorItem]];
-
-  if ([notificationMenuItems count] > 0) {
-    for (NSMenuItem *item in notificationMenuItems) {
-      [statusItemMenu addItem:item];
-    }
-
-    [statusItemMenu addItem:[NSMenuItem separatorItem]];
-  }
-  
-  NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout of Facebook"
-                                                      action:@selector(logoutAndTerminate:)
-                                               keyEquivalent:@""];
-  [logoutItem setTag:LOGOUT_TAG];
-  [statusItemMenu addItem:logoutItem];
-  [logoutItem release];
-  
-  [self addQuitItem];
-}
-
-- (void)makeStatusItem
-{
-  NSStatusBar *bar = [NSStatusBar systemStatusBar];
-  statusItem = [[bar statusItemWithLength:NSVariableStatusItemLength] retain];
-  
-  statusItemMenu = [[NSMenu alloc] init];
-
-  [statusItem setMenu:statusItemMenu];
-  [statusItem setHighlightMode:YES];
-  [statusItem setTitle:@"F"];
-  
-  [self addQuitItem];
-}
-
-- (void)addQuitItem
-{
-  NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
-                                                    action:@selector(terminate:)
-                                             keyEquivalent:@""];
-  [quitItem setTag:QUIT_TAG];
-  [statusItemMenu addItem:quitItem];
-  [quitItem release];
-}
-
 - (void)processPics:(NSXMLNode *)fqlResultSet
 {
   for (NSXMLNode *xml in [fqlResultSet children]) {
@@ -203,27 +116,11 @@ enum {
 }
 
 #pragma mark IBActions
-- (IBAction)menuShowNewsFeed:(id)sender
-{
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/home.php"]];
-}
-
-- (IBAction)menuShowProfile:(id)sender
-{
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:profileURL]];
-}
-
 - (IBAction)menuShowNotification:(id)sender
 {
   FBNotification *notif = [sender representedObject];
   NSString *url = [notif href];
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
-}
-
-- (IBAction)logoutAndTerminate:(id)sender
-{
-  [fbSession logout];
-  [NSApp terminate:self];
 }
 
 #pragma mark Session delegate methods
@@ -257,8 +154,8 @@ enum {
 
     if ([[nameNode stringValue] isEqualToString:kInfoQueryName]) {
       NSXMLNode *user = [resultSetNode childWithName:@"user"];
-      self.userName = [[user childWithName:@"name"] stringValue];
-      self.profileURL = [[user childWithName:@"profile_url"] stringValue];
+      [menu setName:[[user childWithName:@"name"] stringValue]
+         profileURL:[[user childWithName:@"profile_url"] stringValue]];
     } else if ([[nameNode stringValue] isEqualToString:kNotifQueryName]) {
       notificationsNode = resultSetNode;
     } else if ([[nameNode stringValue] isEqualToString:kChainedPicQueryName]) {
@@ -268,7 +165,7 @@ enum {
   }
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
-  [self constructMenu];
+  [menu constructWithNotifications:notificationMenuItems];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error
