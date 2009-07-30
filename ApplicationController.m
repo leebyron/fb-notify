@@ -13,9 +13,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-#define kMaxNotificationsInMenu 20
-#define kMaxNotificationStringLen 60
-#define kEllipsis @"\u2026"
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
@@ -59,6 +56,23 @@
   [fbSession startLogin];
 }
 
+#pragma mark IBActions
+- (IBAction)menuShowNewsFeed:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/"]];
+}
+
+- (IBAction)menuShowProfile:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[[sender representedObject] profileURL]]];
+}
+
+- (IBAction)menuShowNotification:(id)sender
+{
+  FBNotification *notification = [sender representedObject];
+  NSString *url = [notification href];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+}
 
 #pragma mark Private methods
 - (void)processPics:(NSXMLNode *)fqlResultSet
@@ -84,43 +98,27 @@
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
 {
-  // display the latest few notifications in the menu
-  int notifCount = 0;
+  BOOL areUnread = NO;
   for (NSXMLNode *xml in [fqlResultSet children]) {
-    if (notifCount++ >= kMaxNotificationsInMenu) {
-      break;
-    }
 
     FBNotification *notification = [FBNotification notificationWithXMLNode:xml];
     if ([[notification isHidden] isEqualToString:@"1"]) {
       continue;
     }
 
-    NSString *title = [[notification titleText] stringByDecodingXMLEntities];
-    if ([title length] > kMaxNotificationStringLen) {
-      title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
-    }
     if ([[notification isUnread] isEqualToString:@"1"]) {
-      NSString *uid = [notification senderId];
-      NSImage *pic = [profilePics objectForKey:uid];
-      [bubbleManager addBubbleWithText:title image:pic duration:20.0];
+      areUnread = YES;
+      NSImage *pic = [profilePics objectForKey:[notification senderId]];
+      [bubbleManager addBubbleWithText:[[notification titleText] stringByDecodingXMLEntities]
+                                 image:pic
+                              duration:20.0];
     }
 
-    NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
-                                                  action:@selector(menuShowNotification:)
-                                           keyEquivalent:@""];
-    [item setRepresentedObject:notification];
-    [notificationMenuItems addObject:item];
-    [item release];
+    [notificationMenuItems addObject:notification];
   }
-}
 
-#pragma mark IBActions
-- (IBAction)menuShowNotification:(id)sender
-{
-  FBNotification *notif = [sender representedObject];
-  NSString *url = [notif href];
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+  [menu setIconByAreUnread:areUnread];
+  [menu constructWithNotifications:notificationMenuItems];
 }
 
 #pragma mark Session delegate methods
@@ -165,7 +163,6 @@
   }
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
-  [menu constructWithNotifications:notificationMenuItems];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error

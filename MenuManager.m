@@ -7,6 +7,11 @@
 //
 
 #import "MenuManager.h"
+#import "FBNotification.h"
+
+#define kMaxNotificationsInMenu 20
+#define kMaxNotificationStringLen 60
+#define kEllipsis @"\u2026"
 
 enum {
   NEWS_FEED_LINK_TAG,
@@ -61,6 +66,11 @@ enum {
   profileURL = url;
 }
 
+- (void)setIconByAreUnread:(BOOL)areUnread
+{
+  [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
+}
+
 - (void)constructWithNotifications:(NSMutableArray *)notifications
 {
   // remove old
@@ -80,31 +90,37 @@ enum {
                                                        action:@selector(menuShowProfile:)
                                                 keyEquivalent:@""];
   [profileItem setTag:PROFILE_LINK_TAG];
+  [profileItem setRepresentedObject:self];
   [statusItemMenu addItem:profileItem];
   [profileItem release];
   
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
   
   if ([notifications count] > 0) {
-    for (NSMenuItem *item in notifications) {
+    // display the latest few notifications in the menu
+    int notifCount = 0;
+    for (FBNotification *notification in notifications) {
+      if (notifCount++ >= kMaxNotificationsInMenu) {
+        break;
+      }
+
+      NSString *title = [[notification titleText] stringByDecodingXMLEntities];
+      if ([title length] > kMaxNotificationStringLen) {
+        title = [[title substringToIndex:kMaxNotificationStringLen - 3] stringByAppendingString:kEllipsis];
+      }
+
+      NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+                                                    action:@selector(menuShowNotification:)
+                                             keyEquivalent:@""];
+      [item setRepresentedObject:notification];
       [statusItemMenu addItem:item];
+      [item release];
     }
-    
+
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
   
   [self addQuitItem];
-}
-
-#pragma mark IBActions
-- (IBAction)menuShowNewsFeed:(id)sender
-{
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/home.php"]];
-}
-
-- (IBAction)menuShowProfile:(id)sender
-{
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:profileURL]];
 }
 
 #pragma mark Private methods

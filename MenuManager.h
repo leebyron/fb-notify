@@ -25,6 +25,7 @@
 @property(retain) NSString *profileURL;
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url;
+- (void)setIconByAreUnread:(BOOL)areUnread;
 - (void)constructWithNotifications:(NSMutableArray *)notifications;
 
 @end
