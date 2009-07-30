@@ -21,7 +21,7 @@
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
   @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
   @"href, app_id, is_unread, is_hidden FROM notification "\
-  @"WHERE recipient_id = %@ AND (notification_id IN (%@) OR updated_time > %i) " \
+  @"WHERE recipient_id = %@ AND ((is_unread = 0 AND notification_id IN (%@)) OR updated_time > %i) " \
   @"ORDER BY created_time ASC"
 #define kChainedPicQueryName @"pic"
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
@@ -177,7 +177,7 @@
 
 - (void)session:(FBSession *)session completedMultiquery:(NSXMLDocument *)response
 {
-  //NSLog(@"%@", response);
+  NSLog(@"%@", response);
   NSXMLNode *node = [response rootElement];
   while (node != nil && ![[node name] isEqualToString:@"fql_result"]) {
     node = [node nextNode];

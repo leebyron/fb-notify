@@ -131,8 +131,8 @@
   // If the alpha value is near 0, this means the "fade out" animation just finished
   // as part of the window going away.
   if ([self alphaValue] < 0.01) {
-    [self orderOut:self];
     [[manager windows] removeObject:self];
+    [self orderOut:self];
   }
 }
 
