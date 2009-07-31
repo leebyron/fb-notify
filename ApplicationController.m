@@ -90,7 +90,7 @@
 - (void)readNotification:(FBNotification *)notification
 {
   // load action url
-  NSURL *url = [notification urlForKey:@"href"];
+  NSURL *url = [notification href];
   [[NSWorkspace sharedWorkspace] openURL:url];
   
   // mark this notification as read
@@ -111,7 +111,7 @@
 {
   NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
   for (FBNotification *notification in [notifications unreadNotifications]) {
-    [unreadIDs addObject:[notification uidForKey:@"notificationId"]];
+    [unreadIDs addObject:[notification objForKey:@"notificationId"]];
   }
   
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
@@ -160,7 +160,7 @@
 
   for (FBNotification *notification in newNotifications) {
     if ([notification boolForKey:@"isUnread"]) {
-      NSImage *pic = [profilePics objectForKey:[notification uidForKey:@"senderId"]];
+      NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
       [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
                                  image:pic
                           notification:notification];

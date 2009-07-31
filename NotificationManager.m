@@ -45,7 +45,7 @@
       continue;
     }
     
-    NSString *notificationID = [notification uidForKey:@"notificationId"];
+    NSString *notificationID = [notification objForKey:@"notificationId"];
     FBNotification *existingNotification = [allDict objectForKey:notificationID];
 
     if (existingNotification == nil) {
@@ -71,7 +71,7 @@
     
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
-                               [[notification uidForKey:@"updatedTime"] intValue]);
+                               [[notification objForKey:@"updatedTime"] intValue]);
   }
 
   return newNotifications;
