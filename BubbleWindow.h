@@ -14,12 +14,7 @@
 @interface BubbleWindow : NSWindow {
   BubbleManager *manager;
   BubbleView *view;
-  NSTextField *textField;
-
   FBNotification *notification;
-
-  CAKeyframeAnimation *moveAnim;
-  
   BOOL disappearing;
 }
 
@@ -30,6 +25,5 @@
          notification:(FBNotification *)notif;
 - (void)appear;
 - (void)disappear;
-- (void)slideDown:(float)distance;
 
 @end

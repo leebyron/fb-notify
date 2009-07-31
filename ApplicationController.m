@@ -94,13 +94,17 @@
   [[NSWorkspace sharedWorkspace] openURL:url];
   
   // mark this notification as read
-  if ([notification boolForKey:@"isUnread"]) {
-    [notification markAsRead];
-    
-    // update menu and icon
-    [menu setIconByAreUnread:[notifications unreadCount] > 0];
-    [menu constructWithNotifications:[notifications allNotifications]];
-  }  
+  [self markNotificationAsRead:notification];
+}
+
+- (void)markNotificationAsRead:(FBNotification *)notification
+{
+  if (![notification boolForKey:@"isUnread"]) {
+    return;
+  }
+  [notification markAsRead];
+  [menu setIconByAreUnread:[notifications unreadCount] > 0];
+  [menu constructWithNotifications:[notifications allNotifications]];
 }
 
 - (void)query
@@ -178,7 +182,7 @@
 
 - (void)session:(FBSession *)session completedMultiquery:(NSXMLDocument *)response
 {
-  NSLog(@"%@", response);
+  //NSLog(@"%@", response);
   NSXMLNode *node = [response rootElement];
   while (node != nil && ![[node name] isEqualToString:@"fql_result"]) {
     node = [node nextNode];

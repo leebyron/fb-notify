@@ -26,41 +26,42 @@
                           styleMask:NSBorderlessWindowMask
                             backing:NSBackingStoreBuffered
                               defer:YES];
-  if (self) {
+  if (self) {    
     manager      = mngr;
+    notification = [notif retain];
     disappearing = NO;
-    
-    if (notif) {
-      notification = [notif retain];
-    }
 
     // Set up the BubbleView, which draws the black rounded-rect background
     view = [[BubbleView alloc] initWithFrame:frame image:image text:text];
     [self setContentView:view];
     [view release];
 
-    // Set up the animations which make the window appear/disappear coolly
-    CAAnimation *fadeAnim = [CABasicAnimation animation];
-    [fadeAnim setDuration:kANIMATION_DURATION];
-    [fadeAnim setDelegate:self];
+    // set up fade in/out animation
+    CAAnimation *fadeAni = [[self animationForKey:@"alphaValue"] copy];
+    [fadeAni setDelegate:self];
+    [fadeAni setDuration:kANIMATION_DURATION];
+    
+    // set up drop-in animation
+    CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
+    [moveAni setDuration:kANIMATION_DURATION];
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + kCLOSE_SLIDE_DISTANCE);
+    CGPathAddLineToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y);
+    [moveAni setPath:path];
+    CGPathRelease(path);
 
-    // This animation gets a new path every time it is used, since the path
-    // needs to change depending on where the window is and where it's going.
-    // We don't bother setting its delegate; we only need to know about one
-    // animation finishing.
-    moveAnim = [CAKeyframeAnimation animation];
-    [moveAnim setDuration:kANIMATION_DURATION];
-
-    [self setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAnim,
-                         @"alphaValue", moveAnim, @"frameOrigin", nil]];
+    // assign animations
+    [self setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAni, @"alphaValue",
+                                                                   moveAni, @"frameOrigin", nil]];
 
     // Set some attributes of the window to make it work/look right
     [self setLevel:NSFloatingWindowLevel];
     [self setOpaque:NO];
     [self setAlphaValue:1.0];
-    
+
+    // allows mouse enter/leave handlers to work
     [view addTrackingRect:[view bounds] owner:self userData:nil assumeInside:NO];
-    
+
     // Prep to remove it
     [self performSelector:@selector(disappear)
                withObject:nil
@@ -71,10 +72,7 @@
 
 - (void)dealloc
 {
-  NSLog(@"deallocing the bub window for %@", notification);
-  if (notification != nil) {
-    [notification release];
-  }
+  [notification release];
   [super dealloc];
 }
 
@@ -83,7 +81,7 @@
   [self setAlphaValue:0.0];
   [self makeKeyAndOrderFront:self];
   [[self animator] setAlphaValue:1.0];
-  [self slideDown:kCLOSE_SLIDE_DISTANCE];
+  [[self animator] setFrameOrigin:[self frame].origin];
 }
 
 - (void)disappear
@@ -95,22 +93,15 @@
   [NSObject cancelPreviousPerformRequestsWithTarget:self
                                            selector:@selector(disappear)
                                              object:nil];
-  [self setAlphaValue:1.0];
   [[self animator] setAlphaValue:0.0];
-}
-
-- (void)slideDown:(float)distance
-{
-  CGMutablePathRef path = CGPathCreateMutable();
-  CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + distance);
-  CGPathAddLineToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y);
-  [moveAnim setPath:path];
-  CGPathRelease(path);
-  [[self animator] setFrameOrigin:[self frame].origin];
 }
 
 - (void)mouseEntered:(NSEvent *)event
 {
+  if (disappearing) {
+    return;
+  }
+  [self setAlphaValue:1.0];
   [NSObject cancelPreviousPerformRequestsWithTarget:self
                                            selector:@selector(disappear)
                                              object:nil];
@@ -118,8 +109,11 @@
 
 - (void)mouseExited:(NSEvent *)event
 {
+  if (disappearing) {
+    return;
+  }
   if (notification != nil) {
-    [notification markAsRead];
+    [[NSApp delegate] markNotificationAsRead:notification];
   }
   [self disappear];
 }
