@@ -86,6 +86,11 @@
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
 }
 
+- (IBAction)logout:(id)sender
+{
+  [[FBSession session] logout];
+}
+
 #pragma mark Private methods
 - (void)readNotification:(FBNotification *)notification
 {
@@ -210,6 +215,12 @@
   
   // get ready to query again shortly...
   [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
+}
+
+- (void)sessionCompletedLogout:(FBSession *)session
+{
+  NSLog(@"loggin out, gunna quit");
+  [NSApp terminate:self];
 }
 
 - (void)session:(FBSession *)session failedMultiquery:(NSError *)error

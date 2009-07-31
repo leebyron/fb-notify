@@ -152,6 +152,13 @@ enum {
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
   
+  NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout of Facebook Notifications"
+                                                      action:@selector(logout:)
+                                               keyEquivalent:@""];
+  [logoutItem setTag:LOGOUT_TAG];
+  [statusItemMenu addItem:logoutItem];
+  [logoutItem release];
+  
   [self addQuitItem];
 }
 
