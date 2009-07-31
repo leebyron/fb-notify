@@ -50,7 +50,6 @@
     
     // find and fill href var
     NSString *hrefString = [self objForKey:@"href"];
-    NSLog(@"story href: %@", hrefString);
     if (hrefString == nil || [hrefString length] == 0) {
       // try to find it in the title html
       hrefString = [self lastURLInHTML:[self stringForKey:@"titleHtml"]];
