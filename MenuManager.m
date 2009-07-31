@@ -158,7 +158,7 @@ enum {
   [logoutItem setTag:LOGOUT_TAG];
   [statusItemMenu addItem:logoutItem];
   [logoutItem release];
-  
+
   [self addQuitItem];
 }
 

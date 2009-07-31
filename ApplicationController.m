@@ -136,7 +136,10 @@
                   kNotifQueryName, picQuery, kChainedPicQueryName, nil];
   }
 
-  [fbSession sendFQLMultiquery:multiQuery];
+  [fbSession sendFQLMultiquery:multiQuery
+                        target:self
+                      selector:@selector(completedMultiquery:)
+                         error:@selector(failedMultiquery:)];
 }
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
@@ -185,7 +188,7 @@
   [self query];
 }
 
-- (void)session:(FBSession *)session completedMultiquery:(NSXMLDocument *)response
+- (void)completedMultiquery:(NSXMLDocument *)response
 {
   //NSLog(@"%@", response);
   NSXMLNode *node = [response rootElement];
@@ -217,16 +220,18 @@
   [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
 }
 
+- (void)failedMultiquery:(NSError *)error
+{
+  NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+}
+
+
 - (void)sessionCompletedLogout:(FBSession *)session
 {
   NSLog(@"loggin out, gunna quit");
   [NSApp terminate:self];
 }
 
-- (void)session:(FBSession *)session failedMultiquery:(NSError *)error
-{
-  NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
-}
 
 - (void)session:(FBSession *)session failedCallMethod:(NSError *)error
 {

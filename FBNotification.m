@@ -80,7 +80,10 @@
 
   [[FBSession session] callMethod:@"notifications.markRead"
                     withArguments:[NSDictionary dictionaryWithObject:notificationID
-                                                              forKey:@"notification_ids"]];
+                                                              forKey:@"notification_ids"]
+                           target:self
+                         selector:nil
+                            error:@selector(markReadError:)];
 }
 
 - (NSString *)objForKey:(NSString *)key
@@ -118,6 +121,11 @@
                                                     [html length] - startUrl)];
   return [html substringWithRange:NSMakeRange(startUrl,
                                               endHref.location - startUrl)];
+}
+
+- (void)markReadError:(NSError *)error
+{
+  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 @end
