@@ -140,6 +140,7 @@
                         target:self
                       selector:@selector(completedMultiquery:)
                          error:@selector(failedMultiquery:)];
+  [unreadIDs release];
 }
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
