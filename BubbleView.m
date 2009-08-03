@@ -48,13 +48,13 @@ static NSDictionary *attrs = nil;
   } else {
     totalHeight = textHeight + 4 * kBUBBLE_PADDING;
   }
-  
+
   float textWidth = [self widthOfText:text maxWidth:(maxWidth - (hasImage?(kBUBBLE_ICON_SIZE + kBUBBLE_PADDING):0))];
-  float totalWidth = textWidth + 4 * kBUBBLE_PADDING;  
+  float totalWidth = textWidth + 4 * kBUBBLE_PADDING;
   if (hasImage) {
     totalWidth += kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
   }
-  
+
   return NSMakeSize(totalWidth, totalHeight);
 }
 
@@ -88,7 +88,7 @@ static NSDictionary *attrs = nil;
                                                               yRadius:kBUBBLE_RADIUS];
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] set];
   [roundedRect fill];
-  
+
   // draw white notify text
   NSRect textRect;
   textRect.origin.x = 2 * kBUBBLE_PADDING;
@@ -98,7 +98,7 @@ static NSDictionary *attrs = nil;
   textRect.size.width = [self bounds].size.width - textRect.origin.x;
   textRect.size.height = [BubbleView heightOfText:text
                                          maxWidth:textRect.size.width];
-  
+
   if (textRect.size.height < kBUBBLE_ICON_SIZE) {
     textRect.origin.y = ([self bounds].size.height - textRect.size.height) / 2;
   } else {
@@ -108,7 +108,7 @@ static NSDictionary *attrs = nil;
 
   [[NSColor whiteColor] set];
   [text drawInRect:textRect withAttributes:attrs];
-  
+
   // draw rounded profile pic
   [NSGraphicsContext saveGraphicsState];
   NSRect imageRect = NSMakeRect(kBUBBLE_PADDING,

@@ -26,7 +26,7 @@
                           styleMask:NSBorderlessWindowMask
                             backing:NSBackingStoreBuffered
                               defer:YES];
-  if (self) {    
+  if (self) {
     manager      = mngr;
     notification = [notif retain];
     disappearing = NO;
@@ -40,7 +40,7 @@
     CAAnimation *fadeAni = [[self animationForKey:@"alphaValue"] copy];
     [fadeAni setDelegate:self];
     [fadeAni setDuration:kANIMATION_DURATION];
-    
+
     // set up drop-in animation
     CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
     [moveAni setDuration:kANIMATION_DURATION];

@@ -35,7 +35,7 @@
                     image:(NSImage *)image
              notification:(FBNotification *)notif
 {
-  NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];  
+  NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
 

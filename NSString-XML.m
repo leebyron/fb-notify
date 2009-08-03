@@ -5,14 +5,14 @@
 - (NSString *) stringByDecodingXMLEntities {
   NSUInteger myLength = [self length];
   NSUInteger ampIndex = [self rangeOfString:@"&" options:NSLiteralSearch].location;
-  
+
   // Short-circuit if there are no ampersands.
   if (ampIndex == NSNotFound) {
     return self;
   }
   // Make result string with some extra capacity.
   NSMutableString *result = [NSMutableString stringWithCapacity:(myLength * 1.25)];
-  
+
   // First iteration doesn't need to scan to & since we did that already, but for code simplicity's sake we'll do it again with the scanner.
   NSScanner *scanner = [NSScanner scannerWithString:self];
   do {
@@ -39,7 +39,7 @@
       BOOL gotNumber;
       unsigned charCode;
       NSString *xForHex = @"";
-      
+
       // Is it hex or decimal?
       if ([scanner scanString:@"x" intoString:&xForHex]) {
         gotNumber = [scanner scanHexInt:&charCode];
@@ -68,7 +68,7 @@
     }
   }
   while (![scanner isAtEnd]);
-  
+
 finish:
   return result;
 }

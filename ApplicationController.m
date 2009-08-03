@@ -97,7 +97,7 @@
   // load action url
   NSURL *url = [notification href];
   [[NSWorkspace sharedWorkspace] openURL:url];
-  
+
   // mark this notification as read
   [self markNotificationAsRead:notification];
 }
@@ -118,7 +118,7 @@
   for (FBNotification *notification in [notifications unreadNotifications]) {
     [unreadIDs addObject:[notification objForKey:@"notificationId"]];
   }
-  
+
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
                           [fbSession uid],
                           [unreadIDs componentsJoinedByString:@","],
@@ -215,7 +215,7 @@
   }
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
-  
+
   // get ready to query again shortly...
   [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
 }

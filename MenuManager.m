@@ -100,9 +100,9 @@ enum {
   [profileItem setRepresentedObject:self];
   [statusItemMenu addItem:profileItem];
   [profileItem release];
-  
+
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
-  
+
   if ([notifications count] > 0) {
     // display the latest few notifications in the menu
     int addedNotifications = 0;
@@ -135,7 +135,7 @@ enum {
       [item release];
       addedNotifications++;
     }
-    
+
     if (extraNotifications > 0) {
       NSString *more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
       if (extraNotifications > 1) {
@@ -151,7 +151,7 @@ enum {
 
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
-  
+
   NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout of Facebook Notifications"
                                                       action:@selector(logout:)
                                                keyEquivalent:@""];

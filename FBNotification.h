@@ -11,7 +11,7 @@
 @interface FBNotification : NSObject {
   NotificationManager *manager;
   NSMutableDictionary *fields;
-  
+
   NSURL *href;
 }
 
