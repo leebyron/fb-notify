@@ -15,6 +15,8 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #define kQueryInterval 30
+#define kRetryQueryInterval 60
+
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
@@ -112,10 +114,12 @@
   for (FBNotification *notification in [notifications unreadNotifications]) {
     [unreadIDs addObject:[notification objForKey:@"notificationId"]];
   }
+  NSString *unreadIDsList = [unreadIDs componentsJoinedByString:@","];
+  [unreadIDs release];
 
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
                           [FBConnect uid],
-                          [unreadIDs componentsJoinedByString:@","],
+                          unreadIDsList,
                           [notifications mostRecentUpdateTime]];
   NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
 
@@ -134,7 +138,6 @@
                         target:self
                       selector:@selector(completedMultiquery:)
                          error:@selector(failedMultiquery:)];
-  [unreadIDs release];
 }
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
@@ -210,6 +213,9 @@
 - (void)failedMultiquery:(NSError *)error
 {
   NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  
+  // get ready to query again in a reasonable amount of time
+  [self performSelector:@selector(query) withObject:nil afterDelay:kRetryQueryInterval];
 }
 
 - (void)fbConnectLoggedIn
