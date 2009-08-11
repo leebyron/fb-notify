@@ -34,9 +34,7 @@
 {
   self = [super init];
   if (self) {
-    fbSession = [FBSession sessionWithAPIKey:kAppKey
-                                      secret:kAppSecret
-                                    delegate:self];
+    [FBConnect setupWithAPIKey:kAppKey secret:kAppSecret delegate:self];
     notifications = [[NotificationManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics = [[NSMutableDictionary alloc] init];
@@ -47,10 +45,7 @@
 
 - (void)dealloc
 {
-  if (silhouette != nil) {
-    [silhouette release];
-  }
-  [fbSession release];
+  [silhouette release];
   [notifications release];
   [bubbleManager release];
   [menu release];
@@ -60,7 +55,7 @@
 
 - (void)awakeFromNib
 {
-  [fbSession loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
+  [FBConnect loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
 }
 
 #pragma mark IBActions
@@ -87,7 +82,7 @@
 
 - (IBAction)logout:(id)sender
 {
-  [[FBSession instance] logout];
+  [FBConnect logout];
 }
 
 #pragma mark Private methods
@@ -119,14 +114,14 @@
   }
 
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
-                          [fbSession uid],
+                          [FBConnect uid],
                           [unreadIDs componentsJoinedByString:@","],
                           [notifications mostRecentUpdateTime]];
   NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
 
   NSDictionary *multiQuery;
   if ([menu profileURL] == nil) {
-    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [fbSession uid]];
+    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [FBConnect uid]];
     multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
                   kInfoQueryName, notifQuery, kNotifQueryName,
                   picQuery, kChainedPicQueryName, nil];
@@ -135,7 +130,7 @@
                   kNotifQueryName, picQuery, kChainedPicQueryName, nil];
   }
 
-  [fbSession sendFQLMultiquery:multiQuery
+  [FBConnect sendFQLMultiquery:multiQuery
                         target:self
                       selector:@selector(completedMultiquery:)
                          error:@selector(failedMultiquery:)];
@@ -239,7 +234,7 @@
 }
 
 
-- (void)session:(FBSession *)session failedCallMethod:(NSError *)error
+- (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {
   NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }

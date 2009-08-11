@@ -7,14 +7,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import <FBCocoa/FBCocoa.h>
+
 #import "BubbleManager.h"
 #import "MenuManager.h"
 #import "NotificationManager.h"
 
 @interface ApplicationController : NSObject {
   NSImage *silhouette;
-
-  FBSession *fbSession;
 
   MenuManager *menu;
   NotificationManager *notifications;

@@ -78,12 +78,11 @@
   NSString *notificationID = [self objForKey:@"notificationId"];
   [[manager unreadNotifications] removeObject:self];
 
-  [[FBSession instance] callMethod:@"notifications.markRead"
-                    withArguments:[NSDictionary dictionaryWithObject:notificationID
-                                                              forKey:@"notification_ids"]
-                           target:self
-                         selector:nil
-                            error:@selector(markReadError:)];
+  [FBConnect callMethod:@"notifications.markRead"
+          withArguments:[NSDictionary dictionaryWithObject:notificationID forKey:@"notification_ids"]
+                 target:self
+               selector:nil
+                  error:@selector(markReadError:)];
 }
 
 - (NSString *)objForKey:(NSString *)key

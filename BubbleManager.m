@@ -9,7 +9,7 @@
 #import "BubbleWindow.h"
 #import "BubbleView.h"
 
-#define kBUBBLE_MAX_WIDTH 400.0
+#define kBUBBLE_MAX_WIDTH 350.0
 #define kSPACING 10.0
 
 @implementation BubbleManager
