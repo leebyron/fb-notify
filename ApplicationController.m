@@ -37,7 +37,6 @@
     fbSession = [FBSession sessionWithAPIKey:kAppKey
                                       secret:kAppSecret
                                     delegate:self];
-    [fbSession setPersistentSessionUserDefaultsKey:@"PersistentSession"];
     notifications = [[NotificationManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics = [[NSMutableDictionary alloc] init];
@@ -61,7 +60,7 @@
 
 - (void)awakeFromNib
 {
-  [fbSession startLogin];
+  [fbSession login];
 }
 
 #pragma mark IBActions
@@ -88,7 +87,7 @@
 
 - (IBAction)logout:(id)sender
 {
-  [[FBSession session] logout];
+  [[FBSession instance] logout];
 }
 
 #pragma mark Private methods
@@ -180,14 +179,6 @@
 }
 
 #pragma mark Session delegate methods
-- (void)sessionCompletedLogin:(FBSession *)s
-{
-  [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
-                             image:nil
-                      notification:nil];
-  [self query];
-}
-
 - (void)completedMultiquery:(NSXMLDocument *)response
 {
   //NSLog(@"%@", response);
@@ -225,10 +216,24 @@
   NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
+- (void)fbConnectLoggedIn
+{
+  NSLog(@"must have logged in okay!");
+  [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
+                             image:nil
+                      notification:nil];
+  [self query];
+}
 
-- (void)sessionCompletedLogout:(FBSession *)session
+- (void)fbConnectLoggedOut
 {
   NSLog(@"loggin out, gunna quit");
+  [NSApp terminate:self];
+}
+
+- (void)fbConnectErrorLoggingIn
+{
+  NSLog(@"shit, couldn't connect");
   [NSApp terminate:self];
 }
 
