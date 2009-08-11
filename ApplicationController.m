@@ -60,7 +60,7 @@
 
 - (void)awakeFromNib
 {
-  [fbSession login];
+  [fbSession loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
 }
 
 #pragma mark IBActions
