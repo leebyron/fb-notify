@@ -166,7 +166,6 @@
 		29B97314FDCFA39411CA2CEA /* Facebook */ = {
 			isa = PBXGroup;
 			children = (
-				53F6FCA1102133FA00CAE806 /* Icons */,
 				53700DFC101E7C6300BAD55B /* Categories */,
 				93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -190,6 +189,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				53F6FCA1102133FA00CAE806 /* Icons */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,

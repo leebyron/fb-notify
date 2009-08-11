@@ -26,7 +26,7 @@
                           styleMask:NSBorderlessWindowMask
                             backing:NSBackingStoreBuffered
                               defer:YES];
-  if (self) {    
+  if (self) {
     manager      = mngr;
     notification = [notif retain];
     disappearing = NO;
@@ -37,10 +37,10 @@
     [view release];
 
     // set up fade in/out animation
-    CAAnimation *fadeAni = [[self animationForKey:@"alphaValue"] copy];
+    CAAnimation *fadeAni = [CABasicAnimation animation];
     [fadeAni setDelegate:self];
     [fadeAni setDuration:kANIMATION_DURATION];
-    
+
     // set up drop-in animation
     CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
     [moveAni setDuration:kANIMATION_DURATION];
@@ -58,6 +58,7 @@
     [self setLevel:NSFloatingWindowLevel];
     [self setOpaque:NO];
     [self setAlphaValue:1.0];
+    [self setReleasedWhenClosed:NO];
 
     // allows mouse enter/leave handlers to work
     [view addTrackingRect:[view bounds] owner:self userData:nil assumeInside:NO];
@@ -131,8 +132,8 @@
   // If the alpha value is near 0, this means the "fade out" animation just finished
   // as part of the window going away.
   if ([self alphaValue] < 0.01) {
-    [[manager windows] removeObject:self];
     [self close];
+    [[manager windows] removeObject:self];
   }
 }
 

@@ -39,12 +39,12 @@
   NSMutableArray *newNotifications = [[[NSMutableArray alloc] init] autorelease];
 
   for (NSXMLNode *node in [xml children]) {
-    
+
     FBNotification *notification = [FBNotification notificationWithXMLNode:node manager:self];
     if ([notification boolForKey:@"isHidden"]) {
       continue;
     }
-    
+
     NSString *notificationID = [notification objForKey:@"notificationId"];
     FBNotification *existingNotification = [allDict objectForKey:notificationID];
 
@@ -68,7 +68,7 @@
         [allNotifications addObject:notification];
       }
     }
-    
+
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
                                [[notification objForKey:@"updatedTime"] intValue]);

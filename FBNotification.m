@@ -47,7 +47,7 @@
 
       [fields setObject:[child stringValue] forKey:key];
     }
-    
+
     // find and fill href var
     NSString *hrefString = [self objForKey:@"href"];
     if (hrefString == nil || [hrefString length] == 0) {
