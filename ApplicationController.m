@@ -162,7 +162,7 @@
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
 {
-  NSMutableArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
+  NSArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
 
   for (FBNotification *notification in newNotifications) {
     if ([notification boolForKey:@"isUnread"]) {
