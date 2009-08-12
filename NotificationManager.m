@@ -33,7 +33,7 @@
   [super dealloc];
 }
 
--(NSMutableArray *)addNotificationsFromXML:(NSXMLNode *)xml
+-(NSArray *)addNotificationsFromXML:(NSXMLNode *)xml
 {
   // remember the new notifications
   NSMutableArray *newNotifications = [[[NSMutableArray alloc] init] autorelease];
@@ -83,6 +83,20 @@
 
 -(int)mostRecentUpdateTime {
   return mostRecentUpdateTime;
+}
+
+-(NSArray *)notificationsWithTarget:(NSURL *)url
+{
+  NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
+  
+  for (FBNotification *notif in unreadNotifications) {
+    NSLog(@"%@ == %@", url, [notif href]);
+    if ([url isEqual:[notif href]]) {
+      [hasTarget addObject:notif];
+    }
+  }
+  
+  return hasTarget;
 }
 
 @end

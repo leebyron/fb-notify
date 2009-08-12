@@ -21,6 +21,7 @@
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
 
 - (void)markAsRead;
+- (void)setObject:(id)obj forKey:(NSString *)key;
 - (NSString *)objForKey:(NSString *)key;
 - (NSString *)stringForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)key;
