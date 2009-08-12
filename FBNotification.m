@@ -74,7 +74,6 @@
 - (void)markAsRead
 {
   NSArray *commonNotifs = [manager notificationsWithTarget:href];
-  NSLog(@"notifs: %@", commonNotifs);
   if ([commonNotifs count] > 0) {
     for (FBNotification *notif in commonNotifs) {
       [notif setObject:@"0" forKey:@"isUnread"];
@@ -86,17 +85,6 @@
                  selector:nil
                     error:@selector(markReadError:)];
   }
-
-  /*
-  [fields setObject:@"0" forKey:@"isUnread"];
-  NSString *notificationID = [self objForKey:@"notificationId"];
-  [[manager unreadNotifications] removeObject:self];
-
-  [FBConnect callMethod:@"notifications.markRead"
-          withArguments:[NSDictionary dictionaryWithObject:notificationID forKey:@"notification_ids"]
-                 target:self
-               selector:nil
-                  error:@selector(markReadError:)];*/
 }
 
 - (void)setObject:(id)obj forKey:(NSString *)key
