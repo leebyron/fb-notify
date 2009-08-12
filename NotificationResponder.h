@@ -12,6 +12,6 @@
 @interface NSObject (Notifications)
 
 - (void)readNotification:(FBNotification *)notification;
-- (void)markNotificationAsRead:(FBNotification *)notification;
+- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar;
 
 @end

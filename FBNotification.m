@@ -71,16 +71,21 @@
   [super dealloc];
 }
 
-- (void)markAsRead
+- (void)markAsReadWithSimilar:(BOOL)markSimilar
 {
-  NSArray *commonNotifs = [manager notificationsWithTarget:href];
-  if ([commonNotifs count] > 0) {
-    for (FBNotification *notif in commonNotifs) {
+  NSArray *notifs;
+  if (markSimilar) {
+    notifs = [manager notificationsWithTarget:href];
+  } else {
+    notifs = [NSArray arrayWithObject:self];
+  }
+  if ([notifs count] > 0) {
+    for (FBNotification *notif in notifs) {
       [notif setObject:@"0" forKey:@"isUnread"];
     }
-    [[manager unreadNotifications] removeObjectsInArray:commonNotifs];
+    [[manager unreadNotifications] removeObjectsInArray:notifs];
     [FBConnect callMethod:@"notifications.markRead"
-            withArguments:[NSDictionary dictionaryWithObject:[commonNotifs componentsJoinedByString:@","] forKey:@"notification_ids"]
+            withArguments:[NSDictionary dictionaryWithObject:[notifs componentsJoinedByString:@","] forKey:@"notification_ids"]
                    target:self
                  selector:nil
                     error:@selector(markReadError:)];
