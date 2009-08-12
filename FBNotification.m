@@ -7,6 +7,7 @@
 
 #import "FBNotification.h"
 #import "NSString-XML.h"
+#import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
 
 @interface FBNotification (Private)
@@ -78,12 +79,12 @@
   NSString *notificationID = [self objForKey:@"notificationId"];
   [[manager unreadNotifications] removeObject:self];
 
-  [[FBSession instance] callMethod:@"notifications.markRead"
-                    withArguments:[NSDictionary dictionaryWithObject:notificationID
-                                                              forKey:@"notification_ids"]
-                           target:self
-                         selector:nil
-                            error:@selector(markReadError:)];
+  [connectSession callMethod:@"notifications.markRead"
+               withArguments:[NSDictionary dictionaryWithObject:notificationID
+                                                         forKey:@"notification_ids"]
+                      target:self
+                    selector:nil
+                       error:@selector(markReadError:)];
 }
 
 - (NSString *)objForKey:(NSString *)key

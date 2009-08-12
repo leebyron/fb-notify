@@ -14,8 +14,6 @@
 @interface ApplicationController : NSObject {
   NSImage *silhouette;
 
-  FBSession *fbSession;
-
   MenuManager *menu;
   NotificationManager *notifications;
 

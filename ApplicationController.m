@@ -10,6 +10,7 @@
 #import "ApplicationController.h"
 #import "BubbleWindow.h"
 #import "FBNotification.h"
+#import "GlobalSession.h"
 #import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
@@ -30,15 +31,18 @@
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
   @"SELECT sender_id FROM #%@)"
 
+FBConnect *connectSession;
+
+
 @implementation ApplicationController
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    fbSession = [FBSession sessionWithAPIKey:kAppKey
-                                      secret:kAppSecret
-                                    delegate:self];
+    connectSession = [FBConnect sessionWithAPIKey:kAppKey
+                                           secret:kAppSecret
+                                         delegate:self];
     notifications = [[NotificationManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics = [[NSMutableDictionary alloc] init];
@@ -52,7 +56,7 @@
   if (silhouette != nil) {
     [silhouette release];
   }
-  [fbSession release];
+  [connectSession release];
   [notifications release];
   [bubbleManager release];
   [menu release];
@@ -62,7 +66,7 @@
 
 - (void)awakeFromNib
 {
-  [fbSession loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
+  [connectSession loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
 }
 
 #pragma mark IBActions
@@ -89,7 +93,7 @@
 
 - (IBAction)logout:(id)sender
 {
-  [[FBSession instance] logout];
+  [connectSession logout];
 }
 
 #pragma mark Private methods
@@ -123,14 +127,14 @@
   [unreadIDs release];
 
   NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
-                          [fbSession uid],
+                          [connectSession uid],
                           unreadIDsList,
                           [notifications mostRecentUpdateTime]];
   NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
 
   NSDictionary *multiQuery;
   if ([menu profileURL] == nil) {
-    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [fbSession uid]];
+    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [connectSession uid]];
     multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
                   kInfoQueryName, notifQuery, kNotifQueryName,
                   picQuery, kChainedPicQueryName, nil];
@@ -139,7 +143,7 @@
                   kNotifQueryName, picQuery, kChainedPicQueryName, nil];
   }
 
-  [fbSession sendFQLMultiquery:multiQuery
+  [connectSession sendFQLMultiquery:multiQuery
                         target:self
                       selector:@selector(completedMultiquery:)
                          error:@selector(failedMultiquery:)];
@@ -223,7 +227,7 @@
   [self performSelector:@selector(query) withObject:nil afterDelay:kRetryQueryInterval];
 }
 
-- (void)fbConnectLoggedIn
+- (void)FBConnectLoggedIn:(FBConnect *)fbc
 {
   NSLog(@"must have logged in okay!");
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
@@ -232,20 +236,20 @@
   [self query];
 }
 
-- (void)fbConnectLoggedOut
+- (void)FBConnectLoggedOut:(FBConnect *)fbc
 {
   NSLog(@"loggin out, gunna quit");
   [NSApp terminate:self];
 }
 
-- (void)fbConnectErrorLoggingIn
+- (void)FBConnectErrorLoggingIn:(FBConnect *)fbc
 {
   NSLog(@"shit, couldn't connect");
   [NSApp terminate:self];
 }
 
 
-- (void)session:(FBSession *)session failedCallMethod:(NSError *)error
+- (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {
   NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }

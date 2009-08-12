@@ -95,6 +95,7 @@
 		9353434410192D17002C6CBD /* BubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleView.m; sourceTree = "<group>"; };
 		935344EB101A253B002C6CBD /* BubbleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleManager.h; sourceTree = "<group>"; };
 		935344EC101A253B002C6CBD /* BubbleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleManager.m; sourceTree = "<group>"; };
+		93E197C910338BFA00CC8789 /* GlobalSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalSession.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				53F6FB031020EFFD00CAE806 /* secret.h */,
+				93E197C910338BFA00CC8789 /* GlobalSession.h */,
 				931F2013101E7A5F00ED25F6 /* FBNotification.h */,
 				931F2014101E7A5F00ED25F6 /* FBNotification.m */,
 				93533C9110179981002C6CBD /* ApplicationController.h */,
