@@ -105,7 +105,11 @@
 
 - (NSString *)stringForKey:(NSString *)key
 {
-  return [[fields objectForKey:key] stringByDecodingXMLEntities];
+  NSString *obj = [fields objectForKey:key];
+  if (obj == nil) {
+    return nil;
+  }
+  return [obj stringByDecodingXMLEntities];
 }
 
 - (BOOL)boolForKey:(NSString *)key

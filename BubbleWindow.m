@@ -33,9 +33,12 @@
     manager      = mngr;
     notification = [notif retain];
     disappearing = NO;
-
+    
     // Set up the BubbleView, which draws the black rounded-rect background
-    view = [[BubbleView alloc] initWithFrame:frame image:image text:text];
+    view = [[BubbleView alloc] initWithFrame:frame
+                                       image:image
+                                        text:text
+                                     subText:[notification stringForKey:@"bodyText"]];
     [self setContentView:view];
     [view release];
 

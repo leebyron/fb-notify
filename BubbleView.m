@@ -9,6 +9,7 @@
 #import "BubbleDimensions.h"
 
 static NSDictionary *attrs = nil;
+static NSDictionary *subAttrs = nil;
 
 @implementation BubbleView
 
@@ -17,27 +18,48 @@ static NSDictionary *attrs = nil;
   attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:11.0],
             NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
             NSForegroundColorAttributeName, nil] retain];
+  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:10.0],
+               NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
+               NSForegroundColorAttributeName, nil] retain];
 }
 
-+ (float)heightOfText:(NSString *)text maxWidth:(float)width
++ (float)heightOfText:(NSString *)text subText:(NSString *)subText maxWidth:(float)width
 {
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                      options:NSStringDrawingUsesLineFragmentOrigin
                   attributes:attrs].size;
-  return ceil(size.height);
+  
+  if (subText && [subText length] > 0) {
+    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
+                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:subAttrs].size;
+    NSLog(@"found subtext %@ with combined height of %f", subText, ceil(size.height + size2.height));
+    return ceil(size.height + size2.height);
+  } else {
+    return ceil(size.height);
+  }
 }
 
-+ (float)widthOfText:(NSString *)text maxWidth:(float)width
++ (float)widthOfText:(NSString *)text subText:(NSString *)subText maxWidth:(float)width
 {
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                                    options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:attrs].size;
-  return ceil(size.width);
+  
+  if (subText && [subText length] > 0) {
+    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
+                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:subAttrs].size;
+    NSLog(@"found subtext %@ with combined width of %f", subText, ceil(MAX(size.width, size2.width)));
+    return ceil(MAX(size.width, size2.width));
+  } else {
+    return ceil(size.width);
+  }
 }
 
-+ (NSSize)totalSizeWithText:(NSString *)text withImage:(BOOL)hasImage maxWidth:(float)maxWidth
++ (NSSize)totalSizeWithText:(NSString *)text subText:(NSString *)subText withImage:(BOOL)hasImage maxWidth:(float)maxWidth
 {
-  float textHeight = [self heightOfText:text maxWidth:maxWidth];
+  float textHeight = [self heightOfText:text subText:subText maxWidth:maxWidth];
   float totalHeight;
   if (hasImage) {
     totalHeight = MAX(textHeight, kBubbleIconSize) + 2 * kBubblePadding;
@@ -45,7 +67,7 @@ static NSDictionary *attrs = nil;
     totalHeight = textHeight + 4 * kBubblePadding;
   }
 
-  float textWidth = [self widthOfText:text maxWidth:(maxWidth - (hasImage?(kBubbleIconSize + kBubblePadding):0))];
+  float textWidth = [self widthOfText:text subText:subText maxWidth:(maxWidth - (hasImage?(kBubbleIconSize + kBubblePadding):0))];
   float totalWidth = textWidth + 4 * kBubblePadding;
   if (hasImage) {
     totalWidth += kBubbleIconSize + kBubblePadding;
@@ -57,11 +79,13 @@ static NSDictionary *attrs = nil;
 - (id)initWithFrame:(NSRect)frame
               image:(NSImage *)img
                text:(NSString *)aString
+            subText:(NSString *)bString
 {
   self = [super initWithFrame:frame];
   if (self) {
-    text = [aString retain];
-    image = [img retain];
+    text    = [aString retain];
+    subText = [bString retain];
+    image   = [img retain];
   }
   return self;
 }
@@ -69,6 +93,7 @@ static NSDictionary *attrs = nil;
 - (void)dealloc
 {
   [text release];
+  [subText release];
   if (image != nil) {
     [image release];
   }
@@ -90,7 +115,7 @@ static NSDictionary *attrs = nil;
   // create shadow
   [NSGraphicsContext saveGraphicsState];
   NSShadow *shadow = [[NSShadow alloc] init];
-  [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.6]];
+  [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.5]];
   [shadow setShadowBlurRadius:kBubbleShadowRadius];
   [shadow setShadowOffset:NSMakeSize(0, -kBubbleShadowOffset)];
   [shadow set];
@@ -106,38 +131,48 @@ static NSDictionary *attrs = nil;
 
   [[NSColor blackColor] set];
   [roundedRect fill];
-  
+
   // remove shadow
   [NSGraphicsContext restoreGraphicsState];
   [shadow release];
-  
+
   // draw the background for real
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.75] set];
   [roundedRect fill];
-  
+
   // draw thin stroke on background
-  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.3] set];
+  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.25] set];
   [roundedRect stroke];
 
-  // draw white notify text
   NSRect textRect;
   textRect.origin.x = 2 * kBubblePadding;
   if (image != nil) {
     textRect.origin.x += kBubbleIconSize + kBubblePadding;
   }
   textRect.size.width = trueBounds.size.width - textRect.origin.x;
+
+  // draw white notify text
+  float fullHeight = [BubbleView heightOfText:text
+                                      subText:subText
+                                     maxWidth:textRect.size.width];
+
   textRect.size.height = [BubbleView heightOfText:text
+                                          subText:nil
                                          maxWidth:textRect.size.width];
 
-  if (textRect.size.height < kBubbleIconSize) {
-    textRect.origin.y = ([self bounds].size.height - textRect.size.height) / 2;
-  } else {
-    textRect.origin.y = [self bounds].size.height - textRect.size.height;
-  }
+  textRect.origin.y = (rect.size.height - fullHeight) / 2 + (fullHeight - textRect.size.height);
   textRect.origin.y += 1.0;
   textRect.origin.x += kBubbleShadowSpacing;
 
   [text drawInRect:textRect withAttributes:attrs];
+  
+  if (subText && [subText length] > 0) {
+    textRect.size.height = [BubbleView heightOfText:nil
+                                            subText:subText
+                                           maxWidth:textRect.size.width];
+    textRect.origin.y -= textRect.size.height + 2;
+    [subText drawInRect:textRect withAttributes:subAttrs];
+  }
 
   // draw rounded profile pic
   [NSGraphicsContext saveGraphicsState];
