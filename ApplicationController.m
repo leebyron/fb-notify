@@ -159,10 +159,12 @@ FBConnect *connectSession;
     NSString *appID = [[xml childWithName:@"app_id"] stringValue];
     NSString *iconUrl = [[xml childWithName:@"icon_url"] stringValue];
     if ([iconUrl length] > 0) {
-      NSURL *url = [NSURL URLWithString:iconUrl];
-      NSImage *icon = [[NSImage alloc] initWithContentsOfURL:url];
-      [[menu appIcons] setObject:icon forKey:appID];
-      [icon release];
+      if ([[menu appIcons] objectForKey:appID] == nil) {
+        NSURL *url = [NSURL URLWithString:iconUrl];
+        NSImage *icon = [[NSImage alloc] initWithContentsOfURL:url];
+        [[menu appIcons] setObject:icon forKey:appID];
+        [icon release];
+      }
     }
   }
 }
@@ -179,10 +181,12 @@ FBConnect *connectSession;
       }
       [profilePics setObject:silhouette forKey:uid];
     } else {
-      NSURL *url = [NSURL URLWithString:picUrl];
-      NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
-      [profilePics setObject:pic forKey:uid];
-      [pic release];
+      if ([profilePics objectForKey:uid] == nil) {
+        NSURL *url = [NSURL URLWithString:picUrl];
+        NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
+        [profilePics setObject:pic forKey:uid];
+        [pic release];
+      }
     }
   }
 }
