@@ -90,7 +90,6 @@
   NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
   
   for (FBNotification *notif in unreadNotifications) {
-    NSLog(@"%@ == %@", url, [notif href]);
     if ([url isEqual:[notif href]]) {
       [hasTarget addObject:notif];
     }
