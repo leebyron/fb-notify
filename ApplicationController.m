@@ -236,7 +236,8 @@ FBConnect *connectSession;
       NSXMLNode *user = [resultSetNode childWithName:@"user"];
       userPic = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[user childWithName:@"pic_square"] stringValue]]];
       [menu setName:[[user childWithName:@"name"] stringValue]
-         profileURL:[[user childWithName:@"profile_url"] stringValue]];
+         profileURL:[[user childWithName:@"profile_url"] stringValue]
+            userPic:userPic];
     } else if ([[nameNode stringValue] isEqualToString:kNotifQueryName]) {
       notificationsNode = resultSetNode;
     } else if ([[nameNode stringValue] isEqualToString:kChainedPicQueryName]) {

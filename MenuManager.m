@@ -13,6 +13,7 @@
 #define kMinNotifications 5
 #define kMaxStringLen 60
 #define kEllipsis @"\u2026"
+#define kUserIconSize 15.0
 
 enum {
   NEWS_FEED_LINK_TAG,
@@ -41,6 +42,8 @@ enum {
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
 
+    userIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
+
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
@@ -62,6 +65,8 @@ enum {
 
 - (void)dealloc
 {
+  [userIcon release];
+
   [fbActiveIcon release];
   [fbEmptyIcon release];
   [fbFullIcon release];
@@ -81,10 +86,22 @@ enum {
   [super dealloc];
 }
 
-- (void)setName:(NSString *)name profileURL:(NSString *)url
+- (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic
 {
   userName   = [name retain];
   profileURL = [url retain];
+  userIcon   = [pic retain];
+
+  [userIcon release];
+  userIcon = [[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)];
+  NSSize originalSize = [pic size];
+  
+  [userIcon lockFocus];
+  [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
+         fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
+        operation:NSCompositeSourceOver
+         fraction:1.0];
+  [userIcon unlockFocus];
 }
 
 - (void)setIconByAreUnread:(BOOL)areUnread
@@ -112,7 +129,7 @@ enum {
                                                        action:@selector(menuShowProfile:)
                                                 keyEquivalent:@""];
   [profileItem setTag:PROFILE_LINK_TAG];
-  [profileItem setImage:profileIcon];
+  [profileItem setImage:userIcon];
   [profileItem setRepresentedObject:self];
   [statusItemMenu addItem:profileItem];
   [profileItem release];

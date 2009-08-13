@@ -10,6 +10,8 @@
 
 
 @interface MenuManager : NSObject {
+  NSImage *userIcon;
+
   NSImage *fbActiveIcon;
   NSImage *fbEmptyIcon;
   NSImage *fbFullIcon;
@@ -31,7 +33,7 @@
 @property(retain) NSString *profileURL;
 @property(retain) NSMutableDictionary *appIcons;
 
-- (void)setName:(NSString *)name profileURL:(NSString *)url;
+- (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic;
 - (void)setIconByAreUnread:(BOOL)areUnread;
 - (void)constructWithNotifications:(NSMutableArray *)notifications;
 
