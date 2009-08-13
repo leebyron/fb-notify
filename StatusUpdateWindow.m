@@ -28,11 +28,13 @@
 
 - (void)windowDidLoad
 {
+  [NSApp activateIgnoringOtherApps:YES];
   [[self window] makeKeyAndOrderFront:self];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
+  [[self window] makeMainWindow];
   [statusField becomeFirstResponder];
 }
 
