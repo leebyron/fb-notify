@@ -14,6 +14,10 @@
   NSImage *fbEmptyIcon;
   NSImage *fbFullIcon;
 
+  NSImage *newsFeedIcon;
+  NSImage *profileIcon;
+  NSImage *notificationsIcon;
+
   NSStatusItem *statusItem;
   NSMenu *statusItemMenu;
 

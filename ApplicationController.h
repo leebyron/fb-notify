@@ -20,6 +20,8 @@
   NSMutableDictionary *profilePics;
 
   BubbleManager *bubbleManager;
+  
+  BOOL hasInitialLoad;
 }
 
 @end
