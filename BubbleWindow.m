@@ -114,7 +114,7 @@
     return;
   }
   if (notification != nil) {
-    [[NSApp delegate] markNotificationAsRead:notification];
+    [[NSApp delegate] markNotificationAsRead:notification withSimilar:NO];
   }
   [self disappear];
 }

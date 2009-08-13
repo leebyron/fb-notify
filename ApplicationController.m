@@ -104,15 +104,12 @@ FBConnect *connectSession;
   [[NSWorkspace sharedWorkspace] openURL:url];
 
   // mark this notification as read
-  [self markNotificationAsRead:notification];
+  [self markNotificationAsRead:notification withSimilar:YES];
 }
 
-- (void)markNotificationAsRead:(FBNotification *)notification
+- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
 {
-  if (![notification boolForKey:@"isUnread"]) {
-    return;
-  }
-  [notification markAsRead];
+  [notification markAsReadWithSimilar:markSimilar];
   [menu setIconByAreUnread:[notifications unreadCount] > 0];
   [menu constructWithNotifications:[notifications allNotifications]];
 }
@@ -171,7 +168,7 @@ FBConnect *connectSession;
 
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
 {
-  NSMutableArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
+  NSArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
 
   for (FBNotification *notification in newNotifications) {
     if ([notification boolForKey:@"isUnread"]) {

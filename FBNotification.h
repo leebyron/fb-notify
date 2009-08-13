@@ -20,7 +20,8 @@
 + (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
 
-- (void)markAsRead;
+- (void)markAsReadWithSimilar:(BOOL)markSimilar;
+- (void)setObject:(id)obj forKey:(NSString *)key;
 - (NSString *)objForKey:(NSString *)key;
 - (NSString *)stringForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)key;

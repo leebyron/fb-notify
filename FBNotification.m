@@ -72,19 +72,30 @@
   [super dealloc];
 }
 
-- (void)markAsRead
+- (void)markAsReadWithSimilar:(BOOL)markSimilar
 {
-  [fields setObject:@"0" forKey:@"isUnread"];
+  NSArray *notifs;
+  if (markSimilar) {
+    notifs = [manager notificationsWithTarget:href];
+  } else {
+    notifs = [NSArray arrayWithObject:self];
+  }
+  if ([notifs count] > 0) {
+    for (FBNotification *notif in notifs) {
+      [notif setObject:@"0" forKey:@"isUnread"];
+    }
+    [[manager unreadNotifications] removeObjectsInArray:notifs];
+    [connectSession callMethod:@"notifications.markRead"
+                 withArguments:[NSDictionary dictionaryWithObject:[notifs componentsJoinedByString:@","] forKey:@"notification_ids"]
+                        target:self
+                      selector:nil
+                         error:@selector(markReadError:)];
+  }
+}
 
-  NSString *notificationID = [self objForKey:@"notificationId"];
-  [[manager unreadNotifications] removeObject:self];
-
-  [connectSession callMethod:@"notifications.markRead"
-               withArguments:[NSDictionary dictionaryWithObject:notificationID
-                                                         forKey:@"notification_ids"]
-                      target:self
-                    selector:nil
-                       error:@selector(markReadError:)];
+- (void)setObject:(id)obj forKey:(NSString *)key
+{
+  [fields setObject:obj forKey:key];
 }
 
 - (NSString *)objForKey:(NSString *)key
@@ -127,6 +138,10 @@
 - (void)markReadError:(NSError *)error
 {
   NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+}
+
+- (NSString *)description {
+  return [self objForKey:@"notificationId"];
 }
 
 @end
