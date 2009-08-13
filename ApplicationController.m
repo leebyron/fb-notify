@@ -47,8 +47,6 @@ FBConnect *connectSession;
 
 @implementation ApplicationController
 
-static ApplicationController *this;
-
 - (id)init
 {
   self = [super init];
@@ -62,7 +60,6 @@ static ApplicationController *this;
     menu          = [[MenuManager alloc] init];
 
     hasInitialLoad = NO;
-    this = self;
   }
   return self;
 }
@@ -81,29 +78,30 @@ static ApplicationController *this;
   [super dealloc];
 }
 
+// Global hot key reciever
 OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData)
 {
-  [this beginUpdateStatus:nil];
+  [[NSApp delegate] beginUpdateStatus:nil];
   return noErr;
 }
 
 - (void)awakeFromNib
 {
-  //Register the Hotkeys
-  EventHotKeyRef gMyHotKeyRef;
-  EventHotKeyID  gMyHotKeyID;
+  //create a carbon event handler for a global hot key
+  EventHotKeyRef globalStatusUpdateHotKeyRef;
+  EventHotKeyID  globalStatusUpdateHotKeyID;
+  globalStatusUpdateHotKeyID.signature = 'fbs1';
+  globalStatusUpdateHotKeyID.id        = 1;
   EventTypeSpec  eventType;
   eventType.eventClass = kEventClassKeyboard;
   eventType.eventKind  = kEventHotKeyPressed;
-
   InstallApplicationEventHandler(&globalHotKeyHandler, 1, &eventType, NULL, NULL);
 
-  gMyHotKeyID.signature = 'fbs1';
-  gMyHotKeyID.id        = 1;
+  // register our hot key: control + option + command + space
+  RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
+                      GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
 
-  RegisterEventHotKey(49, cmdKey + optionKey + controlKey, gMyHotKeyID,
-                      GetApplicationEventTarget(), 0, &gMyHotKeyRef);
-
+  // login to facebook!
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"publish_stream", nil]];
 }
 
