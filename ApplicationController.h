@@ -13,6 +13,7 @@
 
 @interface ApplicationController : NSObject {
   NSImage *silhouette;
+  NSImage *userPic;
 
   MenuManager *menu;
   NotificationManager *notifications;
@@ -22,6 +23,7 @@
   BubbleManager *bubbleManager;
   
   BOOL hasInitialLoad;
+  NSString *lastStatusUpdate;
 }
 
 @end

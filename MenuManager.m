@@ -17,6 +17,7 @@
 enum {
   NEWS_FEED_LINK_TAG,
   PROFILE_LINK_TAG,
+  STATUS_UPDATE_TAG,
   MORE_LINK_TAG,
   LOGOUT_TAG,
   QUIT_TAG
@@ -115,6 +116,15 @@ enum {
   [profileItem setRepresentedObject:self];
   [statusItemMenu addItem:profileItem];
   [profileItem release];
+  
+  NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
+                                                         action:@selector(beginUpdateStatus:)
+                                                  keyEquivalent:@"s"];
+  [setStatusItem setTag:STATUS_UPDATE_TAG];
+  [setStatusItem setImage:profileIcon];
+  [setStatusItem setRepresentedObject:self];
+  [statusItemMenu addItem:setStatusItem];
+  [setStatusItem release];
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
 

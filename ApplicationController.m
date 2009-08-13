@@ -11,6 +11,7 @@
 #import "BubbleWindow.h"
 #import "FBNotification.h"
 #import "GlobalSession.h"
+#import "StatusUpdateWindow.h"
 #import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
@@ -20,7 +21,7 @@
 
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
-#define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
+#define kInfoQueryFmt @"SELECT name, profile_url, pic_square FROM user WHERE uid = %@"
 #define kNotifQueryName @"notif"
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
   @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
@@ -71,7 +72,7 @@ FBConnect *connectSession;
 
 - (void)awakeFromNib
 {
-  [connectSession loginWithPermissions:[NSArray arrayWithObject:@"manage_mailbox"]];
+  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"publish_stream", nil]];
 }
 
 #pragma mark IBActions
@@ -83,6 +84,11 @@ FBConnect *connectSession;
 - (IBAction)menuShowProfile:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[[sender representedObject] profileURL]]];
+}
+
+- (IBAction)beginUpdateStatus:(id)sender
+{
+  [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
 }
 
 - (IBAction)menuShowNotification:(id)sender
@@ -104,12 +110,12 @@ FBConnect *connectSession;
 #pragma mark Private methods
 - (void)readNotification:(FBNotification *)notification
 {
+  // mark this notification as read
+  [self markNotificationAsRead:notification withSimilar:YES];
+
   // load action url
   NSURL *url = [notification href];
   [[NSWorkspace sharedWorkspace] openURL:url];
-
-  // mark this notification as read
-  [self markNotificationAsRead:notification withSimilar:YES];
 }
 
 - (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
@@ -228,6 +234,7 @@ FBConnect *connectSession;
 
     if ([[nameNode stringValue] isEqualToString:kInfoQueryName]) {
       NSXMLNode *user = [resultSetNode childWithName:@"user"];
+      userPic = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[user childWithName:@"pic_square"] stringValue]]];
       [menu setName:[[user childWithName:@"name"] stringValue]
          profileURL:[[user childWithName:@"profile_url"] stringValue]];
     } else if ([[nameNode stringValue] isEqualToString:kNotifQueryName]) {
@@ -263,6 +270,23 @@ FBConnect *connectSession;
                              image:nil
                       notification:nil];
   [self query];
+}
+
+- (void)didStatusUpdate:(id)sender
+{
+  lastStatusUpdate = [sender statusMessage];
+  [connectSession callMethod:@"Stream.publish"
+               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
+                      target:self
+                    selector:@selector(statusUpdateWasPublished:)
+                       error:nil];
+}
+
+- (void)statusUpdateWasPublished:(NSXMLDocument *)reply
+{
+  [bubbleManager addBubbleWithText:lastStatusUpdate
+                             image:userPic
+                      notification:nil];
 }
 
 - (void)FBConnectLoggedOut:(FBConnect *)fbc
