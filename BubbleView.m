@@ -31,9 +31,8 @@ static NSDictionary *subAttrs = nil;
   
   if (subText && [subText length] > 0) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
-                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                         options:NSStringDrawingTruncatesLastVisibleLine
                                       attributes:subAttrs].size;
-    NSLog(@"found subtext %@ with combined height of %f", subText, ceil(size.height + size2.height));
     return ceil(size.height + size2.height);
   } else {
     return ceil(size.height);
@@ -48,9 +47,8 @@ static NSDictionary *subAttrs = nil;
   
   if (subText && [subText length] > 0) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
-                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                         options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                       attributes:subAttrs].size;
-    NSLog(@"found subtext %@ with combined width of %f", subText, ceil(MAX(size.width, size2.width)));
     return ceil(MAX(size.width, size2.width));
   } else {
     return ceil(size.width);
@@ -164,14 +162,18 @@ static NSDictionary *subAttrs = nil;
   textRect.origin.y += 1.0;
   textRect.origin.x += kBubbleShadowSpacing;
 
-  [text drawInRect:textRect withAttributes:attrs];
+  [text drawWithRect:textRect
+             options:NSStringDrawingUsesLineFragmentOrigin
+          attributes:attrs];
   
   if (subText && [subText length] > 0) {
     textRect.size.height = [BubbleView heightOfText:nil
                                             subText:subText
                                            maxWidth:textRect.size.width];
     textRect.origin.y -= textRect.size.height + 2;
-    [subText drawInRect:textRect withAttributes:subAttrs];
+    [subText drawWithRect:textRect
+                  options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
+               attributes:subAttrs];
   }
 
   // draw rounded profile pic

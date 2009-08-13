@@ -32,14 +32,9 @@
   [[self window] makeKeyAndOrderFront:self];
 }
 
-- (void)windowDidBecomeKey:(NSNotification *)notification
-{
-  [[self window] makeMainWindow];
-  [statusField becomeFirstResponder];
-}
-
 - (BOOL)control: (NSControl *)control textView:(NSTextView *)textView doCommandBySelector: (SEL)commandSelector {
-  if ([NSStringFromSelector(commandSelector) isEqual:@"insertNewline:"]) {
+  if ([NSStringFromSelector(commandSelector) isEqual:@"insertNewline:"] &&
+      [[statusField stringValue] length] > 0) {
     [target performSelector:selector withObject:self];
     [[self window] performClose:self];
     return YES;
