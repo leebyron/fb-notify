@@ -15,8 +15,9 @@
 {
   self = [super initWithWindowNibName:@"status"];
   if (self) {
-    target = obj;
+    target   = obj;
     selector = sel;
+    isClosed = NO;
 
     // Force the window to be loaded
     [[self window] center];
@@ -42,6 +43,16 @@
     return YES;
   }
   return NO;
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+  isClosed = YES;
+}
+
+- (BOOL)isClosed
+{
+  return isClosed;
 }
 
 - (NSString *)statusMessage

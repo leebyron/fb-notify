@@ -13,6 +13,7 @@
 #import "GlobalSession.h"
 #import "StatusUpdateWindow.h"
 #import "NotificationResponder.h"
+#import <Carbon/Carbon.h>
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
@@ -37,8 +38,16 @@
 
 FBConnect *connectSession;
 
+@interface ApplicationController (Private)
+
+- (IBAction)beginUpdateStatus:(id)sender;
+
+@end
+
 
 @implementation ApplicationController
+
+static ApplicationController *this;
 
 - (id)init
 {
@@ -53,6 +62,7 @@ FBConnect *connectSession;
     menu          = [[MenuManager alloc] init];
 
     hasInitialLoad = NO;
+    this = self;
   }
   return self;
 }
@@ -67,11 +77,33 @@ FBConnect *connectSession;
   [bubbleManager release];
   [menu release];
   [profilePics release];
+  [statusUpdateWindow release];
   [super dealloc];
+}
+
+OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData)
+{
+  [this beginUpdateStatus:nil];
+  return noErr;
 }
 
 - (void)awakeFromNib
 {
+  //Register the Hotkeys
+  EventHotKeyRef gMyHotKeyRef;
+  EventHotKeyID  gMyHotKeyID;
+  EventTypeSpec  eventType;
+  eventType.eventClass = kEventClassKeyboard;
+  eventType.eventKind  = kEventHotKeyPressed;
+
+  InstallApplicationEventHandler(&globalHotKeyHandler, 1, &eventType, NULL, NULL);
+
+  gMyHotKeyID.signature = 'fbs1';
+  gMyHotKeyID.id        = 1;
+
+  RegisterEventHotKey(49, cmdKey + optionKey + controlKey, gMyHotKeyID,
+                      GetApplicationEventTarget(), 0, &gMyHotKeyRef);
+
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"publish_stream", nil]];
 }
 
@@ -88,7 +120,17 @@ FBConnect *connectSession;
 
 - (IBAction)beginUpdateStatus:(id)sender
 {
-  [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
+  if ([connectSession isLoggedIn]) {
+    if (statusUpdateWindow) {
+      if ([statusUpdateWindow isClosed]) {
+        [statusUpdateWindow release];
+        statusUpdateWindow = nil;
+      } else {
+        return;
+      }
+    }
+    statusUpdateWindow = [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
+  }
 }
 
 - (IBAction)menuShowNotification:(id)sender

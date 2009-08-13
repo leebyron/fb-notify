@@ -14,10 +14,12 @@
   
   id target;
   SEL selector;
+  BOOL isClosed;
 }
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel;
 
+- (BOOL)isClosed;
 - (NSString *)statusMessage;
 
 @end

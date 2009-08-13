@@ -11,6 +11,8 @@
 #import "MenuManager.h"
 #import "NotificationManager.h"
 
+@class StatusUpdateWindow;
+
 @interface ApplicationController : NSObject {
   NSImage *silhouette;
   NSImage *userPic;
@@ -24,6 +26,7 @@
   
   BOOL hasInitialLoad;
   NSString *lastStatusUpdate;
+  StatusUpdateWindow *statusUpdateWindow;
 }
 
 @end
