@@ -15,6 +15,7 @@
   id target;
   SEL selector;
   BOOL isClosed;
+  NSString *lastApp;
 }
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel;

@@ -18,6 +18,15 @@
     target   = obj;
     selector = sel;
     isClosed = NO;
+    
+    // what was the last active window?    
+    NSDictionary *app = [[NSWorkspace sharedWorkspace] activeApplication];
+
+    if ([[app objectForKey:@"NSApplicationBundleIdentifier"] isEqual:@"com.facebook.notifications"]) {
+      lastApp = nil;
+    } else {
+      lastApp = [app objectForKey:@"NSApplicationName"];
+    }
 
     // Force the window to be loaded
     [[self window] center];
@@ -45,6 +54,12 @@
 - (void)windowWillClose:(NSNotification *)notification
 {
   isClosed = YES;
+
+  // refocus last app!
+  [NSApp deactivate];
+  if (lastApp && [lastApp length] > 0) {
+    [[NSWorkspace sharedWorkspace] launchApplication:lastApp];
+  }
 }
 
 - (BOOL)isClosed
