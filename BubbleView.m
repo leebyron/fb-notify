@@ -46,10 +46,10 @@ static NSDictionary *subAttrs = nil;
                                 attributes:attrs].size;
   
   if (subText && [subText length] > 0) {
-    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
+    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width - kBubblePadding, 1.0)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                       attributes:subAttrs].size;
-    return ceil(MAX(size.width, size2.width));
+    return ceil(MAX(size.width, size2.width + kBubblePadding));
   } else {
     return ceil(size.width);
   }
