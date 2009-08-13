@@ -136,7 +136,7 @@ enum {
   
   NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
                                                          action:@selector(beginUpdateStatus:)
-                                                  keyEquivalent:@"s"];
+                                                  keyEquivalent:@""];
   [setStatusItem setTag:STATUS_UPDATE_TAG];
   [setStatusItem setImage:profileIcon];
   [setStatusItem setRepresentedObject:self];
