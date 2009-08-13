@@ -30,7 +30,7 @@ enum {
 
 @implementation MenuManager
 
-@synthesize userName, profileURL;
+@synthesize userName, profileURL, appIcons;
 
 - (id)init
 {
@@ -43,6 +43,8 @@ enum {
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
+
+    appIcons      = [[NSMutableDictionary alloc] init];
 
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
     statusItemMenu = [[NSMenu alloc] init];
@@ -66,6 +68,8 @@ enum {
   [newsFeedIcon release];
   [profileIcon release];
   [notificationsIcon release];
+
+  [appIcons release];
 
   if (userName != nil) {
     [userName release];
@@ -142,6 +146,7 @@ enum {
         [item setState:NSOnState];
       }
       [item setRepresentedObject:notification];
+      [item setImage:[appIcons objectForKey:[notification objForKey:@"appId"]]];
       [statusItemMenu addItem:item];
       [item release];
       addedNotifications++;

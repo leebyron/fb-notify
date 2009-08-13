@@ -18,6 +18,8 @@
   NSImage *profileIcon;
   NSImage *notificationsIcon;
 
+  NSMutableDictionary *appIcons;
+
   NSStatusItem *statusItem;
   NSMenu *statusItemMenu;
 
@@ -27,6 +29,7 @@
 
 @property(retain) NSString *userName;
 @property(retain) NSString *profileURL;
+@property(retain) NSMutableDictionary *appIcons;
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url;
 - (void)setIconByAreUnread:(BOOL)areUnread;

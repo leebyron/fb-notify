@@ -30,6 +30,9 @@
 #define kChainedPicQueryName @"pic"
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
   @"SELECT sender_id FROM #%@)"
+#define kChainedAppIconQueryName @"app_icon"
+#define kChainedAppIconQueryFmt @"SELECT app_id, icon_url FROM application WHERE app_id IN (" \
+  @"SELECT app_id FROM #%@)"
 
 FBConnect *connectSession;
 
@@ -74,7 +77,7 @@ FBConnect *connectSession;
 #pragma mark IBActions
 - (IBAction)menuShowNewsFeed:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/"]];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/home.php"]];
 }
 
 - (IBAction)menuShowProfile:(id)sender
@@ -130,22 +133,38 @@ FBConnect *connectSession;
                           unreadIDsList,
                           [notifications mostRecentUpdateTime]];
   NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
+  
+  NSString *appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt, kNotifQueryName];
 
   NSDictionary *multiQuery;
   if ([menu profileURL] == nil) {
     NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [connectSession uid]];
     multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
                   kInfoQueryName, notifQuery, kNotifQueryName,
-                  picQuery, kChainedPicQueryName, nil];
+                  picQuery, kChainedPicQueryName, appIconQuery, kChainedAppIconQueryName, nil];
   } else {
     multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:notifQuery,
-                  kNotifQueryName, picQuery, kChainedPicQueryName, nil];
+                  kNotifQueryName, picQuery, kChainedPicQueryName, appIconQuery, kChainedAppIconQueryName, nil];
   }
 
   [connectSession sendFQLMultiquery:multiQuery
                         target:self
                       selector:@selector(completedMultiquery:)
                          error:@selector(failedMultiquery:)];
+}
+
+- (void)processAppIcons:(NSXMLNode *)fqlResultSet
+{
+  for (NSXMLNode *xml in [fqlResultSet children]) {
+    NSString *appID = [[xml childWithName:@"app_id"] stringValue];
+    NSString *iconUrl = [[xml childWithName:@"icon_url"] stringValue];
+    if ([iconUrl length] > 0) {
+      NSURL *url = [NSURL URLWithString:iconUrl];
+      NSImage *icon = [[NSImage alloc] initWithContentsOfURL:url];
+      [[menu appIcons] setObject:icon forKey:appID];
+      [icon release];
+    }
+  }
 }
 
 - (void)processPics:(NSXMLNode *)fqlResultSet
@@ -198,6 +217,7 @@ FBConnect *connectSession;
 
   NSXMLNode *notificationsNode = nil;
   NSXMLNode *picsNode = nil;
+  NSXMLNode *appIconsNode = nil;
   while (node) {
     NSXMLNode *nameNode = [node childWithName:@"name"];
     NSXMLNode *resultSetNode = [node childWithName:@"fql_result_set"];
@@ -210,9 +230,12 @@ FBConnect *connectSession;
       notificationsNode = resultSetNode;
     } else if ([[nameNode stringValue] isEqualToString:kChainedPicQueryName]) {
       picsNode = resultSetNode;
+    } else if ([[nameNode stringValue] isEqualToString:kChainedAppIconQueryName]) {
+      appIconsNode = resultSetNode;
     }
     node = [node nextSibling];
   }
+  [self processAppIcons:appIconsNode];
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
 
