@@ -40,6 +40,10 @@ enum {
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
 
+    newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
+    profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
+    notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
+
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
     statusItemMenu = [[NSMenu alloc] init];
 
@@ -58,6 +62,11 @@ enum {
   [fbActiveIcon release];
   [fbEmptyIcon release];
   [fbFullIcon release];
+
+  [newsFeedIcon release];
+  [profileIcon release];
+  [notificationsIcon release];
+
   if (userName != nil) {
     [userName release];
     [profileURL release];
@@ -90,6 +99,7 @@ enum {
                                                         action:@selector(menuShowNewsFeed:)
                                                  keyEquivalent:@""];
   [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
+  [newsFeedItem setImage:newsFeedIcon];
   [statusItemMenu addItem:newsFeedItem];
   [newsFeedItem release];
 
@@ -97,6 +107,7 @@ enum {
                                                        action:@selector(menuShowProfile:)
                                                 keyEquivalent:@""];
   [profileItem setTag:PROFILE_LINK_TAG];
+  [profileItem setImage:profileIcon];
   [profileItem setRepresentedObject:self];
   [statusItemMenu addItem:profileItem];
   [profileItem release];
@@ -145,6 +156,7 @@ enum {
                                                         action:@selector(menuShowAllNotifications:)
                                                  keyEquivalent:@""];
       [moreItem setTag:MORE_LINK_TAG];
+      [moreItem setImage:notificationsIcon];
       [statusItemMenu addItem:moreItem];
       [moreItem release];
     }

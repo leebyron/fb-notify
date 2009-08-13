@@ -39,8 +39,10 @@
     [FBConnect setupWithAPIKey:kAppKey secret:kAppSecret delegate:self];
     notifications = [[NotificationManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
-    profilePics = [[NSMutableDictionary alloc] init];
-    menu = [[MenuManager alloc] init];
+    profilePics   = [[NSMutableDictionary alloc] init];
+    menu          = [[MenuManager alloc] init];
+
+    hasInitialLoad = NO;
   }
   return self;
 }
@@ -161,12 +163,14 @@
 {
   NSArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
 
-  for (FBNotification *notification in newNotifications) {
-    if ([notification boolForKey:@"isUnread"]) {
-      NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
-      [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
-                                 image:pic
-                          notification:notification];
+  if (hasInitialLoad) {
+    for (FBNotification *notification in newNotifications) {
+      if ([notification boolForKey:@"isUnread"]) {
+        NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
+        [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
+                                   image:pic
+                            notification:notification];
+      }
     }
   }
 
@@ -205,6 +209,7 @@
 
   // get ready to query again shortly...
   [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
+  hasInitialLoad = YES;
 }
 
 - (void)failedMultiquery:(NSError *)error
