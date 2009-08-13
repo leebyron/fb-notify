@@ -74,6 +74,7 @@
 		531848CC1033858C00C0FFA4 /* newsfeed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newsfeed.png; sourceTree = "<group>"; };
 		531848FB1033920400C0FFA4 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
 		53184909103394CA00C0FFA4 /* notifications.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notifications.png; sourceTree = "<group>"; };
+		531849EA1033D2FE00C0FFA4 /* BubbleDimensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleDimensions.h; sourceTree = "<group>"; };
 		53700DFB101E7C1300BAD55B /* NSString-XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-XML.h"; sourceTree = "<group>"; };
 		53700DFD101E7C8C00BAD55B /* NSString-XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-XML.m"; sourceTree = "<group>"; };
 		53F600EF1021B13A00CAE806 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullet.png; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 				53F6FDE910215E4000CAE806 /* NotificationManager.h */,
 				53F6FDEA10215E4000CAE806 /* NotificationManager.m */,
 				53F6029A1021CD5600CAE806 /* NotificationResponder.h */,
+				531849EA1033D2FE00C0FFA4 /* BubbleDimensions.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

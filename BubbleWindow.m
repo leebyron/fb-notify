@@ -9,10 +9,7 @@
 #import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
-
-#define kANIMATION_DURATION 0.2
-#define kCLOSE_SLIDE_DISTANCE 5
-#define kDisplayTime 6
+#import "BubbleDimensions.h"
 
 @implementation BubbleWindow
 
@@ -22,7 +19,13 @@
                  text:(NSString *)text
          notification:(FBNotification *)notif
 {
-  self = [super initWithContentRect:frame
+  // need to make space for a shadow, add a 10px border
+  NSRect wideFrame = NSMakeRect(frame.origin.x - kBubbleShadowSpacing,
+                                frame.origin.y - kBubbleShadowSpacing,
+                                frame.size.width + 2.0 * kBubbleShadowSpacing,
+                                frame.size.height + 2.0 * kBubbleShadowSpacing);
+
+  self = [super initWithContentRect:wideFrame
                           styleMask:NSBorderlessWindowMask
                             backing:NSBackingStoreBuffered
                               defer:YES];
@@ -39,13 +42,13 @@
     // set up fade in/out animation
     CAAnimation *fadeAni = [CABasicAnimation animation];
     [fadeAni setDelegate:self];
-    [fadeAni setDuration:kANIMATION_DURATION];
+    [fadeAni setDuration:kAnimationDuration];
 
     // set up drop-in animation
     CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
-    [moveAni setDuration:kANIMATION_DURATION];
+    [moveAni setDuration:kAnimationDuration];
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + kCLOSE_SLIDE_DISTANCE);
+    CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + kCloseSlideDistance);
     CGPathAddLineToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y);
     [moveAni setPath:path];
     CGPathRelease(path);

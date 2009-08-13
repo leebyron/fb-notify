@@ -6,11 +6,7 @@
 //
 
 #import "BubbleView.h"
-
-#define kBUBBLE_PADDING 5.0
-#define kBUBBLE_RADIUS 5.0
-#define kPIC_RADIUS 3.0
-#define kBUBBLE_ICON_SIZE 32.0
+#import "BubbleDimensions.h"
 
 static NSDictionary *attrs = nil;
 
@@ -19,7 +15,7 @@ static NSDictionary *attrs = nil;
 + (void)initialize
 {
   attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:11.0],
-            NSFontAttributeName, [NSColor whiteColor],
+            NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
             NSForegroundColorAttributeName, nil] retain];
 }
 
@@ -44,15 +40,15 @@ static NSDictionary *attrs = nil;
   float textHeight = [self heightOfText:text maxWidth:maxWidth];
   float totalHeight;
   if (hasImage) {
-    totalHeight = MAX(textHeight, kBUBBLE_ICON_SIZE) + 2 * kBUBBLE_PADDING;
+    totalHeight = MAX(textHeight, kBubbleIconSize) + 2 * kBubblePadding;
   } else {
-    totalHeight = textHeight + 4 * kBUBBLE_PADDING;
+    totalHeight = textHeight + 4 * kBubblePadding;
   }
 
-  float textWidth = [self widthOfText:text maxWidth:(maxWidth - (hasImage?(kBUBBLE_ICON_SIZE + kBUBBLE_PADDING):0))];
-  float totalWidth = textWidth + 4 * kBUBBLE_PADDING;
+  float textWidth = [self widthOfText:text maxWidth:(maxWidth - (hasImage?(kBubbleIconSize + kBubblePadding):0))];
+  float totalWidth = textWidth + 4 * kBubblePadding;
   if (hasImage) {
-    totalWidth += kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
+    totalWidth += kBubbleIconSize + kBubblePadding;
   }
 
   return NSMakeSize(totalWidth, totalHeight);
@@ -80,44 +76,78 @@ static NSDictionary *attrs = nil;
 }
 
 - (void)drawRect:(NSRect)rect {
-  // draw background space
+  
+  // true bounds
+  NSRect trueBounds = NSMakeRect(rect.origin.x + kBubbleShadowSpacing,
+                                 rect.origin.y + kBubbleShadowSpacing,
+                                 rect.size.width - 2.0 * kBubbleShadowSpacing,
+                                 rect.size.height - 2.0 * kBubbleShadowSpacing);
+  
+  // clear everything
   [[NSColor clearColor] set];
-  NSRectFill([self bounds]);
-  NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:[self bounds]
-                                                              xRadius:kBUBBLE_RADIUS
-                                                              yRadius:kBUBBLE_RADIUS];
-  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.8] set];
+  NSRectFill(rect);
+
+  // create shadow
+  [NSGraphicsContext saveGraphicsState];
+  NSShadow *shadow = [[NSShadow alloc] init];
+  [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.6]];
+  [shadow setShadowBlurRadius:kBubbleShadowRadius];
+  [shadow setShadowOffset:NSMakeSize(0, -kBubbleShadowOffset)];
+  [shadow set];
+  
+  // draw background space in order to get a knocked-out shadow
+  NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:trueBounds
+                                                              xRadius:kBubbleRadius
+                                                              yRadius:kBubbleRadius];  
+  NSBezierPath *knockOut = [NSBezierPath bezierPathWithRect:rect];
+  [knockOut appendBezierPath:roundedRect];
+  [knockOut setWindingRule:NSEvenOddWindingRule];
+  [knockOut addClip];
+
+  [[NSColor blackColor] set];
   [roundedRect fill];
+  
+  // remove shadow
+  [NSGraphicsContext restoreGraphicsState];
+  [shadow release];
+  
+  // draw the background for real
+  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.75] set];
+  [roundedRect fill];
+  
+  // draw thin stroke on background
+  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.3] set];
+  [roundedRect stroke];
 
   // draw white notify text
   NSRect textRect;
-  textRect.origin.x = 2 * kBUBBLE_PADDING;
+  textRect.origin.x = 2 * kBubblePadding;
   if (image != nil) {
-    textRect.origin.x += kBUBBLE_ICON_SIZE + kBUBBLE_PADDING;
+    textRect.origin.x += kBubbleIconSize + kBubblePadding;
   }
-  textRect.size.width = [self bounds].size.width - textRect.origin.x;
+  textRect.size.width = trueBounds.size.width - textRect.origin.x;
   textRect.size.height = [BubbleView heightOfText:text
                                          maxWidth:textRect.size.width];
 
-  if (textRect.size.height < kBUBBLE_ICON_SIZE) {
+  if (textRect.size.height < kBubbleIconSize) {
     textRect.origin.y = ([self bounds].size.height - textRect.size.height) / 2;
   } else {
     textRect.origin.y = [self bounds].size.height - textRect.size.height;
   }
   textRect.origin.y += 1.0;
+  textRect.origin.x += kBubbleShadowSpacing;
 
-  [[NSColor whiteColor] set];
   [text drawInRect:textRect withAttributes:attrs];
 
   // draw rounded profile pic
   [NSGraphicsContext saveGraphicsState];
-  NSRect imageRect = NSMakeRect(kBUBBLE_PADDING,
-                                [self bounds].size.height - kBUBBLE_PADDING - kBUBBLE_ICON_SIZE,
-                                kBUBBLE_ICON_SIZE,
-                                kBUBBLE_ICON_SIZE);
+  NSRect imageRect = NSMakeRect(kBubbleShadowSpacing + kBubblePadding,
+                                kBubbleShadowSpacing + trueBounds.size.height - kBubblePadding - kBubbleIconSize,
+                                kBubbleIconSize,
+                                kBubbleIconSize);
   NSBezierPath *imgRoundedRect = [NSBezierPath bezierPathWithRoundedRect:imageRect
-                                                                 xRadius:kPIC_RADIUS
-                                                                 yRadius:kPIC_RADIUS];
+                                                                 xRadius:kPicRadius
+                                                                 yRadius:kPicRadius];
   [imgRoundedRect addClip];
   [image drawInRect:imageRect
            fromRect:NSZeroRect

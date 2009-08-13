@@ -8,9 +8,7 @@
 #import "BubbleManager.h"
 #import "BubbleWindow.h"
 #import "BubbleView.h"
-
-#define kBUBBLE_MAX_WIDTH 400.0
-#define kSPACING 10.0
+#import "BubbleDimensions.h"
 
 @implementation BubbleManager
 
@@ -35,14 +33,14 @@
                     image:(NSImage *)image
              notification:(FBNotification *)notif
 {
-  NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBUBBLE_MAX_WIDTH];
+  NSSize windowSize = [BubbleView totalSizeWithText:text withImage:(image != nil) maxWidth:kBubbleMaxWidth];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
 
-  float windowX = screen.width - windowSize.width - kSPACING;
-  float windowY = screen.height - menuBarHeight - windowSize.height - kSPACING;
+  float windowX = screen.width - windowSize.width - kBubbleSpacing;
+  float windowY = screen.height - menuBarHeight - windowSize.height - kBubbleSpacing;
   for (BubbleWindow *w in windows) {
-    windowY = MIN([w frame].origin.y - windowSize.height - kSPACING, windowY);
+    windowY = MIN([w frame].origin.y - windowSize.height - kBubbleSpacing + kBubbleShadowSpacing, windowY);
   }
   NSRect windowRect = NSMakeRect(windowX, windowY, windowSize.width, windowSize.height);
 
