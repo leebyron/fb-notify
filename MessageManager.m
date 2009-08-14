@@ -35,7 +35,6 @@
 
 -(NSArray *)addMessagesFromXML:(NSXMLNode *)xml
 {
-  NSLog(@"adding: %@", xml);
   // remember the new messages
   NSMutableArray *newMessages = [[[NSMutableArray alloc] init] autorelease];
 
@@ -46,7 +45,6 @@
     FBMessage *existingMessage = [allDict objectForKey:threadID];
 
     if (existingMessage) {
-      NSLog(@"old time:%@, new time:%@", [existingMessage objForKey:@"updatedTime"], [message objForKey:@"updatedTime"]);
       if (![[existingMessage objForKey:@"updatedTime"] isEqual:[message objForKey:@"updatedTime"]]) {
         [newMessages addObject:message];
       }
