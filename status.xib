@@ -38,11 +38,12 @@
 			<object class="NSWindowTemplate" id="995243612">
 				<int key="NSWindowStyleMask">8211</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 435}, {401, 75}}</string>
-				<int key="NSWTFlags">1677721600</int>
+				<string key="NSWindowRect">{{1080, 915}, {400, 75}}</string>
+				<int key="NSWTFlags">1685585920</int>
 				<string type="base64-UTF8" key="NSWindowTitle">V2hhdCdzIG9uIHlvdXIgbWluZD8</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="211003038">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -51,7 +52,7 @@
 						<object class="NSTextField" id="895857096">
 							<reference key="NSNextResponder" ref="211003038"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrame">{{7, 9}, {388, 56}}</string>
+							<string key="NSFrame">{{8, 9}, {385, 56}}</string>
 							<reference key="NSSuperview" ref="211003038"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="992276244">
@@ -77,10 +78,10 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{401, 75}</string>
+					<string key="NSFrameSize">{400, 75}</string>
 					<reference key="NSSuperview"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+				<string key="NSScreenRect">{{0, 0}, {2560, 1578}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 		</object>
@@ -203,9 +204,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{583, 711}, {401, 75}}</string>
+					<string>{{1663, 1246}, {400, 75}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{583, 711}, {401, 75}}</string>
+					<string>{{1663, 1246}, {400, 75}}</string>
 					<boolean value="NO"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

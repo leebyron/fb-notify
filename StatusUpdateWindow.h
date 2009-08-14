@@ -15,6 +15,7 @@
   id target;
   SEL selector;
   BOOL isClosed;
+  BOOL disappearing;
   NSString *lastApp;
 }
 
