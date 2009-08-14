@@ -10,11 +10,13 @@
 #import "BubbleView.h"
 #import "BubbleManager.h"
 #import "FBNotification.h"
+#import "FBMessage.h"
 
 @interface BubbleWindow : NSWindow {
   BubbleManager *manager;
   BubbleView *view;
   FBNotification *notification;
+  FBMessage *message;
   BOOL disappearing;
 }
 
@@ -22,7 +24,9 @@
                 frame:(NSRect)frame
                 image:(NSImage *)image
                  text:(NSString *)text
-         notification:(FBNotification *)notif;
+              subText:(NSString *)subText
+         notification:(FBNotification *)notif
+              message:(FBMessage *)msg;
 - (void)appear;
 - (void)disappear;
 

@@ -30,10 +30,12 @@
 }
 
 - (void)addBubbleWithText:(NSString *)text
+                  subText:(NSString *)subText
                     image:(NSImage *)image
              notification:(FBNotification *)notif
+                  message:(FBMessage *)msg
 {
-  NSSize windowSize = [BubbleView totalSizeWithText:text subText:[notif stringForKey:@"bodyText"] withImage:(image != nil) maxWidth:kBubbleMaxWidth];
+  NSSize windowSize = [BubbleView totalSizeWithText:text subText:subText withImage:(image != nil) maxWidth:kBubbleMaxWidth];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
 
@@ -48,7 +50,9 @@
                                                          frame:windowRect
                                                          image:image
                                                           text:text
-                                                  notification:notif];
+                                                       subText:subText
+                                                  notification:notif
+                                                       message:msg];
   [window appear];
   [windows addObject:window];
   [window release];

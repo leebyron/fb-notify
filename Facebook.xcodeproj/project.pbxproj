@@ -16,6 +16,8 @@
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53700DFD101E7C8C00BAD55B /* NSString-XML.m */; };
 		53EA5CA71034CEA300B2CE33 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */; };
+		53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D851034FC0800B2CE33 /* FBMessage.m */; };
+		53EA5D891034FDEB00B2CE33 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D881034FDEB00B2CE33 /* MessageManager.m */; };
 		53F600F01021B13A00CAE806 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F600EF1021B13A00CAE806 /* bullet.png */; };
 		53F6FCB91021355700CAE806 /* fb_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCB81021355700CAE806 /* fb_full.png */; };
 		53F6FCBB1021355C00CAE806 /* fb_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F6FCBA1021355C00CAE806 /* fb_active.png */; };
@@ -86,6 +88,10 @@
 		53700DFB101E7C1300BAD55B /* NSString-XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-XML.h"; sourceTree = "<group>"; };
 		53700DFD101E7C8C00BAD55B /* NSString-XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-XML.m"; sourceTree = "<group>"; };
 		53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "fb-notify-icon.icns"; sourceTree = "<group>"; };
+		53EA5D841034FC0800B2CE33 /* FBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBMessage.h; sourceTree = "<group>"; };
+		53EA5D851034FC0800B2CE33 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBMessage.m; sourceTree = "<group>"; };
+		53EA5D871034FDEB00B2CE33 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
+		53EA5D881034FDEB00B2CE33 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
 		53F600EF1021B13A00CAE806 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullet.png; sourceTree = "<group>"; };
 		53F6029A1021CD5600CAE806 /* NotificationResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationResponder.h; sourceTree = "<group>"; };
 		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
@@ -153,6 +159,10 @@
 				531849EA1033D2FE00C0FFA4 /* BubbleDimensions.h */,
 				53184B5E1034147900C0FFA4 /* StatusUpdateWindow.h */,
 				53184B5F1034147900C0FFA4 /* StatusUpdateWindow.m */,
+				53EA5D841034FC0800B2CE33 /* FBMessage.h */,
+				53EA5D851034FC0800B2CE33 /* FBMessage.m */,
+				53EA5D871034FDEB00B2CE33 /* MessageManager.h */,
+				53EA5D881034FDEB00B2CE33 /* MessageManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -354,6 +364,8 @@
 				53F6FCD5102136A300CAE806 /* MenuManager.m in Sources */,
 				53F6FDEB10215E4000CAE806 /* NotificationManager.m in Sources */,
 				53184B601034147900C0FFA4 /* StatusUpdateWindow.m in Sources */,
+				53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */,
+				53EA5D891034FDEB00B2CE33 /* MessageManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -57,9 +57,7 @@
       if ([notification boolForKey:@"isUnread"]) {
         [unreadNotifications addObject:notification];
       }
-
     } else {
-
       // remove it from the unread list if its been read on fb
       if (![notification boolForKey:@"isUnread"] &&
           [existingNotification boolForKey:@"isUnread"]) {

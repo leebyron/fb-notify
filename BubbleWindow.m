@@ -17,7 +17,9 @@
                 frame:(NSRect)frame
                 image:(NSImage *)image
                  text:(NSString *)text
+              subText:(NSString *)subText
          notification:(FBNotification *)notif
+              message:(FBMessage *)msg
 {
   // need to make space for a shadow, add a 10px border
   NSRect wideFrame = NSMakeRect(frame.origin.x - kBubbleShadowSpacing,
@@ -32,13 +34,14 @@
   if (self) {
     manager      = mngr;
     notification = [notif retain];
+    message      = [msg retain];
     disappearing = NO;
     
     // Set up the BubbleView, which draws the black rounded-rect background
     view = [[BubbleView alloc] initWithFrame:frame
                                        image:image
                                         text:text
-                                     subText:[notification stringForKey:@"bodyText"]];
+                                     subText:subText];
     [self setContentView:view];
     [view release];
 
@@ -80,6 +83,7 @@
 - (void)dealloc
 {
   [notification release];
+  [message release];
   [super dealloc];
 }
 

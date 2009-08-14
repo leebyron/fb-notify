@@ -21,6 +21,7 @@
   NSImage *notificationsIcon;
 
   NSMutableDictionary *appIcons;
+  NSDictionary *profilePics;
 
   NSStatusItem *statusItem;
   NSMenu *statusItemMenu;
@@ -35,6 +36,7 @@
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic;
 - (void)setIconByAreUnread:(BOOL)areUnread;
-- (void)constructWithNotifications:(NSMutableArray *)notifications;
+- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages;
+- (void)setProfilePics:(NSDictionary *)pics;
 
 @end

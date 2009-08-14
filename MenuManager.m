@@ -8,9 +8,12 @@
 
 #import "MenuManager.h"
 #import "FBNotification.h"
+#import "FBMessage.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
+#define kMaxMessages 12
+#define kMinMessages 5
 #define kMaxStringLen 60
 #define kEllipsis @"\u2026"
 #define kUserIconSize 15.0
@@ -20,6 +23,7 @@ enum {
   PROFILE_LINK_TAG,
   STATUS_UPDATE_TAG,
   MORE_LINK_TAG,
+  SHOW_INBOX_TAG,
   LOGOUT_TAG,
   QUIT_TAG
 };
@@ -76,6 +80,7 @@ enum {
   [notificationsIcon release];
 
   [appIcons release];
+  [profilePics release];
 
   if (userName != nil) {
     [userName release];
@@ -84,6 +89,11 @@ enum {
   [statusItem release];
   [statusItemMenu release];
   [super dealloc];
+}
+
+- (void)setProfilePics:(NSDictionary *)pics
+{
+  profilePics = [pics retain];
 }
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic
@@ -109,7 +119,7 @@ enum {
   [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
 }
 
-- (void)constructWithNotifications:(NSMutableArray *)notifications
+- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
@@ -197,6 +207,81 @@ enum {
 
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
+
+  if ([messages count] > 0) {
+
+    // display the latest few notifications in the menu
+    int addedMessages = 0;
+    int extraMessages = 0;
+    for (int i = [messages count] - 1; i >= 0; i--) {
+      FBMessage *message = [messages objectAtIndex:i];
+      // maintain between kMinMessages and kMaxMessages
+      if (addedMessages >= kMinMessages &&
+          (![message boolForKey:@"unread"] || addedMessages >= kMaxMessages)) {
+        if ([message boolForKey:@"unread"]) {
+          extraMessages++;
+        }
+        continue;
+      }
+      
+      // add item to menu
+      NSString *title = [message stringForKey:@"subject"];
+      if ([title length] == 0) {
+        title = [message stringForKey:@"snippet"];
+      }
+      if ([title length] > kMaxStringLen) {
+        title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
+      }
+      NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+                                                    action:@selector(menuShowMessage:)
+                                             keyEquivalent:@""];
+      if ([message boolForKey:@"unread"]) {
+        [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
+        [item setState:NSOnState];
+      }
+      [item setRepresentedObject:message];
+
+      // profile pic icon
+      NSImage *senderIcon;
+      NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
+
+      senderIcon = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
+      NSSize originalSize = [pic size];
+
+      [senderIcon lockFocus];
+      [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
+             fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
+            operation:NSCompositeSourceOver
+             fraction:1.0];
+      [senderIcon unlockFocus];
+      [item setImage:senderIcon];
+      [statusItemMenu addItem:item];
+      [item release];
+      addedMessages++;
+    }
+    
+    if (extraMessages > 0) {
+      NSString *more = [NSString stringWithFormat:@"%i More Message", extraMessages];
+      if (extraMessages > 1) {
+        more = [more stringByAppendingString:@"s"];
+      }
+      NSMenuItem *moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
+                                                        action:@selector(menuShowInbox:)
+                                                 keyEquivalent:@""];
+      [moreMessagesItem setTag:MORE_LINK_TAG];
+      [statusItemMenu addItem:moreMessagesItem];
+      [moreMessagesItem release];
+    }    
+    
+  } else {
+    NSMenuItem *noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
+                                                            action:@selector(menuShowInbox:)
+                                                     keyEquivalent:@""];
+    [noMessagesItem setTag:SHOW_INBOX_TAG];
+    [statusItemMenu addItem:noMessagesItem];
+    [noMessagesItem release];
+  }
+  [statusItemMenu addItem:[NSMenuItem separatorItem]];
 
   NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
                                                       action:@selector(logout:)

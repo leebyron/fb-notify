@@ -10,6 +10,7 @@
 #import "ApplicationController.h"
 #import "BubbleWindow.h"
 #import "FBNotification.h"
+#import "FBMessage.h"
 #import "GlobalSession.h"
 #import "StatusUpdateWindow.h"
 #import "NotificationResponder.h"
@@ -29,18 +30,24 @@
   @"href, app_id, is_unread, is_hidden FROM notification "\
   @"WHERE recipient_id = %@ AND ((is_unread = 0 AND notification_id IN (%@)) OR updated_time > %i) " \
   @"ORDER BY created_time ASC"
+#define kMessageQueryName @"messages"
+#define kMessageQueryFmt @"SELECT thread_id, subject, snippet_author, snippet, unread, updated_time FROM thread " \
+  @"WHERE folder_id = 0 AND ((unread = 0 AND thread_id IN (%@)) OR updated_time > %i)" \
+  @"ORDER BY updated_time ASC"
 #define kChainedPicQueryName @"pic"
-#define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (" \
-  @"SELECT sender_id FROM #%@)"
+#define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (SELECT sender_id FROM #%@) " \
+  @"OR uid IN (SELECT snippet_author FROM #%@)"
 #define kChainedAppIconQueryName @"app_icon"
 #define kChainedAppIconQueryFmt @"SELECT app_id, icon_url FROM application WHERE app_id IN (" \
   @"SELECT app_id FROM #%@)"
+
 
 FBConnect *connectSession;
 
 @interface ApplicationController (Private)
 
 - (IBAction)beginUpdateStatus:(id)sender;
+- (void)updateMenu;
 
 @end
 
@@ -55,9 +62,12 @@ FBConnect *connectSession;
                                            secret:kAppSecret
                                          delegate:self];
     notifications = [[NotificationManager alloc] init];
+    messages      = [[MessageManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics   = [[NSMutableDictionary alloc] init];
     menu          = [[MenuManager alloc] init];
+
+    [menu setProfilePics:profilePics];
 
     hasInitialLoad = NO;
   }
@@ -67,13 +77,14 @@ FBConnect *connectSession;
 - (void)dealloc
 {
   if (silhouette != nil) {
-    [silhouette release];
+    [silhouette       release];
   }
-  [connectSession release];
-  [notifications release];
-  [bubbleManager release];
-  [menu release];
-  [profilePics release];
+  [connectSession     release];
+  [notifications      release];
+  [messages           release];
+  [bubbleManager      release];
+  [menu               release];
+  [profilePics        release];
   [statusUpdateWindow release];
   [super dealloc];
 }
@@ -102,7 +113,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
 
   // login to facebook!
-  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"publish_stream", nil]];
+  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
 }
 
 #pragma mark IBActions
@@ -114,6 +125,11 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (IBAction)menuShowProfile:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[[sender representedObject] profileURL]]];
+}
+
+- (IBAction)menuShowInbox:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/inbox"]];
 }
 
 - (IBAction)beginUpdateStatus:(id)sender
@@ -137,6 +153,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [self readNotification:notification];
 }
 
+- (IBAction)menuShowMessage:(id)sender
+{
+  FBMessage *message = [sender representedObject];
+  [self readMessage:message];
+}
+
 - (IBAction)menuShowAllNotifications:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
@@ -158,11 +180,23 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
+- (void)readMessage:(FBMessage *)message
+{
+  [self markMessageAsRead:message];
+
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@", [message objForKey:@"threadId"]]]];
+}
+
 - (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
 {
   [notification markAsReadWithSimilar:markSimilar];
-  [menu setIconByAreUnread:[notifications unreadCount] > 0];
-  [menu constructWithNotifications:[notifications allNotifications]];
+  [self updateMenu];
+}
+
+- (void)markMessageAsRead:(FBMessage *)message
+{
+  [message markAsRead];
+  [self updateMenu];
 }
 
 - (void)query
@@ -178,19 +212,35 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
                           [connectSession uid],
                           unreadIDsList,
                           [notifications mostRecentUpdateTime]];
-  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName];
+
+  NSMutableArray *unreadMessages = [[NSMutableArray alloc] init];
+  for (FBMessage *message in [messages unreadMessages]) {
+    [unreadMessages addObject:[message objForKey:@"threadId"]];
+  }
+  NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
+  [unreadMessages release];
   
+  NSString *messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
+                            unreadMessageList,
+                            [messages mostRecentUpdateTime]];
+
+  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName, kMessageQueryName];
+
   NSString *appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt, kNotifQueryName];
 
   NSDictionary *multiQuery;
   if ([menu profileURL] == nil) {
     NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [connectSession uid]];
-    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,
-                  kInfoQueryName, notifQuery, kNotifQueryName,
-                  picQuery, kChainedPicQueryName, appIconQuery, kChainedAppIconQueryName, nil];
+    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,    kInfoQueryName,
+                                                            notifQuery,   kNotifQueryName,
+                                                            messageQuery, kMessageQueryName,
+                                                            picQuery,     kChainedPicQueryName,
+                                                            appIconQuery, kChainedAppIconQueryName, nil];
   } else {
-    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:notifQuery,
-                  kNotifQueryName, picQuery, kChainedPicQueryName, appIconQuery, kChainedAppIconQueryName, nil];
+    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
+                                                            messageQuery, kMessageQueryName,
+                                                            picQuery,     kChainedPicQueryName,
+                                                            appIconQuery, kChainedAppIconQueryName, nil];
   }
 
   [connectSession sendFQLMultiquery:multiQuery
@@ -246,14 +296,44 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
       if ([notification boolForKey:@"isUnread"]) {
         NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
         [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
+                                 subText:[notification stringForKey:@"bodyText"]
                                    image:pic
-                            notification:notification];
+                            notification:notification
+                                 message:nil];
       }
     }
   }
+}
 
-  [menu setIconByAreUnread:[notifications unreadCount] > 0];
-  [menu constructWithNotifications:[notifications allNotifications]];
+- (void)processMessages:(NSXMLNode *)fqlResultSet
+{
+  NSArray *newMessages = [messages addMessagesFromXML:fqlResultSet];
+
+  if (hasInitialLoad) {
+    for (FBMessage *message in newMessages) {
+      if ([message boolForKey:@"unread"]) {
+        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
+        
+        NSString *bubText = [message stringForKey:@"subject"];
+        NSString *bubSubText = [message stringForKey:@"snippet"];
+        if ([bubText length] == 0) {
+          bubText = bubSubText;
+          bubSubText = nil;
+        }
+        [bubbleManager addBubbleWithText:bubText
+                                 subText:bubSubText
+                                   image:pic
+                            notification:nil
+                                 message:message];
+      }
+    }
+  }
+}
+
+- (void)updateMenu
+{
+  [menu setIconByAreUnread:([notifications unreadCount] + [messages unreadCount] > 0)];
+  [menu constructWithNotifications:[notifications allNotifications] messages:[messages allMessages]];
 }
 
 #pragma mark Session delegate methods
@@ -266,6 +346,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   }
 
   NSXMLNode *notificationsNode = nil;
+  NSXMLNode *messagesNode = nil;
   NSXMLNode *picsNode = nil;
   NSXMLNode *appIconsNode = nil;
   while (node) {
@@ -280,6 +361,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
             userPic:userPic];
     } else if ([[nameNode stringValue] isEqualToString:kNotifQueryName]) {
       notificationsNode = resultSetNode;
+    } else if ([[nameNode stringValue] isEqualToString:kMessageQueryName]){
+      messagesNode = resultSetNode;
     } else if ([[nameNode stringValue] isEqualToString:kChainedPicQueryName]) {
       picsNode = resultSetNode;
     } else if ([[nameNode stringValue] isEqualToString:kChainedAppIconQueryName]) {
@@ -290,6 +373,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [self processAppIcons:appIconsNode];
   [self processPics:picsNode];
   [self processNotifications:notificationsNode];
+  [self processMessages:messagesNode];
+
+  [self updateMenu];
 
   // get ready to query again shortly...
   [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
@@ -308,8 +394,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   NSLog(@"must have logged in okay!");
   [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
+                           subText:nil
                              image:nil
-                      notification:nil];
+                      notification:nil
+                           message:nil];
   [self query];
 }
 
@@ -326,8 +414,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)statusUpdateWasPublished:(NSXMLDocument *)reply
 {
   [bubbleManager addBubbleWithText:lastStatusUpdate
+                           subText:nil
                              image:userPic
-                      notification:nil];
+                      notification:nil
+                           message:nil];
 }
 
 - (void)FBConnectLoggedOut:(FBConnect *)fbc

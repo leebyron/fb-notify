@@ -8,10 +8,14 @@
  */
 
 #import "FBNotification.h"
+#import "FBMessage.h"
 
 @interface NSObject (Notifications)
 
 - (void)readNotification:(FBNotification *)notification;
 - (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar;
+
+- (void)readMessage:(FBMessage *)message;
+- (void)markMessageAsRead:(FBMessage *)message;
 
 @end

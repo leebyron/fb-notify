@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "FBNotification.h"
+#import "FBMessage.h"
 
 @interface BubbleManager : NSObject {
   NSMutableArray *windows;
@@ -15,7 +16,9 @@
 @property(retain) NSMutableArray *windows;
 
 - (void)addBubbleWithText:(NSString *)text
+                  subText:(NSString *)subText
                     image:(NSImage *)image
-             notification:(FBNotification *)notif;
+             notification:(FBNotification *)notif
+                  message:(FBMessage *)msg;
 
 @end

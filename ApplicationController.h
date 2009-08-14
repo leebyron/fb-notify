@@ -10,6 +10,7 @@
 #import "BubbleManager.h"
 #import "MenuManager.h"
 #import "NotificationManager.h"
+#import "MessageManager.h"
 
 @class StatusUpdateWindow;
 
@@ -19,6 +20,7 @@
 
   MenuManager *menu;
   NotificationManager *notifications;
+  MessageManager *messages;
 
   NSMutableDictionary *profilePics;
 
