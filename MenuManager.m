@@ -12,8 +12,8 @@
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
-#define kMaxMessages 12
-#define kMinMessages 5
+#define kMaxMessages 6
+#define kMinMessages 3
 #define kMaxStringLen 60
 #define kEllipsis @"\u2026"
 #define kUserIconSize 15.0

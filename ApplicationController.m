@@ -393,11 +393,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)FBConnectLoggedIn:(FBConnect *)fbc
 {
   NSLog(@"must have logged in okay!");
-  [bubbleManager addBubbleWithText:@"Welcome to Facebook Notifications!"
-                           subText:nil
-                             image:nil
-                      notification:nil
-                           message:nil];
   [self query];
 }
 
