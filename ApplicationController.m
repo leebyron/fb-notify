@@ -117,7 +117,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   
   // if this is the first launch, set up persistant launch
   if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
-    NSLog(@"must be the first! turning on the login item");
     [self setIsLoginItem:YES];
   }
 

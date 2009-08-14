@@ -327,7 +327,6 @@ enum {
                                                               action:@selector(changedStartAtLoginStatus:)
                                                        keyEquivalent:@""];
   [startAtLoginItem setTag:START_AT_LOGIN_TAG];
-  NSLog(@"building login item set to %i", [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption]);
   [startAtLoginItem setState:([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_YES ? NSOnState : NSOffState)];
   [statusItemMenu addItem:startAtLoginItem];
   [startAtLoginItem release];
