@@ -24,6 +24,8 @@ enum {
   STATUS_UPDATE_TAG,
   MORE_LINK_TAG,
   SHOW_INBOX_TAG,
+  COMPOSE_MESSAGE_TAG,
+  START_AT_LOGIN_TAG,
   LOGOUT_TAG,
   QUIT_TAG
 };
@@ -31,6 +33,8 @@ enum {
 @interface MenuManager (Private)
 
 - (void)addQuitItem;
+- (BOOL)wasLaunchedByProcess:(NSString*)creator;
+- (BOOL)wasLaunchedAsLoginItem;
 
 @end
 
@@ -281,8 +285,28 @@ enum {
     [statusItemMenu addItem:noMessagesItem];
     [noMessagesItem release];
   }
+  
+  //compose message
+  NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
+                                                          action:@selector(menuComposeMessage:)
+                                                   keyEquivalent:@""];
+  [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
+  [statusItemMenu addItem:composeMessageItem];
+  [composeMessageItem release];
+
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
 
+  //start at login
+  NSMenuItem *startAtLoginItem = [[NSMenuItem alloc] initWithTitle:@"Start at Login"
+                                                              action:@selector(changedStartAtLoginStatus:)
+                                                       keyEquivalent:@""];
+  [startAtLoginItem setTag:START_AT_LOGIN_TAG];
+  NSLog(@"building login item set to %i", [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption]);
+  [startAtLoginItem setState:([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_YES ? NSOnState : NSOffState)];
+  [statusItemMenu addItem:startAtLoginItem];
+  [startAtLoginItem release];
+
+  // logout first
   NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
                                                       action:@selector(logout:)
                                                keyEquivalent:@""];
@@ -302,6 +326,44 @@ enum {
   [quitItem setTag:QUIT_TAG];
   [statusItemMenu addItem:quitItem];
   [quitItem release];
+}
+
+- (BOOL)wasLaunchedByProcess:(NSString*)creator
+{
+  BOOL wasLaunchedByProcess = NO;
+  
+  // Get our PSN
+  OSStatus  err;
+  ProcessSerialNumber currPSN;
+  err = GetCurrentProcess (&currPSN);
+  if (!err) {
+    // We don't use ProcessInformationCopyDictionary() because the 'ParentPSN' item in the dictionary
+    // has endianness problems in 10.4, fixed in 10.5 however.
+    ProcessInfoRec  procInfo;
+    bzero (&procInfo, sizeof (procInfo));
+    procInfo.processInfoLength = (UInt32)sizeof (ProcessInfoRec);
+    err = GetProcessInformation (&currPSN, &procInfo);
+    if (!err) {
+      ProcessSerialNumber parentPSN = procInfo.processLauncher;
+      
+      // Get info on the launching process
+      NSDictionary* parentDict = (NSDictionary*)ProcessInformationCopyDictionary (&parentPSN, kProcessDictionaryIncludeAllInformationMask);
+      
+      // Test the creator code of the launching app
+      if (parentDict) {
+        wasLaunchedByProcess = [[parentDict objectForKey:@"FileCreator"] isEqualToString:creator];
+        [parentDict release];
+      }
+    }
+  }
+  
+  return wasLaunchedByProcess;
+}
+
+- (BOOL)wasLaunchedAsLoginItem
+{
+  // If the launching process was 'loginwindow', we were launched as a login item
+  return [self wasLaunchedByProcess:@"lgnw"];
 }
 
 @end

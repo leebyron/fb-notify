@@ -48,6 +48,9 @@ FBConnect *connectSession;
 
 - (IBAction)beginUpdateStatus:(id)sender;
 - (void)updateMenu;
+- (void)setIsLoginItem:(BOOL)isLogin;
+- (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
+- (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
 
 @end
 
@@ -111,6 +114,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   // register our hot key: control + option + command + space
   RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
+  
+  // if this is the first launch, set up persistant launch
+  if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
+    NSLog(@"must be the first! turning on the login item");
+    [self setIsLoginItem:YES];
+  }
 
   // login to facebook!
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
@@ -130,6 +139,11 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (IBAction)menuShowInbox:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/inbox"]];
+}
+
+- (IBAction)menuComposeMessage:(id)sender
+{
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/inbox?compose"]];
 }
 
 - (IBAction)beginUpdateStatus:(id)sender
@@ -162,6 +176,11 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (IBAction)menuShowAllNotifications:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
+}
+
+- (IBAction)changedStartAtLoginStatus:(id)sender {
+  [self setIsLoginItem:([sender state] == NSOffState)];
+  [sender setState:([sender state] == NSOffState ? NSOnState : NSOffState)];
 }
 
 - (IBAction)logout:(id)sender
@@ -431,6 +450,51 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {
   NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+}
+
+- (void)setIsLoginItem:(BOOL)isLogin
+{
+  CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+
+	// Create a reference to the shared file list.
+	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+
+	if (loginItems) {
+		if (isLogin) {
+			[self enableLoginItemWithLoginItemsReference:loginItems ForPath:url];
+      [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
+		} else {
+			[self disableLoginItemWithLoginItemsReference:loginItems ForPath:url];
+      [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_NO forKey:kStartAtLoginOption];
+    }
+	}
+	CFRelease(loginItems);
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath {
+	// We call LSSharedFileListInsertItemURL to insert the item at the bottom of Login Items list.
+	LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(theLoginItemsRefs, kLSSharedFileListItemLast, NULL, NULL, thePath, NULL, NULL);		
+	if (item)
+		CFRelease(item);
+}
+
+- (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath {
+	UInt32 seedValue;
+  
+	// We're going to grab the contents of the shared file list (LSSharedFileListItemRef objects)
+	// and pop it in an array so we can iterate through it to find our item.
+	NSArray  *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(theLoginItemsRefs, &seedValue);
+	for (id item in loginItemsArray) {		
+		LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
+		if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &thePath, NULL) == noErr) {
+			if ([[(NSURL *)thePath path] hasPrefix:[[NSBundle mainBundle] bundlePath]]) {
+				LSSharedFileListItemRemove(theLoginItemsRefs, itemRef); // Deleting the item
+      }
+		}
+	}
+	
+	[loginItemsArray release];
 }
 
 @end

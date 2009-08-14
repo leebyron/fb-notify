@@ -8,6 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define kStartAtLoginOption @"StartAtLogin"
+
+enum {
+  START_AT_LOGIN_UNKNOWN,
+  START_AT_LOGIN_NO,
+  START_AT_LOGIN_YES,
+};
+
 
 @interface MenuManager : NSObject {
   NSImage *userIcon;
