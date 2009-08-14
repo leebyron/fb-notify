@@ -114,7 +114,7 @@
 
 - (BOOL)boolForKey:(NSString *)key
 {
-  return [[fields objectForKey:key] isEqualToString:@"1"];
+  return ![[fields objectForKey:key] isEqualToString:@"0"];
 }
 
 - (NSURL *)urlForKey:(NSString *)key

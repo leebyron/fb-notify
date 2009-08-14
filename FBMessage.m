@@ -58,7 +58,7 @@
 
   [connectSession callMethod:@"message.setThreadReadStatus"
                withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objForKey:@"threadId"], @"thread_id",
-                                                                        @"0", @"status",
+                                                                        @"-1", @"status",
                                                                         [connectSession uid], @"uid", nil]
                       target:self
                     selector:nil
@@ -86,7 +86,7 @@
 
 - (BOOL)boolForKey:(NSString *)key
 {
-  return [[fields objectForKey:key] isEqualToString:@"1"];
+  return ![[fields objectForKey:key] isEqualToString:@"0"];
 }
 
 - (NSURL *)urlForKey:(NSString *)key

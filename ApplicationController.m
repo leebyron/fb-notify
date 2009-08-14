@@ -18,7 +18,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-#define kQueryInterval 30
+#define kQueryInterval 5
 #define kRetryQueryInterval 60
 
 #define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
