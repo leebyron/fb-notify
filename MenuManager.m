@@ -55,6 +55,10 @@ enum {
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
+    inboxIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox" ofType:@"png"]];
+    
+    notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
+    inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
 
     appIcons      = [[NSMutableDictionary alloc] init];
 
@@ -82,6 +86,10 @@ enum {
   [newsFeedIcon release];
   [profileIcon release];
   [notificationsIcon release];
+  [inboxIcon release];
+
+  [notificationsGhostIcon release];
+  [inboxGhostIcon release];
 
   [appIcons release];
   [profilePics release];
@@ -158,8 +166,25 @@ enum {
   [setStatusItem setRepresentedObject:self];
   [statusItemMenu addItem:setStatusItem];
   [setStatusItem release];
+  
+  //compose message
+  NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
+                                                              action:@selector(menuComposeMessage:)
+                                                       keyEquivalent:@""];
+  [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
+  [composeMessageItem setImage:inboxIcon];
+  [statusItemMenu addItem:composeMessageItem];
+  [composeMessageItem release];  
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
+
+  // Notifications title
+  NSMenuItem *notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
+                                                          action:nil
+                                                   keyEquivalent:@""];
+  [notifTitleItem setImage:notificationsGhostIcon];
+  [statusItemMenu addItem:notifTitleItem];
+  [notifTitleItem release];  
 
   if ([notifications count] > 0) {
     // display the latest few notifications in the menu
@@ -213,6 +238,13 @@ enum {
   }
 
   if ([messages count] > 0) {
+    // Inbox title
+    NSMenuItem *inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
+                                                            action:nil
+                                                     keyEquivalent:@""];
+    [inboxTitleItem setImage:inboxGhostIcon];
+    [statusItemMenu addItem:inboxTitleItem];
+    [inboxTitleItem release];  
 
     // display the latest few notifications in the menu
     int addedMessages = 0;
@@ -272,7 +304,8 @@ enum {
       NSMenuItem *moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
                                                         action:@selector(menuShowInbox:)
                                                  keyEquivalent:@""];
-      [moreMessagesItem setTag:MORE_LINK_TAG];
+      [moreMessagesItem setTag:SHOW_INBOX_TAG];
+      [moreMessagesItem setImage:inboxIcon];
       [statusItemMenu addItem:moreMessagesItem];
       [moreMessagesItem release];
     }    
@@ -282,17 +315,10 @@ enum {
                                                             action:@selector(menuShowInbox:)
                                                      keyEquivalent:@""];
     [noMessagesItem setTag:SHOW_INBOX_TAG];
+    [noMessagesItem setImage:inboxIcon];
     [statusItemMenu addItem:noMessagesItem];
     [noMessagesItem release];
   }
-  
-  //compose message
-  NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
-                                                          action:@selector(menuComposeMessage:)
-                                                   keyEquivalent:@""];
-  [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
-  [statusItemMenu addItem:composeMessageItem];
-  [composeMessageItem release];
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
 
