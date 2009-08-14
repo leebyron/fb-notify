@@ -68,7 +68,7 @@
   [[[self window] animator] setFrameOrigin:[[self window] frame].origin];
 }
 
-- (BOOL)control: (NSControl *)control textView:(NSTextView *)textView doCommandBySelector: (SEL)commandSelector {
+- (BOOL)control: (NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
   if ([NSStringFromSelector(commandSelector) isEqual:@"insertNewline:"] &&
       [[statusField stringValue] length] > 0) {
     [target performSelector:selector withObject:self];
