@@ -14,6 +14,7 @@
 		53184B57103412FF00C0FFA4 /* status.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53184B56103412FF00C0FFA4 /* status.xib */; };
 		53184B601034147900C0FFA4 /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 53184B5F1034147900C0FFA4 /* StatusUpdateWindow.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
+		536D708A10363ABF00FE42C6 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D708910363ABF00FE42C6 /* message.png */; };
 		53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53700DFD101E7C8C00BAD55B /* NSString-XML.m */; };
 		53EA5CA71034CEA300B2CE33 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */; };
 		53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D851034FC0800B2CE33 /* FBMessage.m */; };
@@ -88,6 +89,7 @@
 		53184B5E1034147900C0FFA4 /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateWindow.h; sourceTree = "<group>"; };
 		53184B5F1034147900C0FFA4 /* StatusUpdateWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusUpdateWindow.m; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		536D708910363ABF00FE42C6 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		53700DFB101E7C1300BAD55B /* NSString-XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-XML.h"; sourceTree = "<group>"; };
 		53700DFD101E7C8C00BAD55B /* NSString-XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-XML.m"; sourceTree = "<group>"; };
 		53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "fb-notify-icon.icns"; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 		53F6FCA1102133FA00CAE806 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				536D708910363ABF00FE42C6 /* message.png */,
 				53F43E291035685300FFCA66 /* inbox_ghost.png */,
 				53F43E271035684C00FFCA66 /* notifications_ghost.png */,
 				53F43E06103563E700FFCA66 /* inbox.png */,
@@ -356,6 +359,7 @@
 				53F43E07103563E700FFCA66 /* inbox.png in Resources */,
 				53F43E281035684C00FFCA66 /* notifications_ghost.png in Resources */,
 				53F43E2A1035685300FFCA66 /* inbox_ghost.png in Resources */,
+				536D708A10363ABF00FE42C6 /* message.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

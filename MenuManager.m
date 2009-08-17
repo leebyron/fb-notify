@@ -14,7 +14,7 @@
 #define kMinNotifications 5
 #define kMaxMessages 6
 #define kMinMessages 3
-#define kMaxStringLen 60
+#define kMaxStringLen 50
 #define kEllipsis @"\u2026"
 #define kUserIconSize 15.0
 
@@ -55,6 +55,7 @@ enum {
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
+    messageIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"message" ofType:@"png"]];
     inboxIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox" ofType:@"png"]];
     
     notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
@@ -86,6 +87,7 @@ enum {
   [newsFeedIcon release];
   [profileIcon release];
   [notificationsIcon release];
+  [messageIcon release];
   [inboxIcon release];
 
   [notificationsGhostIcon release];
@@ -172,7 +174,7 @@ enum {
                                                               action:@selector(menuComposeMessage:)
                                                        keyEquivalent:@""];
   [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
-  [composeMessageItem setImage:inboxIcon];
+  [composeMessageItem setImage:messageIcon];
   [statusItemMenu addItem:composeMessageItem];
   [composeMessageItem release];  
 
