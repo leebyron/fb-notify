@@ -63,6 +63,25 @@ enum {
     inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
 
     appIcons      = [[NSMutableDictionary alloc] init];
+    // some nicer over-ridden icons
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
+                 forKey:@"19675640871"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
+                 forKey:@"2719290516"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
+                 forKey:@"219303305471"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"video" ofType:@"png"]]
+                 forKey:@"2392950137"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"photos" ofType:@"png"]]
+                 forKey:@"2305272732"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"posteditem" ofType:@"png"]]
+                 forKey:@"2309869772"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"like" ofType:@"png"]]
+                 forKey:@"2409997254"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"events" ofType:@"png"]]
+                 forKey:@"2344061033"];
+    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"addfriend" ofType:@"png"]]
+                 forKey:@"2356318349"];
 
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
     statusItemMenu = [[NSMenu alloc] init];
@@ -120,10 +139,12 @@ enum {
   NSSize originalSize = [pic size];
   
   [userIcon lockFocus];
+  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+  [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
   [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
          fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
         operation:NSCompositeSourceOver
-         fraction:1.0];
+         fraction:1.0];  
   [userIcon unlockFocus];
 }
 
@@ -306,6 +327,8 @@ enum {
         NSSize originalSize = [pic size];
 
         [senderIcon lockFocus];
+        [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+        [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
         [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
                fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
               operation:NSCompositeSourceOver

@@ -335,6 +335,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
       if ([[menu appIcons] objectForKey:appID] == nil) {
         NSURL *url = [NSURL URLWithString:iconUrl];
         NSImage *icon = [[NSImage alloc] initWithContentsOfURL:url];
+        NSLog(@"got icon:%@ for app:%@", iconUrl, appID);
         [[menu appIcons] setObject:icon forKey:appID];
         [icon release];
       }
@@ -410,7 +411,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)updateMenu
 {
   [menu setIconByAreUnread:(isOnline && ([notifications unreadCount] + [messages unreadCount] > 0))];
-  [menu constructWithNotifications:[notifications allNotifications] messages:[messages allMessages] isOnline:isOnline];
+  [menu constructWithNotifications:[notifications allNotifications]
+                          messages:[messages allMessages]
+                          isOnline:isOnline];
 }
 
 #pragma mark Session delegate methods

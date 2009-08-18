@@ -18,6 +18,13 @@
 		53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53700DFD101E7C8C00BAD55B /* NSString-XML.m */; };
 		537DEB07103A177A00EE3530 /* IXSCNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 537DEB06103A177A00EE3530 /* IXSCNotificationManager.m */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
+		537DEBEF103A3FE300EE3530 /* comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEBEE103A3FE300EE3530 /* comment.png */; };
+		537DEC00103A40D100EE3530 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEBFF103A40D100EE3530 /* video.png */; };
+		537DEC08103A41BB00EE3530 /* photos.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEC07103A41BB00EE3530 /* photos.png */; };
+		537DEC14103A43B000EE3530 /* posteditem.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEC13103A43B000EE3530 /* posteditem.png */; };
+		537DEC19103A655700EE3530 /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEC18103A655700EE3530 /* like.png */; };
+		537DEC26103A6DC500EE3530 /* events.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEC25103A6DC500EE3530 /* events.png */; };
+		537DEC28103A6F7E00EE3530 /* addfriend.png in Resources */ = {isa = PBXBuildFile; fileRef = 537DEC27103A6F7E00EE3530 /* addfriend.png */; };
 		53EA5CA71034CEA300B2CE33 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */; };
 		53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D851034FC0800B2CE33 /* FBMessage.m */; };
 		53EA5D891034FDEB00B2CE33 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D881034FDEB00B2CE33 /* MessageManager.m */; };
@@ -97,6 +104,13 @@
 		537DEB05103A177A00EE3530 /* IXSCNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IXSCNotificationManager.h; sourceTree = "<group>"; };
 		537DEB06103A177A00EE3530 /* IXSCNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IXSCNotificationManager.m; sourceTree = "<group>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
+		537DEBEE103A3FE300EE3530 /* comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment.png; sourceTree = "<group>"; };
+		537DEBFF103A40D100EE3530 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
+		537DEC07103A41BB00EE3530 /* photos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photos.png; sourceTree = "<group>"; };
+		537DEC13103A43B000EE3530 /* posteditem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = posteditem.png; sourceTree = "<group>"; };
+		537DEC18103A655700EE3530 /* like.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like.png; sourceTree = "<group>"; };
+		537DEC25103A6DC500EE3530 /* events.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = events.png; sourceTree = "<group>"; };
+		537DEC27103A6F7E00EE3530 /* addfriend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addfriend.png; sourceTree = "<group>"; };
 		53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "fb-notify-icon.icns"; sourceTree = "<group>"; };
 		53EA5D841034FC0800B2CE33 /* FBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBMessage.h; sourceTree = "<group>"; };
 		53EA5D851034FC0800B2CE33 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBMessage.m; sourceTree = "<group>"; };
@@ -269,6 +283,13 @@
 		53F6FCA1102133FA00CAE806 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				537DEC27103A6F7E00EE3530 /* addfriend.png */,
+				537DEC25103A6DC500EE3530 /* events.png */,
+				537DEC18103A655700EE3530 /* like.png */,
+				537DEC13103A43B000EE3530 /* posteditem.png */,
+				537DEC07103A41BB00EE3530 /* photos.png */,
+				537DEBFF103A40D100EE3530 /* video.png */,
+				537DEBEE103A3FE300EE3530 /* comment.png */,
 				536D708910363ABF00FE42C6 /* message.png */,
 				53F43E291035685300FFCA66 /* inbox_ghost.png */,
 				53F43E271035684C00FFCA66 /* notifications_ghost.png */,
@@ -369,6 +390,13 @@
 				53F43E281035684C00FFCA66 /* notifications_ghost.png in Resources */,
 				53F43E2A1035685300FFCA66 /* inbox_ghost.png in Resources */,
 				536D708A10363ABF00FE42C6 /* message.png in Resources */,
+				537DEBEF103A3FE300EE3530 /* comment.png in Resources */,
+				537DEC00103A40D100EE3530 /* video.png in Resources */,
+				537DEC08103A41BB00EE3530 /* photos.png in Resources */,
+				537DEC14103A43B000EE3530 /* posteditem.png in Resources */,
+				537DEC19103A655700EE3530 /* like.png in Resources */,
+				537DEC26103A6DC500EE3530 /* events.png in Resources */,
+				537DEC28103A6F7E00EE3530 /* addfriend.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
