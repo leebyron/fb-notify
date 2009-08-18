@@ -16,6 +16,8 @@
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		536D708A10363ABF00FE42C6 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 536D708910363ABF00FE42C6 /* message.png */; };
 		53700DFE101E7C8C00BAD55B /* NSString-XML.m in Sources */ = {isa = PBXBuildFile; fileRef = 53700DFD101E7C8C00BAD55B /* NSString-XML.m */; };
+		537DEB07103A177A00EE3530 /* IXSCNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 537DEB06103A177A00EE3530 /* IXSCNotificationManager.m */; };
+		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
 		53EA5CA71034CEA300B2CE33 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */; };
 		53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D851034FC0800B2CE33 /* FBMessage.m */; };
 		53EA5D891034FDEB00B2CE33 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53EA5D881034FDEB00B2CE33 /* MessageManager.m */; };
@@ -92,6 +94,9 @@
 		536D708910363ABF00FE42C6 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		53700DFB101E7C1300BAD55B /* NSString-XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-XML.h"; sourceTree = "<group>"; };
 		53700DFD101E7C8C00BAD55B /* NSString-XML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-XML.m"; sourceTree = "<group>"; };
+		537DEB05103A177A00EE3530 /* IXSCNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IXSCNotificationManager.h; sourceTree = "<group>"; };
+		537DEB06103A177A00EE3530 /* IXSCNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IXSCNotificationManager.m; sourceTree = "<group>"; };
+		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		53EA5CA61034CEA300B2CE33 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "fb-notify-icon.icns"; sourceTree = "<group>"; };
 		53EA5D841034FC0800B2CE33 /* FBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBMessage.h; sourceTree = "<group>"; };
 		53EA5D851034FC0800B2CE33 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBMessage.m; sourceTree = "<group>"; };
@@ -138,6 +143,7 @@
 				935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */,
 				935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */,
 				53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */,
+				537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +177,8 @@
 				53EA5D851034FC0800B2CE33 /* FBMessage.m */,
 				53EA5D871034FDEB00B2CE33 /* MessageManager.h */,
 				53EA5D881034FDEB00B2CE33 /* MessageManager.m */,
+				537DEB05103A177A00EE3530 /* IXSCNotificationManager.h */,
+				537DEB06103A177A00EE3530 /* IXSCNotificationManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -178,6 +186,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				537DEB10103A179F00EE3530 /* SystemConfiguration.framework */,
 				53184DCF103444A700C0FFA4 /* Carbon.framework */,
 				935340451017F5CB002C6CBD /* QuartzCore.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -382,6 +391,7 @@
 				53184B601034147900C0FFA4 /* StatusUpdateWindow.m in Sources */,
 				53EA5D861034FC0800B2CE33 /* FBMessage.m in Sources */,
 				53EA5D891034FDEB00B2CE33 /* MessageManager.m in Sources */,
+				537DEB07103A177A00EE3530 /* IXSCNotificationManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

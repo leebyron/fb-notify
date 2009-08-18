@@ -11,6 +11,7 @@
 #import "MenuManager.h"
 #import "NotificationManager.h"
 #import "MessageManager.h"
+#import "IXSCNotificationManager.h"
 
 @class StatusUpdateWindow;
 
@@ -26,9 +27,13 @@
 
   BubbleManager *bubbleManager;
   
+  NSTimer *queryTimer;
+  
   BOOL hasInitialLoad;
   NSString *lastStatusUpdate;
   StatusUpdateWindow *statusUpdateWindow;
+
+  IXSCNotificationManager *systemConfigNotificationManager;
 }
 
 @end

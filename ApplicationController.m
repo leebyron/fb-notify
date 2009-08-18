@@ -41,7 +41,6 @@
 #define kChainedAppIconQueryFmt @"SELECT app_id, icon_url FROM application WHERE app_id IN (" \
   @"SELECT app_id FROM #%@)"
 
-
 FBConnect *connectSession;
 
 @interface ApplicationController (Private)
@@ -51,6 +50,8 @@ FBConnect *connectSession;
 - (void)setIsLoginItem:(BOOL)isLogin;
 - (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
 - (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
+- (BOOL)isOnline;
+- (void)query;
 
 @end
 
@@ -89,6 +90,8 @@ FBConnect *connectSession;
   [menu               release];
   [profilePics        release];
   [statusUpdateWindow release];
+  [queryTimer         release];
+  [systemConfigNotificationManager release];
   [super dealloc];
 }
 
@@ -119,6 +122,13 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
     [self setIsLoginItem:YES];
   }
+
+  // check for network connectivity changes
+  systemConfigNotificationManager = [[IXSCNotificationManager alloc] init];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(updateNetStatus:)
+                                               name:@"State:/Network/Global/IPv4"
+                                             object:systemConfigNotificationManager];
 
   // login to facebook!
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
@@ -188,6 +198,21 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 }
 
 #pragma mark Private methods
+- (void)updateNetStatus:(NSNotification *)notif
+{
+  [self updateMenu];
+  if ([self isOnline]) {
+    [self query];
+  }
+}
+
+- (BOOL)isOnline
+{
+  SCNetworkConnectionFlags status;
+  Boolean success = SCNetworkCheckReachabilityByName("www.facebook.com", &status);
+  return success && (status & kSCNetworkFlagsReachable) && !(status & kSCNetworkFlagsConnectionRequired);
+}
+
 - (void)readNotification:(FBNotification *)notification
 {
   // mark this notification as read
@@ -217,8 +242,22 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [self updateMenu];
 }
 
+- (void)queryAfterDelay:(NSTimeInterval)delay
+{
+  if (queryTimer) {
+    [queryTimer invalidate];
+    [queryTimer release];
+  }
+  queryTimer = [[NSTimer scheduledTimerWithTimeInterval:delay target:self selector:@selector(query) userInfo:nil repeats:NO] retain];
+  [[NSRunLoop currentRunLoop] addTimer:queryTimer forMode:NSDefaultRunLoopMode];
+}
+
 - (void)query
 {
+  // release the wait timer
+  [queryTimer release];
+  queryTimer = nil;
+
   NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
   for (FBNotification *notification in [notifications unreadNotifications]) {
     [unreadIDs addObject:[notification objForKey:@"notificationId"]];
@@ -350,8 +389,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)updateMenu
 {
-  [menu setIconByAreUnread:([notifications unreadCount] + [messages unreadCount] > 0)];
-  [menu constructWithNotifications:[notifications allNotifications] messages:[messages allMessages]];
+  BOOL isOnline = [self isOnline];
+  [menu setIconByAreUnread:(isOnline && ([notifications unreadCount] + [messages unreadCount] > 0))];
+  [menu constructWithNotifications:[notifications allNotifications] messages:[messages allMessages] isOnline:isOnline];
 }
 
 #pragma mark Session delegate methods
@@ -396,16 +436,16 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [self updateMenu];
 
   // get ready to query again shortly...
-  [self performSelector:@selector(query) withObject:nil afterDelay:kQueryInterval];
+  [self queryAfterDelay:kQueryInterval];
   hasInitialLoad = YES;
 }
 
 - (void)failedMultiquery:(NSError *)error
 {
   NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
-  
+
   // get ready to query again in a reasonable amount of time
-  [self performSelector:@selector(query) withObject:nil afterDelay:kRetryQueryInterval];
+  [self queryAfterDelay:kRetryQueryInterval];
 }
 
 - (void)FBConnectLoggedIn:(FBConnect *)fbc

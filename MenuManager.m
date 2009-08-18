@@ -71,7 +71,8 @@ enum {
     [statusItem setImage:fbEmptyIcon];
     [statusItem setAlternateImage:fbActiveIcon];
 
-    [self addQuitItem];
+    //[self addQuitItem];
+    [self constructWithNotifications:nil messages:nil isOnline:NO];
   }
   return self;
 }
@@ -133,196 +134,208 @@ enum {
   [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
 }
 
-- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages
+- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages isOnline:(BOOL)isOnline
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
     [statusItemMenu removeItemAtIndex:0];
   }
-
-  // add new
-  NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
-                                                        action:@selector(menuShowNewsFeed:)
-                                                 keyEquivalent:@""];
-  [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
-  [newsFeedItem setImage:newsFeedIcon];
-  [statusItemMenu addItem:newsFeedItem];
-  [newsFeedItem release];
-
-  NSMenuItem *profileItem = [[NSMenuItem alloc] initWithTitle:userName
-                                                       action:@selector(menuShowProfile:)
-                                                keyEquivalent:@""];
-  [profileItem setTag:PROFILE_LINK_TAG];
-  [profileItem setImage:userIcon];
-  [profileItem setRepresentedObject:self];
-  [statusItemMenu addItem:profileItem];
-  [profileItem release];
   
-  NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
-                                                         action:@selector(beginUpdateStatus:)
+  if (isOnline) {
+    // add new
+    NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
+                                                          action:@selector(menuShowNewsFeed:)
+                                                   keyEquivalent:@""];
+    [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
+    [newsFeedItem setImage:newsFeedIcon];
+    [statusItemMenu addItem:newsFeedItem];
+    [newsFeedItem release];
+
+    NSMenuItem *profileItem = [[NSMenuItem alloc] initWithTitle:userName
+                                                         action:@selector(menuShowProfile:)
                                                   keyEquivalent:@""];
-  [setStatusItem setKeyEquivalent:@" "];
-  [setStatusItem setKeyEquivalentModifierMask:NSAlternateKeyMask|NSCommandKeyMask|NSControlKeyMask];
-  [setStatusItem setTag:STATUS_UPDATE_TAG];
-  [setStatusItem setImage:profileIcon];
-  [setStatusItem setRepresentedObject:self];
-  [statusItemMenu addItem:setStatusItem];
-  [setStatusItem release];
-  
-  //compose message
-  NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
-                                                              action:@selector(menuComposeMessage:)
-                                                       keyEquivalent:@""];
-  [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
-  [composeMessageItem setImage:messageIcon];
-  [statusItemMenu addItem:composeMessageItem];
-  [composeMessageItem release];  
+    [profileItem setTag:PROFILE_LINK_TAG];
+    [profileItem setImage:userIcon];
+    [profileItem setRepresentedObject:self];
+    [statusItemMenu addItem:profileItem];
+    [profileItem release];
+    
+    NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
+                                                           action:@selector(beginUpdateStatus:)
+                                                    keyEquivalent:@""];
+    [setStatusItem setKeyEquivalent:@" "];
+    [setStatusItem setKeyEquivalentModifierMask:NSAlternateKeyMask|NSCommandKeyMask|NSControlKeyMask];
+    [setStatusItem setTag:STATUS_UPDATE_TAG];
+    [setStatusItem setImage:profileIcon];
+    [setStatusItem setRepresentedObject:self];
+    [statusItemMenu addItem:setStatusItem];
+    [setStatusItem release];
+    
+    //compose message
+    NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
+                                                                action:@selector(menuComposeMessage:)
+                                                         keyEquivalent:@""];
+    [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
+    [composeMessageItem setImage:messageIcon];
+    [statusItemMenu addItem:composeMessageItem];
+    [composeMessageItem release];
+  } else {
+    // Offline title
+    NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Offline"
+                                                         action:nil
+                                                  keyEquivalent:@""];
+    [statusItemMenu addItem:offlineItem];
+    [offlineItem release];
+  }
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
+  
+  if (isOnline) {
 
-  // Notifications title
-  NSMenuItem *notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
-                                                          action:nil
-                                                   keyEquivalent:@""];
-  [notifTitleItem setImage:notificationsGhostIcon];
-  [statusItemMenu addItem:notifTitleItem];
-  [notifTitleItem release];  
+    if (notifications && [notifications count] > 0) {
+      // Notifications title
+      NSMenuItem *notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
+                                                              action:nil
+                                                       keyEquivalent:@""];
+      [notifTitleItem setImage:notificationsGhostIcon];
+      [statusItemMenu addItem:notifTitleItem];
+      [notifTitleItem release];
 
-  if ([notifications count] > 0) {
-    // display the latest few notifications in the menu
-    int addedNotifications = 0;
-    int extraNotifications = 0;
-    for (int i = [notifications count] - 1; i >= 0; i--) {
-      FBNotification *notification = [notifications objectAtIndex:i];
-      // maintain between kMinNotifications and kMaxNotifications
-      if (addedNotifications >= kMinNotifications &&
-          (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {
-        if ([notification boolForKey:@"isUnread"]) {
-          extraNotifications++;
+      // display the latest few notifications in the menu
+      int addedNotifications = 0;
+      int extraNotifications = 0;
+      for (int i = [notifications count] - 1; i >= 0; i--) {
+        FBNotification *notification = [notifications objectAtIndex:i];
+        // maintain between kMinNotifications and kMaxNotifications
+        if (addedNotifications >= kMinNotifications &&
+            (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {
+          if ([notification boolForKey:@"isUnread"]) {
+            extraNotifications++;
+          }
+          continue;
         }
-        continue;
+
+        // add item to menu
+        NSString *title = [notification stringForKey:@"titleText"];
+        if ([title length] > kMaxStringLen) {
+          title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
+        }
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+                                                      action:@selector(menuShowNotification:)
+                                               keyEquivalent:@""];
+        if ([notification boolForKey:@"isUnread"]) {
+          [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
+          [item setState:NSOnState];
+        }
+        [item setRepresentedObject:notification];
+        [item setImage:[appIcons objectForKey:[notification objForKey:@"appId"]]];
+        [statusItemMenu addItem:item];
+        [item release];
+        addedNotifications++;
       }
 
-      // add item to menu
-      NSString *title = [notification stringForKey:@"titleText"];
-      if ([title length] > kMaxStringLen) {
-        title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
+      if (extraNotifications > 0) {
+        NSString *more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
+        if (extraNotifications > 1) {
+          more = [more stringByAppendingString:@"s"];
+        }
+        NSMenuItem *moreItem = [[NSMenuItem alloc] initWithTitle:more
+                                                          action:@selector(menuShowAllNotifications:)
+                                                   keyEquivalent:@""];
+        [moreItem setTag:MORE_LINK_TAG];
+        [moreItem setImage:notificationsIcon];
+        [statusItemMenu addItem:moreItem];
+        [moreItem release];
       }
-      NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
-                                                    action:@selector(menuShowNotification:)
-                                             keyEquivalent:@""];
-      if ([notification boolForKey:@"isUnread"]) {
-        [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
-        [item setState:NSOnState];
-      }
-      [item setRepresentedObject:notification];
-      [item setImage:[appIcons objectForKey:[notification objForKey:@"appId"]]];
-      [statusItemMenu addItem:item];
-      [item release];
-      addedNotifications++;
+
+      [statusItemMenu addItem:[NSMenuItem separatorItem]];
     }
 
-    if (extraNotifications > 0) {
-      NSString *more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
-      if (extraNotifications > 1) {
-        more = [more stringByAppendingString:@"s"];
+    if (messages && [messages count] > 0) {
+      // Inbox title
+      NSMenuItem *inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
+                                                              action:nil
+                                                       keyEquivalent:@""];
+      [inboxTitleItem setImage:inboxGhostIcon];
+      [statusItemMenu addItem:inboxTitleItem];
+      [inboxTitleItem release];  
+
+      // display the latest few notifications in the menu
+      int addedMessages = 0;
+      int extraMessages = 0;
+      for (int i = [messages count] - 1; i >= 0; i--) {
+        FBMessage *message = [messages objectAtIndex:i];
+        // maintain between kMinMessages and kMaxMessages
+        if (addedMessages >= kMinMessages &&
+            (![message boolForKey:@"unread"] || addedMessages >= kMaxMessages)) {
+          if ([message boolForKey:@"unread"]) {
+            extraMessages++;
+          }
+          continue;
+        }
+        
+        // add item to menu
+        NSString *title = [message stringForKey:@"subject"];
+        if ([title length] == 0) {
+          title = [message stringForKey:@"snippet"];
+        }
+        if ([title length] > kMaxStringLen) {
+          title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
+        }
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+                                                      action:@selector(menuShowMessage:)
+                                               keyEquivalent:@""];
+        if ([message boolForKey:@"unread"]) {
+          [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
+          [item setState:NSOnState];
+        }
+        [item setRepresentedObject:message];
+
+        // profile pic icon
+        NSImage *senderIcon;
+        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
+
+        senderIcon = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
+        NSSize originalSize = [pic size];
+
+        [senderIcon lockFocus];
+        [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
+               fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
+              operation:NSCompositeSourceOver
+               fraction:1.0];
+        [senderIcon unlockFocus];
+        [item setImage:senderIcon];
+        [statusItemMenu addItem:item];
+        [item release];
+        addedMessages++;
       }
-      NSMenuItem *moreItem = [[NSMenuItem alloc] initWithTitle:more
-                                                        action:@selector(menuShowAllNotifications:)
-                                                 keyEquivalent:@""];
-      [moreItem setTag:MORE_LINK_TAG];
-      [moreItem setImage:notificationsIcon];
-      [statusItemMenu addItem:moreItem];
-      [moreItem release];
+      
+      if (extraMessages > 0) {
+        NSString *more = [NSString stringWithFormat:@"%i More Message", extraMessages];
+        if (extraMessages > 1) {
+          more = [more stringByAppendingString:@"s"];
+        }
+        NSMenuItem *moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
+                                                          action:@selector(menuShowInbox:)
+                                                   keyEquivalent:@""];
+        [moreMessagesItem setTag:SHOW_INBOX_TAG];
+        [moreMessagesItem setImage:inboxIcon];
+        [statusItemMenu addItem:moreMessagesItem];
+        [moreMessagesItem release];
+      }    
+      
+    } else {
+      NSMenuItem *noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
+                                                              action:@selector(menuShowInbox:)
+                                                       keyEquivalent:@""];
+      [noMessagesItem setTag:SHOW_INBOX_TAG];
+      [noMessagesItem setImage:inboxIcon];
+      [statusItemMenu addItem:noMessagesItem];
+      [noMessagesItem release];
     }
 
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
-
-  if ([messages count] > 0) {
-    // Inbox title
-    NSMenuItem *inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
-                                                            action:nil
-                                                     keyEquivalent:@""];
-    [inboxTitleItem setImage:inboxGhostIcon];
-    [statusItemMenu addItem:inboxTitleItem];
-    [inboxTitleItem release];  
-
-    // display the latest few notifications in the menu
-    int addedMessages = 0;
-    int extraMessages = 0;
-    for (int i = [messages count] - 1; i >= 0; i--) {
-      FBMessage *message = [messages objectAtIndex:i];
-      // maintain between kMinMessages and kMaxMessages
-      if (addedMessages >= kMinMessages &&
-          (![message boolForKey:@"unread"] || addedMessages >= kMaxMessages)) {
-        if ([message boolForKey:@"unread"]) {
-          extraMessages++;
-        }
-        continue;
-      }
-      
-      // add item to menu
-      NSString *title = [message stringForKey:@"subject"];
-      if ([title length] == 0) {
-        title = [message stringForKey:@"snippet"];
-      }
-      if ([title length] > kMaxStringLen) {
-        title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
-      }
-      NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
-                                                    action:@selector(menuShowMessage:)
-                                             keyEquivalent:@""];
-      if ([message boolForKey:@"unread"]) {
-        [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
-        [item setState:NSOnState];
-      }
-      [item setRepresentedObject:message];
-
-      // profile pic icon
-      NSImage *senderIcon;
-      NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
-
-      senderIcon = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
-      NSSize originalSize = [pic size];
-
-      [senderIcon lockFocus];
-      [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
-             fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
-            operation:NSCompositeSourceOver
-             fraction:1.0];
-      [senderIcon unlockFocus];
-      [item setImage:senderIcon];
-      [statusItemMenu addItem:item];
-      [item release];
-      addedMessages++;
-    }
-    
-    if (extraMessages > 0) {
-      NSString *more = [NSString stringWithFormat:@"%i More Message", extraMessages];
-      if (extraMessages > 1) {
-        more = [more stringByAppendingString:@"s"];
-      }
-      NSMenuItem *moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
-                                                        action:@selector(menuShowInbox:)
-                                                 keyEquivalent:@""];
-      [moreMessagesItem setTag:SHOW_INBOX_TAG];
-      [moreMessagesItem setImage:inboxIcon];
-      [statusItemMenu addItem:moreMessagesItem];
-      [moreMessagesItem release];
-    }    
-    
-  } else {
-    NSMenuItem *noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
-                                                            action:@selector(menuShowInbox:)
-                                                     keyEquivalent:@""];
-    [noMessagesItem setTag:SHOW_INBOX_TAG];
-    [noMessagesItem setImage:inboxIcon];
-    [statusItemMenu addItem:noMessagesItem];
-    [noMessagesItem release];
-  }
-
-  [statusItemMenu addItem:[NSMenuItem separatorItem]];
 
   //start at login
   NSMenuItem *startAtLoginItem = [[NSMenuItem alloc] initWithTitle:@"Start at Login"
@@ -334,12 +347,14 @@ enum {
   [startAtLoginItem release];
 
   // logout first
-  NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
-                                                      action:@selector(logout:)
-                                               keyEquivalent:@""];
-  [logoutItem setTag:LOGOUT_TAG];
-  [statusItemMenu addItem:logoutItem];
-  [logoutItem release];
+  if (isOnline) {
+    NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
+                                                        action:@selector(logout:)
+                                                 keyEquivalent:@""];
+    [logoutItem setTag:LOGOUT_TAG];
+    [statusItemMenu addItem:logoutItem];
+    [logoutItem release];
+  }
 
   [self addQuitItem];
 }
