@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 #define kStartAtLoginOption @"StartAtLogin"
+#define kStartAtLoginOptionPath @"StartAtLoginPath"
 
 enum {
   START_AT_LOGIN_UNKNOWN,

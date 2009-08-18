@@ -122,6 +122,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   // if this is the first launch, set up persistant launch
   if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
     [self setIsLoginItem:YES];
+
+  // otherwise check to make sure it's in the same position.
+  } else if (![[[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath] isEqual:[[NSBundle mainBundle] bundlePath]]) {
+    BOOL priorValue = [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_YES;
+    [self setIsLoginItem:NO];
+    [self setIsLoginItem:priorValue];
   }
 
   // checking if we're currently online
@@ -515,16 +521,19 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)setIsLoginItem:(BOOL)isLogin
 {
-  CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-
 	// Create a reference to the shared file list.
 	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
 
 	if (loginItems) {
 		if (isLogin) {
+      CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+      NSLog(@"adding to login items: %@", url);
 			[self enableLoginItemWithLoginItemsReference:loginItems ForPath:url];
       [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
+      [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
 		} else {
+      CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath]];
+      NSLog(@"removing from login items: %@", url);
 			[self disableLoginItemWithLoginItemsReference:loginItems ForPath:url];
       [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_NO forKey:kStartAtLoginOption];
     }
