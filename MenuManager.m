@@ -9,6 +9,7 @@
 #import "MenuManager.h"
 #import "FBNotification.h"
 #import "FBMessage.h"
+#import "GlobalSession.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
@@ -70,9 +71,6 @@ enum {
     [statusItem setHighlightMode:YES];
     [statusItem setImage:fbEmptyIcon];
     [statusItem setAlternateImage:fbActiveIcon];
-
-    //[self addQuitItem];
-    [self constructWithNotifications:nil messages:nil isOnline:NO];
   }
   return self;
 }
@@ -141,7 +139,9 @@ enum {
     [statusItemMenu removeItemAtIndex:0];
   }
   
-  if (isOnline) {
+  BOOL isLoggedIn = [connectSession isLoggedIn];
+
+  if (isOnline && isLoggedIn) {
     // add new
     NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
                                                           action:@selector(menuShowNewsFeed:)
@@ -179,6 +179,13 @@ enum {
     [composeMessageItem setImage:messageIcon];
     [statusItemMenu addItem:composeMessageItem];
     [composeMessageItem release];
+  } else if (isOnline) {
+    // Connecting title
+    NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Connecting..."
+                                                         action:nil
+                                                  keyEquivalent:@""];
+    [statusItemMenu addItem:offlineItem];
+    [offlineItem release];
   } else {
     // Offline title
     NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Offline"
@@ -190,7 +197,7 @@ enum {
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
   
-  if (isOnline) {
+  if (isOnline && isLoggedIn) {
 
     if (notifications && [notifications count] > 0) {
       // Notifications title
@@ -347,7 +354,7 @@ enum {
   [startAtLoginItem release];
 
   // logout first
-  if (isOnline) {
+  if (isOnline && isLoggedIn) {
     NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
                                                         action:@selector(logout:)
                                                  keyEquivalent:@""];

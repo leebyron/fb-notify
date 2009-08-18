@@ -50,8 +50,9 @@ FBConnect *connectSession;
 - (void)setIsLoginItem:(BOOL)isLogin;
 - (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
 - (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
-- (BOOL)isOnline;
+- (BOOL)isNetworkConnected;
 - (void)query;
+- (void)loginToFacebook;
 
 @end
 
@@ -117,21 +118,29 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   // register our hot key: control + option + command + space
   RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
-  
+
   // if this is the first launch, set up persistant launch
   if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
     [self setIsLoginItem:YES];
   }
 
-  // check for network connectivity changes
+  // checking if we're currently online
+  isOnline = [self isNetworkConnected];
+
+  // check for future network connectivity changes
   systemConfigNotificationManager = [[IXSCNotificationManager alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(updateNetStatus:)
                                                name:@"State:/Network/Global/IPv4"
                                              object:systemConfigNotificationManager];
 
-  // login to facebook!
-  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
+  // show a default menu
+  [menu constructWithNotifications:nil messages:nil isOnline:isOnline];
+
+  // if possible, login to facebook!
+  if (isOnline) {
+    [self loginToFacebook];
+  }
 }
 
 #pragma mark IBActions
@@ -200,13 +209,24 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 #pragma mark Private methods
 - (void)updateNetStatus:(NSNotification *)notif
 {
+  BOOL wasOnline = isOnline;
+  isOnline = [notif userInfo] != nil;
   [self updateMenu];
-  if ([self isOnline]) {
-    [self query];
+  if (!wasOnline && isOnline) {
+    if ([connectSession isLoggedIn]) {
+      [self query];
+    } else {
+      [self loginToFacebook];
+    }
   }
 }
 
-- (BOOL)isOnline
+- (void)loginToFacebook
+{
+  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
+}
+
+- (BOOL)isNetworkConnected
 {
   SCNetworkConnectionFlags status;
   Boolean success = SCNetworkCheckReachabilityByName("www.facebook.com", &status);
@@ -389,7 +409,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)updateMenu
 {
-  BOOL isOnline = [self isOnline];
   [menu setIconByAreUnread:(isOnline && ([notifications unreadCount] + [messages unreadCount] > 0))];
   [menu constructWithNotifications:[notifications allNotifications] messages:[messages allMessages] isOnline:isOnline];
 }

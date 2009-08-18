@@ -34,6 +34,7 @@
   StatusUpdateWindow *statusUpdateWindow;
 
   IXSCNotificationManager *systemConfigNotificationManager;
+  BOOL isOnline;
 }
 
 @end
