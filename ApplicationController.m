@@ -296,7 +296,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   }
   NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
   [unreadMessages release];
-  
+
   NSString *messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
                             unreadMessageList,
                             [messages mostRecentUpdateTime]];
@@ -321,9 +321,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   }
 
   [connectSession sendFQLMultiquery:multiQuery
-                        target:self
-                      selector:@selector(completedMultiquery:)
-                         error:@selector(failedMultiquery:)];
+                             target:self
+                           selector:@selector(completedMultiquery:)
+                              error:@selector(failedMultiquery:)];
 }
 
 - (void)processAppIcons:(NSXMLNode *)fqlResultSet

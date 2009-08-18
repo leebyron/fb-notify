@@ -138,8 +138,8 @@ enum {
   while ([statusItemMenu numberOfItems] > 0) {
     [statusItemMenu removeItemAtIndex:0];
   }
-  
-  BOOL isLoggedIn = [connectSession isLoggedIn];
+
+  BOOL isLoggedIn = [connectSession isLoggedIn] && userName != nil;
 
   if (isOnline && isLoggedIn) {
     // add new
