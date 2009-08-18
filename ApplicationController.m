@@ -21,25 +21,28 @@
 #define kQueryInterval 30
 #define kRetryQueryInterval 60
 
-#define kSilhouettePic @"http://static.ak.fbcdn.net/pics/q_silhouette.gif"
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url, pic_square FROM user WHERE uid = %@"
+
 #define kNotifQueryName @"notif"
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
   @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
   @"href, app_id, is_unread, is_hidden FROM notification "\
   @"WHERE recipient_id = %@ AND ((is_unread = 0 AND notification_id IN (%@)) OR updated_time > %i) " \
   @"ORDER BY created_time ASC"
+
 #define kMessageQueryName @"messages"
 #define kMessageQueryFmt @"SELECT thread_id, subject, snippet_author, snippet, unread, updated_time FROM thread " \
   @"WHERE folder_id = 0 AND ((unread = 0 AND thread_id IN (%@)) OR updated_time > %i)" \
   @"ORDER BY updated_time ASC"
+
 #define kChainedPicQueryName @"pic"
-#define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid IN (SELECT sender_id FROM #%@) " \
-  @"OR uid IN (SELECT snippet_author FROM #%@)"
+#define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid = %@ " \
+  @" OR uid IN (SELECT sender_id FROM #%@) OR uid IN (SELECT snippet_author FROM #%@)"
+
 #define kChainedAppIconQueryName @"app_icon"
-#define kChainedAppIconQueryFmt @"SELECT app_id, icon_url FROM application WHERE app_id IN (" \
-  @"SELECT app_id FROM #%@)"
+#define kChainedAppIconQueryFmt @"SELECT app_id, icon_url FROM application " \
+  @"WHERE app_id IN (SELECT app_id FROM #%@)"
 
 FBConnect *connectSession;
 
@@ -70,6 +73,7 @@ FBConnect *connectSession;
     messages      = [[MessageManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
     profilePics   = [[NSMutableDictionary alloc] init];
+    profileURLs   = [[NSMutableDictionary alloc] init];
     menu          = [[MenuManager alloc] init];
 
     [menu setProfilePics:profilePics];
@@ -90,6 +94,7 @@ FBConnect *connectSession;
   [bubbleManager      release];
   [menu               release];
   [profilePics        release];
+  [profileURLs        release];
   [statusUpdateWindow release];
   [queryTimer         release];
   [systemConfigNotificationManager release];
@@ -255,8 +260,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)readMessage:(FBMessage *)message
 {
   [self markMessageAsRead:message];
-
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@", [message objForKey:@"threadId"]]]];
+  NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@",
+                                                                    [message objForKey:@"threadId"]]];
+  [[NSWorkspace sharedWorkspace] openURL:inboxURL];
 }
 
 - (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
@@ -294,11 +300,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   NSString *unreadIDsList = [unreadIDs componentsJoinedByString:@","];
   [unreadIDs release];
 
-  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
-                          [connectSession uid],
-                          unreadIDsList,
-                          [notifications mostRecentUpdateTime]];
-
   NSMutableArray *unreadMessages = [[NSMutableArray alloc] init];
   for (FBMessage *message in [messages unreadMessages]) {
     [unreadMessages addObject:[message objForKey:@"threadId"]];
@@ -306,27 +307,28 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
   [unreadMessages release];
 
+  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
+                                                    [connectSession uid],
+                                                    unreadIDsList,
+                                                    [notifications mostRecentUpdateTime]];
   NSString *messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
-                            unreadMessageList,
-                            [messages mostRecentUpdateTime]];
-
-  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt, kNotifQueryName, kMessageQueryName];
-
-  NSString *appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt, kNotifQueryName];
-
-  NSDictionary *multiQuery;
+                                                      unreadMessageList,
+                                                      [messages mostRecentUpdateTime]];
+  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt,
+                                                  [connectSession uid],
+                                                  kNotifQueryName,
+                                                  kMessageQueryName];
+  NSString *appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt,
+                                                      kNotifQueryName];
+  NSMutableDictionary *multiQuery =
+    [NSMutableDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
+                                                      messageQuery, kMessageQueryName,
+                                                      picQuery,     kChainedPicQueryName,
+                                                      appIconQuery, kChainedAppIconQueryName, nil];  
   if ([menu profileURL] == nil) {
-    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt, [connectSession uid]];
-    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:infoQuery,    kInfoQueryName,
-                                                            notifQuery,   kNotifQueryName,
-                                                            messageQuery, kMessageQueryName,
-                                                            picQuery,     kChainedPicQueryName,
-                                                            appIconQuery, kChainedAppIconQueryName, nil];
-  } else {
-    multiQuery = [NSDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
-                                                            messageQuery, kMessageQueryName,
-                                                            picQuery,     kChainedPicQueryName,
-                                                            appIconQuery, kChainedAppIconQueryName, nil];
+    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt,
+                                                     [connectSession uid]];
+    [multiQuery setObject:infoQuery forKey:kInfoQueryName];
   }
 
   [connectSession sendFQLMultiquery:multiQuery
@@ -359,17 +361,19 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     NSString *picUrl = [[xml childWithName:@"pic_square"] stringValue];
     if ([picUrl length] == 0) {
       if (silhouette == nil) {
-        NSURL *url = [NSURL URLWithString:kSilhouettePic];
-        silhouette = [[NSImage alloc] initWithContentsOfURL:url];
+        silhouette = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
       }
       [profilePics setObject:silhouette forKey:uid];
-    } else {
-      if ([profilePics objectForKey:uid] == nil) {
-        NSURL *url = [NSURL URLWithString:picUrl];
-        NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
-        [profilePics setObject:pic forKey:uid];
-        [pic release];
+    } else if ([profileURLs objectForKey:uid] == nil ||
+               ![[profilePics objectForKey:uid] isEqual:picUrl]) {
+      NSURL *url = [NSURL URLWithString:picUrl];
+      NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
+      [profilePics setObject:pic    forKey:uid];
+      [profileURLs setObject:picUrl forKey:uid];
+      if ([uid isEqual:[connectSession uid]]) {
+        [menu setName:nil profileURL:nil userPic:pic];
       }
+      [pic release];
     }
   }
 }

@@ -24,6 +24,7 @@
   MessageManager *messages;
 
   NSMutableDictionary *profilePics;
+  NSMutableDictionary *profileURLs;
 
   BubbleManager *bubbleManager;
   

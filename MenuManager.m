@@ -51,7 +51,7 @@ enum {
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
 
-    userIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
+    userIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
 
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
@@ -130,22 +130,28 @@ enum {
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic
 {
-  userName   = [name retain];
-  profileURL = [url retain];
-  userIcon   = [pic retain];
+  if (name) {
+    userName   = [name retain];
+  }
 
-  [userIcon release];
-  userIcon = [[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)];
-  NSSize originalSize = [pic size];
-  
-  [userIcon lockFocus];
-  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-  [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
-  [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
-         fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
-        operation:NSCompositeSourceOver
-         fraction:1.0];  
-  [userIcon unlockFocus];
+  if (url) {
+    profileURL = [url retain];
+  }
+
+  if (pic) {
+    [userIcon release];
+    userIcon = [[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)];
+    NSSize originalSize = [pic size];
+    
+    [userIcon lockFocus];
+    [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+    [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
+    [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
+           fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
+          operation:NSCompositeSourceOver
+           fraction:1.0];  
+    [userIcon unlockFocus];
+  }
 }
 
 - (void)setIconByAreUnread:(BOOL)areUnread
