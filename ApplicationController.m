@@ -119,15 +119,18 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
 
+  int startupLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption];
+  NSString *startupPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
   // if this is the first launch, set up persistant launch
-  if ([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_UNKNOWN) {
+  if (startupLaunch == START_AT_LOGIN_UNKNOWN) {
     [self setIsLoginItem:YES];
 
   // otherwise check to make sure it's in the same position.
-  } else if (![[[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath] isEqual:[[NSBundle mainBundle] bundlePath]]) {
-    BOOL priorValue = [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_YES;
+  } else if (startupLaunch == START_AT_LOGIN_YES &&
+             startupPath && [startupPath length] > 0 &&
+             ![startupPath isEqual:[[NSBundle mainBundle] bundlePath]]) {
     [self setIsLoginItem:NO];
-    [self setIsLoginItem:priorValue];
+    [self setIsLoginItem:YES];
   }
 
   // checking if we're currently online
@@ -532,10 +535,13 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
       [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
       [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
 		} else {
-      CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath]];
-      NSLog(@"removing from login items: %@", url);
-			[self disableLoginItemWithLoginItemsReference:loginItems ForPath:url];
-      [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_NO forKey:kStartAtLoginOption];
+      NSString *existingPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
+      if (existingPath && [existingPath length] > 0) {
+        CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:existingPath];
+        NSLog(@"removing from login items: %@", url);
+        [self disableLoginItemWithLoginItemsReference:loginItems ForPath:url];
+        [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_NO forKey:kStartAtLoginOption];
+      }
     }
 	}
 	CFRelease(loginItems);
