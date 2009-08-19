@@ -7,7 +7,7 @@
 //
 
 #import "FBMessage.h"
-#import "NSString-XML.h"
+#import "NSString+.h"
 #import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
 

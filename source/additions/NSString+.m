@@ -1,4 +1,5 @@
-#import "NSString-XML.h"
+
+#import "NSString+.h"
 
 @implementation NSString (XML)
 

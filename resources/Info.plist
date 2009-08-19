@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>fb-notify-icon</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>Facebook Notifications</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.facebook.notifications</string>
 	<key>CFBundleInfoDictionaryVersion</key>
