@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <FBCocoa/FBCocoa.h>
+#import <Sparkle/Sparkle.h>
 #import "BubbleManager.h"
 #import "MenuManager.h"
 #import "NotificationManager.h"
@@ -16,6 +17,8 @@
 @class StatusUpdateWindow;
 
 @interface ApplicationController : NSObject {
+  IBOutlet SUUpdater *updater;
+
   NSImage *silhouette;
   NSImage *userPic;
 

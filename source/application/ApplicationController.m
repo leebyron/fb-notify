@@ -108,6 +108,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   return noErr;
 }
 
+- (void)applicationWillFinishLaunching
+{
+  //automatically check for updates
+  [updater setAutomaticallyDownloadsUpdates:YES];
+}
+
 - (void)awakeFromNib
 {
   //create a carbon event handler for a global hot key
