@@ -108,10 +108,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   return noErr;
 }
 
-- (void)applicationWillFinishLaunching
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification
 {
   //automatically check for updates
-  [updater setAutomaticallyDownloadsUpdates:YES];
+  [updater checkForUpdatesInBackground];
 }
 
 - (void)awakeFromNib
