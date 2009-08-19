@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		5306F86F103B7A0B0061C722 /* silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85C103B7A0B0061C722 /* silhouette.png */; };
 		5306F870103B7A0B0061C722 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85D103B7A0B0061C722 /* video.png */; };
 		5306F871103B7A0B0061C722 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85E103B7A0B0061C722 /* profile.png */; };
@@ -42,11 +41,12 @@
 		5306F90C103B80D40061C722 /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F90B103B80D40061C722 /* StatusUpdateWindow.m */; };
 		5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F91C103B81870061C722 /* IXSCNotificationManager.m */; };
 		5306F927103B8A780061C722 /* NSString+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F926103B8A780061C722 /* NSString+.m */; };
+		5306FBA5103B92110061C722 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5306FBA1103B92110061C722 /* InfoPlist.strings */; };
+		5306FBA6103B92110061C722 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5306FBA3103B92110061C722 /* MainMenu.xib */; };
+		5306FBE8103B94560061C722 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
-		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		93533ED51017AD32002C6CBD /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		93533ED61017AD35002C6CBD /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935340451017F5CB002C6CBD /* QuartzCore.framework */; };
 		935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935340E71018CCAF002C6CBD /* ApplicationServices.framework */; };
@@ -83,10 +83,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5306F85C103B7A0B0061C722 /* silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silhouette.png; path = resources/images/silhouette.png; sourceTree = "<group>"; };
@@ -140,6 +138,8 @@
 		5306F923103B87530061C722 /* GlobalSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalSession.h; path = source/backend/fbconnect/GlobalSession.h; sourceTree = "<group>"; };
 		5306F925103B8A780061C722 /* NSString+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+.h"; path = "source/additions/NSString+.h"; sourceTree = "<group>"; };
 		5306F926103B8A780061C722 /* NSString+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+.m"; path = "source/additions/NSString+.m"; sourceTree = "<group>"; };
+		5306FBA2103B92110061C722 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = InfoPlist.strings; sourceTree = "<group>"; };
+		5306FBA4103B92110061C722 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainMenu.xib; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93533ED51017AD32002C6CBD /* FBCocoa.framework in Frameworks */,
+				5306FBE8103B94560061C722 /* FBCocoa.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */,
 				935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */,
@@ -224,11 +224,11 @@
 			isa = PBXGroup;
 			children = (
 				5306F88E103B7A9D0061C722 /* Info.plist */,
+				5306FBA1103B92110061C722 /* InfoPlist.strings */,
 				5306F884103B7A350061C722 /* status.xib */,
+				5306FBA3103B92110061C722 /* MainMenu.xib */,
 				5306F882103B7A190061C722 /* fb-notify-icon.icns */,
 				53F6FCA1102133FA00CAE806 /* Images */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -400,9 +400,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* Facebook */ = {
+		8D1107260486CEB800E47090 /* FBDesktopNotifications */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Facebook" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FBDesktopNotifications" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -414,7 +414,7 @@
 			dependencies = (
 				93533ED41017AD28002C6CBD /* PBXTargetDependency */,
 			);
-			name = Facebook;
+			name = FBDesktopNotifications;
 			productInstallPath = "$(HOME)/Applications";
 			productName = Facebook;
 			productReference = 8D1107320486CEB800E47090 /* Facebook Notifications.app */;
@@ -425,7 +425,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Facebook" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FBDesktopNotifications" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Facebook */;
@@ -438,7 +438,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* Facebook */,
+				8D1107260486CEB800E47090 /* FBDesktopNotifications */,
 			);
 		};
 /* End PBXProject section */
@@ -458,8 +458,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				5306F86F103B7A0B0061C722 /* silhouette.png in Resources */,
 				5306F870103B7A0B0061C722 /* video.png in Resources */,
 				5306F871103B7A0B0061C722 /* profile.png in Resources */,
@@ -481,6 +479,8 @@
 				5306F881103B7A0B0061C722 /* addfriend.png in Resources */,
 				5306F883103B7A190061C722 /* fb-notify-icon.icns in Resources */,
 				5306F885103B7A350061C722 /* status.xib in Resources */,
+				5306FBA5103B92110061C722 /* InfoPlist.strings in Resources */,
+				5306FBA6103B92110061C722 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,20 +518,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+		5306FBA1103B92110061C722 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
+				5306FBA2103B92110061C722 /* English */,
 			);
 			name = InfoPlist.strings;
+			path = resources/English.lproj;
 			sourceTree = "<group>";
 		};
-		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+		5306FBA3103B92110061C722 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1DDD58150DA1D0A300B32029 /* English */,
+				5306FBA4103B92110061C722 /* English */,
 			);
 			name = MainMenu.xib;
+			path = resources/English.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -571,8 +573,8 @@
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Facebook_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
+				GCC_PREFIX_HEADER = source/other/Facebook_Prefix.pch;
+				INFOPLIST_FILE = resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "Facebook Notifications";
 			};
@@ -607,7 +609,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Facebook" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FBDesktopNotifications" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -616,7 +618,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Facebook" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FBDesktopNotifications" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
