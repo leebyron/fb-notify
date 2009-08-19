@@ -30,7 +30,7 @@
   
   NSTimer *queryTimer;
   
-  BOOL hasInitialLoad;
+  NSTimeInterval lastQuery;
   NSString *lastStatusUpdate;
   StatusUpdateWindow *statusUpdateWindow;
 

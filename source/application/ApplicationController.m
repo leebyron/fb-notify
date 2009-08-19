@@ -78,7 +78,7 @@ FBConnect *connectSession;
 
     [menu setProfilePics:profilePics];
 
-    hasInitialLoad = NO;
+    lastQuery = 0;
   }
   return self;
 }
@@ -381,8 +381,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)processNotifications:(NSXMLNode *)fqlResultSet
 {
   NSArray *newNotifications = [notifications addNotificationsFromXML:fqlResultSet];
-
-  if (hasInitialLoad) {
+  
+  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification *notification in newNotifications) {
       if ([notification boolForKey:@"isUnread"]) {
         NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
@@ -400,7 +400,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   NSArray *newMessages = [messages addMessagesFromXML:fqlResultSet];
 
-  if (hasInitialLoad) {
+  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage *message in newMessages) {
       if ([message boolForKey:@"unread"]) {
         NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
@@ -472,7 +472,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
   // get ready to query again shortly...
   [self queryAfterDelay:kQueryInterval];
-  hasInitialLoad = YES;
+  lastQuery = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)failedMultiquery:(NSError *)error
