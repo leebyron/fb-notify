@@ -306,6 +306,11 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [queryTimer release];
   queryTimer = nil;
 
+  // if we're not online, we shouldn't attempt a query.
+  if (!isOnline) {
+    return;
+  }
+
   NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
   for (FBNotification *notification in [notifications unreadNotifications]) {
     [unreadIDs addObject:[notification objForKey:@"notificationId"]];
