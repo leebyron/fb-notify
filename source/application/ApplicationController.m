@@ -98,6 +98,15 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   //automatically check for updates
   [updater checkForUpdatesInBackground];
+
+  // setup login manager
+  [[LoginItemManager manager] loginItemAsDefault:YES];
+
+  // check for future network connectivity changes
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(updateNetStatus:)
+                                               name:kNetConnectionNotification
+                                             object:[NetConnection netConnection]];
 }
 
 - (void)awakeFromNib
@@ -115,15 +124,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   // register our hot key: control + option + command + space
   RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
-
-  // setup login manager
-  [[LoginItemManager manager] loginItemAsDefault:YES];
-
-  // check for future network connectivity changes
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(updateNetStatus:)
-                                               name:kNetConnectionNotification
-                                             object:[NetConnection netConnection]];
 
   // show a default menu
   [menu constructWithNotifications:nil messages:nil];
