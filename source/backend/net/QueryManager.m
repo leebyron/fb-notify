@@ -111,8 +111,6 @@
     return;
   }
 
-  NSLog(@"Query");
-
   // release the wait timer
   if (queryTimer) {
     [queryTimer invalidate];
@@ -172,8 +170,6 @@
   if (![[NetConnection netConnection] isOnline]) {
     return;
   }
-
-  NSLog(@"Query Response Recieved");
 
   NSDictionary* responses = [response parseMultiqueryResponse];
   //  NSLog(@"%@", responses);
