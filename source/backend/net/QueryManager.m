@@ -106,6 +106,11 @@
 
 - (void)query
 {
+  // if we're not online, we shouldn't attempt a query.
+  if (![[NetConnection netConnection] isOnline]) {
+    return;
+  }
+
   NSLog(@"Query");
 
   // release the wait timer
@@ -113,11 +118,6 @@
     [queryTimer invalidate];
     [queryTimer release];
     queryTimer = nil;
-  }
-
-  // if we're not online, we shouldn't attempt a query.
-  if (![[NetConnection netConnection] isOnline]) {
-    return;
   }
 
   // build queries
@@ -168,6 +168,11 @@
 
 - (void)completedMultiquery:(NSXMLDocument*)response
 {
+  // if we're not online, this must be bogus.
+  if (![[NetConnection netConnection] isOnline]) {
+    return;
+  }
+
   NSLog(@"Query Response Recieved");
 
   NSDictionary* responses = [response parseMultiqueryResponse];
@@ -188,7 +193,21 @@
 
 - (void)failedMultiquery:(NSError*)error
 {
-  NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  // if we're not online, it's obvious that this would fail
+  if (![[NetConnection netConnection] isOnline]) {
+    return;
+  }
+
+  // let us know what happened
+  if ([[error userInfo] objectForKey:kFBErrorMessageKey]) {
+    NSLog(@"multiquery failed (fb error:%i) -> %@",
+          [error code],
+          [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  } else {
+    NSLog(@"multiquery failed (net error:%i) -> %@",
+          [error code],
+          [[[[error userInfo] objectForKey:NSUnderlyingErrorKey] userInfo] objectForKey:NSLocalizedDescriptionKey]);
+  }
 
   // get ready to query again in a reasonable amount of time
   [self queryAfterDelay:kRetryQueryInterval];

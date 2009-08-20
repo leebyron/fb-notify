@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 
+NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
+
 @interface MessageManager : NSObject {
   NSMutableDictionary* allDict;
   NSMutableArray*      allMessages;

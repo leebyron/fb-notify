@@ -52,6 +52,11 @@
   return [obj stringByDecodingXMLEntities];
 }
 
+- (int)integerForKey:(NSString*)key
+{
+  return [[self objectForKey:key] intValue];
+}
+
 - (BOOL)boolForKey:(NSString*)key
 {
   return ![[fields objectForKey:key] isEqualToString:@"0"];

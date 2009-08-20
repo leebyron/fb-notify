@@ -296,6 +296,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [NSApp terminate:self];
 }
 
+- (void)FBConnectErrorLoggingOut:(FBConnect *)fbc
+{
+  NSLog(@"couldn't log out, quitting anyway");
+  [NSApp terminate:self];
+}
+
 - (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {
   NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);

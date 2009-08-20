@@ -17,6 +17,7 @@
 - (void)setObject:(id)obj forKey:(NSString*)key;
 - (NSString *)objectForKey:(NSString*)key;
 - (NSString *)stringForKey:(NSString*)key;
+- (int)integerForKey:(NSString*)key;
 - (BOOL)boolForKey:(NSString*)key;
 - (NSURL *)urlForKey:(NSString*)key;
 

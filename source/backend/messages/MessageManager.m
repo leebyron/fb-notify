@@ -63,13 +63,26 @@
       [unreadMessages addObject:message];
     }
 
-    // TODO: at this point we really need to sort allMessages based on timestamp
+    // at this point we need to sort allMessages based on latest time
+    [allMessages sortUsingFunction:sortMessages context:@"updated_time"];
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
                                [[message objectForKey:@"updated_time"] intValue]);
   }
   return newMessages;
+}
+
+NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
+  int a = [firstItem integerForKey:context];
+  int b = [secondItem integerForKey:context];
+
+  if (a < b) {
+    return NSOrderedAscending;
+  } else if (a > b) {
+    return NSOrderedDescending;
+  }
+  return NSOrderedSame;
 }
 
 -(int)unreadCount {
