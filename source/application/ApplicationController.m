@@ -280,19 +280,19 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 #pragma mark FB Session delegate methods
 - (void)FBConnectLoggedIn:(FBConnect *)fbc
 {
-  NSLog(@"must have logged in okay!");
+  NSLog(@"fb connect success");
   [queryManager start];
 }
 
 - (void)FBConnectLoggedOut:(FBConnect *)fbc
 {
-  NSLog(@"loggin out, gunna quit");
+  NSLog(@"loggin' out, gunna quit");
   [NSApp terminate:self];
 }
 
 - (void)FBConnectErrorLoggingIn:(FBConnect *)fbc
 {
-  NSLog(@"shit, couldn't connect");
+  NSLog(@"couldn't fb connect, not much else to do, quitting.");
   [NSApp terminate:self];
 }
 
@@ -300,11 +300,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   NSLog(@"couldn't log out, quitting anyway");
   [NSApp terminate:self];
-}
-
-- (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
-{
-  NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 @end
