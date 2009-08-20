@@ -99,9 +99,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   //automatically check for updates
   [updater checkForUpdatesInBackground];
 
-  // setup login manager
-  [[LoginItemManager manager] loginItemAsDefault:YES];
-
   // check for future network connectivity changes
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(updateNetStatus:)
@@ -281,6 +278,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)FBConnectLoggedIn:(FBConnect *)fbc
 {
   NSLog(@"fb connect success");
+
+  // setup login manager
+  [[LoginItemManager manager] loginItemAsDefault:YES];
+
   [queryManager start];
 }
 
