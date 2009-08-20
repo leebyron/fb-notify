@@ -12,43 +12,40 @@
  * @abstract       Callback for the dynamic store, just calls keysChanged: on
  *                 the notification center.
  */
-void _IXSCNotificationCallback(SCDynamicStoreRef store, CFArrayRef changedKeys, void *info) {
-  NSEnumerator *keysE = [(NSArray *)changedKeys objectEnumerator];
-  NSString *key = nil;
-  NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+void _IXSCNotificationCallback(SCDynamicStoreRef store, CFArrayRef changedKeys, void* info) {
+  NSEnumerator* keysE      = [(NSArray *)changedKeys objectEnumerator];
+  NSString* key            = nil;
+  NSNotificationCenter* nc = [NSNotificationCenter defaultCenter];
   while (key = [keysE nextObject]) {
     [nc postNotificationName:key
                       object:(id)info
-                    userInfo:[(NSDictionary *)SCDynamicStoreCopyValue(store, (CFStringRef) key) autorelease]];
+                    userInfo:[(NSDictionary*)SCDynamicStoreCopyValue(store, (CFStringRef) key) autorelease]];
   }
 }
 
 
 @implementation IXSCNotificationManager
 
-- (void)setObservedKeys:(NSArray *)inKeyArray regExes:(NSArray *)inRegExeArray {
-  BOOL success = SCDynamicStoreSetNotificationKeys(
-                                                   dynStore,
+- (void)setObservedKeys:(NSArray*)inKeyArray regExes:(NSArray*)inRegExeArray {
+  BOOL success = SCDynamicStoreSetNotificationKeys(dynStore,
                                                    (CFArrayRef)inKeyArray,
                                                    (CFArrayRef)inRegExeArray
                                                    );
-  if (!success) NSLog(@"%s desired keys could not be observed.",__FUNCTION__);
+  if (!success) NSLog(@"%s desired keys could not be observed.", __FUNCTION__);
 }
-
 
 - (id)init {
   self = [super init];
   if (self) {
-    SCDynamicStoreContext context = { 0, (void *)self, NULL, NULL, NULL };
+    SCDynamicStoreContext context = {0, (void *)self, NULL, NULL, NULL};
 
-    dynStore = SCDynamicStoreCreate(
-                                    NULL,
+    dynStore = SCDynamicStoreCreate(NULL,
                                     (CFStringRef) [[NSBundle mainBundle] bundleIdentifier],
                                     _IXSCNotificationCallback,
                                     &context
                                     );
 
-    rlSrc = SCDynamicStoreCreateRunLoopSource(NULL,dynStore,0);
+    rlSrc = SCDynamicStoreCreateRunLoopSource(NULL, dynStore, 0);
     CFRunLoopAddSource([[NSRunLoop currentRunLoop] getCFRunLoop], rlSrc, kCFRunLoopCommonModes);
 
     [self setObservedKeys:nil regExes:[NSArray arrayWithObject:@".*"]];

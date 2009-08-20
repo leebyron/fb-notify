@@ -14,11 +14,11 @@
 
 
 @interface NetConnection : NSObject {
-  IXSCNotificationManager *systemConfigNotificationManager;
-  BOOL isOnline;
+  IXSCNotificationManager* systemConfigNotificationManager;
+  BOOL                     isOnline;
 }
 
-+ (NetConnection *)netConnection;
++ (NetConnection*)netConnection;
 
 - (BOOL)isOnline;
 

@@ -29,11 +29,11 @@
   [super dealloc];
 }
 
-- (void)addBubbleWithText:(NSString *)text
-                  subText:(NSString *)subText
-                    image:(NSImage *)image
-             notification:(FBNotification *)notif
-                  message:(FBMessage *)msg
+- (void)addBubbleWithText:(NSString*)text
+                  subText:(NSString*)subText
+                    image:(NSImage*)image
+             notification:(FBNotification*)notif
+                  message:(FBMessage*)msg
 {
   NSSize windowSize = [BubbleView totalSizeWithText:text subText:subText withImage:(image != nil) maxWidth:kBubbleMaxWidth];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
@@ -41,12 +41,12 @@
 
   float windowX = screen.width - windowSize.width - kBubbleSpacing;
   float windowY = screen.height - menuBarHeight - windowSize.height - kBubbleSpacing;
-  for (BubbleWindow *w in windows) {
+  for (BubbleWindow* w in windows) {
     windowY = MIN([w frame].origin.y - windowSize.height - kBubbleSpacing + kBubbleShadowSpacing, windowY);
   }
   NSRect windowRect = NSMakeRect(windowX, windowY, windowSize.width, windowSize.height);
 
-  BubbleWindow *window = [[BubbleWindow alloc] initWithManager:self
+  BubbleWindow* window = [[BubbleWindow alloc] initWithManager:self
                                                          frame:windowRect
                                                          image:image
                                                           text:text

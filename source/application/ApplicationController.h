@@ -40,8 +40,8 @@
 @property(retain) ImageDictionary*      appIcons;
 
 
-- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar;
-- (void)markMessageAsRead:(FBMessage *)message;
+- (void)markNotificationAsRead:(FBNotification*)notification withSimilar:(BOOL)markSimilar;
+- (void)markMessageAsRead:(FBMessage*)message;
 - (void)updateMenu;
 
 - (IBAction)menuShowNewsFeed:(id)sender;

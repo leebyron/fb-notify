@@ -34,6 +34,6 @@
  * @discussion     Default Value is inKeys:nil inRegExArray:[@".*"] which is in fact a
  observe all
  */
-- (void)setObservedKeys:(NSArray *)inKeyArray regExes:(NSArray *)inRegExeArray;
+- (void)setObservedKeys:(NSArray*)inKeyArray regExes:(NSArray*)inRegExeArray;
 
 @end

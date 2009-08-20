@@ -17,10 +17,10 @@
 {
   self = [super init];
   if (self) {
-    allDict = [[NSMutableDictionary alloc] init];
-    allNotifications = [[NSMutableArray alloc] init];
-    unreadNotifications = [[NSMutableArray alloc] init];
-    mostRecentUpdateTime = 0;
+    allDict               = [[NSMutableDictionary alloc] init];
+    allNotifications      = [[NSMutableArray alloc] init];
+    unreadNotifications   = [[NSMutableArray alloc] init];
+    mostRecentUpdateTime  = 0;
   }
   return self;
 }
@@ -33,20 +33,20 @@
   [super dealloc];
 }
 
--(NSArray *)addNotificationsFromXML:(NSXMLNode *)xml
+-(NSArray*)addNotificationsFromXML:(NSXMLNode*)xml
 {
   // remember the new notifications
-  NSMutableArray *newNotifications = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray* newNotifications = [[[NSMutableArray alloc] init] autorelease];
 
-  for (NSXMLNode *node in [xml children]) {
+  for (NSXMLNode* node in [xml children]) {
 
-    FBNotification *notification = [FBNotification notificationWithXMLNode:node manager:self];
+    FBNotification* notification = [FBNotification notificationWithXMLNode:node manager:self];
     if ([notification boolForKey:@"is_hidden"]) {
       continue;
     }
 
-    NSString *notificationID = [notification objectForKey:@"notification_id"];
-    FBNotification *existingNotification = [allDict objectForKey:notificationID];
+    NSString* notificationID = [notification objectForKey:@"notification_id"];
+    FBNotification* existingNotification = [allDict objectForKey:notificationID];
 
     if (existingNotification == nil) {
 
@@ -83,11 +83,11 @@
   return mostRecentUpdateTime;
 }
 
--(NSArray *)notificationsWithTarget:(NSURL *)url
+-(NSArray*)notificationsWithTarget:(NSURL*)url
 {
   NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
 
-  for (FBNotification *notif in unreadNotifications) {
+  for (FBNotification* notif in unreadNotifications) {
     if ([url isEqual:[notif href]]) {
       [hasTarget addObject:notif];
     }

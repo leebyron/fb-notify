@@ -17,32 +17,32 @@
 {
   self = [super init];
   if (self) {
-    allDict = [[NSMutableDictionary alloc] init];
-    allMessages = [[NSMutableArray alloc] init];
-    unreadMessages = [[NSMutableArray alloc] init];
-    mostRecentUpdateTime = 0;
+    allDict               = [[NSMutableDictionary alloc] init];
+    allMessages           = [[NSMutableArray alloc] init];
+    unreadMessages        = [[NSMutableArray alloc] init];
+    mostRecentUpdateTime  = 0;
   }
   return self;
 }
 
 - (void)dealloc
 {
-  [allDict release];
-  [allMessages release];
+  [allDict        release];
+  [allMessages    release];
   [unreadMessages release];
   [super dealloc];
 }
 
--(NSArray *)addMessagesFromXML:(NSXMLNode *)xml
+-(NSArray*)addMessagesFromXML:(NSXMLNode*)xml
 {
   // remember the new messages
-  NSMutableArray *newMessages = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray* newMessages = [[[NSMutableArray alloc] init] autorelease];
 
-  for (NSXMLNode *node in [xml children]) {
-    FBMessage *message = [FBMessage messageWithXMLNode:node manager:self];
+  for (NSXMLNode* node in [xml children]) {
+    FBMessage* message = [FBMessage messageWithXMLNode:node manager:self];
 
-    NSString *threadID = [message objectForKey:@"thread_id"];
-    FBMessage *existingMessage = [allDict objectForKey:threadID];
+    NSString* threadID = [message objectForKey:@"thread_id"];
+    FBMessage* existingMessage = [allDict objectForKey:threadID];
 
     if (existingMessage) {
       if (![[existingMessage objectForKey:@"updated_time"] isEqual:[message objectForKey:@"updated_time"]]) {
@@ -63,7 +63,7 @@
       [unreadMessages addObject:message];
     }
 
-    // TODO: at this point we need to sort allMessages
+    // TODO: at this point we really need to sort allMessages based on timestamp
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,

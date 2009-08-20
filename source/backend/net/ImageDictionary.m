@@ -11,14 +11,14 @@
 
 @implementation ImageDictionary
 
--(id) initWithBackupImage:(NSImage *)img allowUpdates:(BOOL)updates
+-(id) initWithBackupImage:(NSImage*)img allowUpdates:(BOOL)updates
 {
   self = [super init];
   if (self) {
-    images = [[NSMutableDictionary alloc] init];
-    urls   = [[NSMutableDictionary alloc] init];
-    backup = [img retain];
-    allowUpdates = updates;
+    images        = [[NSMutableDictionary alloc] init];
+    urls          = [[NSMutableDictionary alloc] init];
+    backup        = [img retain];
+    allowUpdates  = updates;
   }
   return self;
 }
@@ -31,7 +31,7 @@
   [super dealloc];
 }
 
--(void) setImageURL:(NSString *)url forKey:(NSString *)key
+-(void) setImageURL:(NSString*)url forKey:(NSString*)key
 {
   if (url == nil || [url length] == 0) {
     return;
@@ -42,12 +42,12 @@
   }
 
   [urls setObject:url forKey:key];
-  NSImage *image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+  NSImage* image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
   [images setObject:image forKey:key];
   [image release];
 }
 
--(void) setImageFile:(NSString *)file forKey:(NSString *)key {
+-(void) setImageFile:(NSString*)file forKey:(NSString*)key {
   if (file == nil || [file length] == 0) {
     return;
   }
@@ -57,19 +57,19 @@
   }
 
   [urls setObject:file forKey:key];
-  NSImage *image = [[NSImage alloc] initByReferencingFile:file];
+  NSImage* image = [[NSImage alloc] initByReferencingFile:file];
   [images setObject:image forKey:key];
   [image release];
 }
 
--(NSString *) urlForKey:(NSString *)key
+-(NSString*) urlForKey:(NSString*)key
 {
   return [urls objectForKey:key];
 }
 
--(NSImage *) imageForKey:(NSString *)key
+-(NSImage*) imageForKey:(NSString*)key
 {
-  NSImage *image = [images objectForKey:key];
+  NSImage* image = [images objectForKey:key];
   if (image == nil) {
     image = backup;
   }
@@ -81,7 +81,7 @@
   backup = image;
 }
 
--(NSImage *) backupImage
+-(NSImage*) backupImage
 {
   return backup;
 }

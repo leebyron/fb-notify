@@ -44,20 +44,20 @@
 
 - (void)queryAfterDelay:(NSTimeInterval)delay;
 - (void)query;
-- (void)completedMultiquery:(NSXMLDocument *)response;
-- (void)failedMultiquery:(NSError *)error;
-- (void)processUserInfo:(NSXMLNode *)userInfo;
-- (void)processAppIcons:(NSXMLNode *)fqlResultSet;
-- (void)processPics:(NSXMLNode *)fqlResultSet;
-- (void)processNotifications:(NSXMLNode *)fqlResultSet;
-- (void)processMessages:(NSXMLNode *)fqlResultSet;
+- (void)completedMultiquery:(NSXMLDocument*)response;
+- (void)failedMultiquery:(NSError*)error;
+- (void)processUserInfo:(NSXMLNode*)userInfo;
+- (void)processAppIcons:(NSXMLNode*)fqlResultSet;
+- (void)processPics:(NSXMLNode*)fqlResultSet;
+- (void)processNotifications:(NSXMLNode*)fqlResultSet;
+- (void)processMessages:(NSXMLNode*)fqlResultSet;
 
 @end
 
 
 @implementation QueryManager
 
--(id) initWithParent:(ApplicationController *)app
+-(id) initWithParent:(ApplicationController*)app
 {
   self = [super init];
   if (self) {
@@ -121,41 +121,41 @@
   }
 
   // build queries
-  NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
-  for (FBNotification *notification in [[parent notifications] unreadNotifications]) {
+  NSMutableArray* unreadIDs = [[NSMutableArray alloc] init];
+  for (FBNotification* notification in [[parent notifications] unreadNotifications]) {
     [unreadIDs addObject:[notification objectForKey:@"notification_id"]];
   }
-  NSString *unreadIDsList = [unreadIDs componentsJoinedByString:@","];
+  NSString* unreadIDsList = [unreadIDs componentsJoinedByString:@","];
   [unreadIDs release];
 
-  NSMutableArray *unreadMessages = [[NSMutableArray alloc] init];
-  for (FBMessage *message in [[parent messages] unreadMessages]) {
+  NSMutableArray* unreadMessages = [[NSMutableArray alloc] init];
+  for (FBMessage* message in [[parent messages] unreadMessages]) {
     [unreadMessages addObject:[message objectForKey:@"thread_id"]];
   }
-  NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
+  NSString* unreadMessageList = [unreadMessages componentsJoinedByString:@","];
   [unreadMessages release];
 
-  NSString *notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
-                          [connectSession uid],
-                          unreadIDsList,
-                          [[parent notifications] mostRecentUpdateTime]];
-  NSString *messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
-                            unreadMessageList,
-                            [[parent messages] mostRecentUpdateTime]];
-  NSString *picQuery = [NSString stringWithFormat:kChainedPicQueryFmt,
-                        [connectSession uid],
-                        kNotifQueryName,
-                        kMessageQueryName];
-  NSString *appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt,
+  NSString* notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
+                                                    [connectSession uid],
+                                                    unreadIDsList,
+                                                    [[parent notifications] mostRecentUpdateTime]];
+  NSString* messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
+                                                      unreadMessageList,
+                                                      [[parent messages] mostRecentUpdateTime]];
+  NSString* picQuery = [NSString stringWithFormat:kChainedPicQueryFmt,
+                                                  [connectSession uid],
+                                                  kNotifQueryName,
+                                                  kMessageQueryName];
+  NSString* appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt,
                             kNotifQueryName];
-  NSMutableDictionary *multiQuery =
+  NSMutableDictionary* multiQuery =
   [NSMutableDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
-   messageQuery, kMessageQueryName,
-   picQuery,     kChainedPicQueryName,
-   appIconQuery, kChainedAppIconQueryName, nil];
+                                                    messageQuery, kMessageQueryName,
+                                                    picQuery,     kChainedPicQueryName,
+                                                    appIconQuery, kChainedAppIconQueryName, nil];
   if ([[parent menu] profileURL] == nil) {
-    NSString *infoQuery = [NSString stringWithFormat:kInfoQueryFmt,
-                           [connectSession uid]];
+    NSString* infoQuery = [NSString stringWithFormat:kInfoQueryFmt,
+                                                     [connectSession uid]];
     [multiQuery setObject:infoQuery forKey:kInfoQueryName];
   }
 
@@ -166,11 +166,11 @@
                               error:@selector(failedMultiquery:)];
 }
 
-- (void)completedMultiquery:(NSXMLDocument *)response
+- (void)completedMultiquery:(NSXMLDocument*)response
 {
   NSLog(@"Query Response Recieved");
 
-  NSDictionary *responses = [response parseMultiqueryResponse];
+  NSDictionary* responses = [response parseMultiqueryResponse];
   //  NSLog(@"%@", responses);
 
   [self processUserInfo:[responses objectForKey:kInfoQueryName]];
@@ -186,7 +186,7 @@
   lastQuery = [[NSDate date] timeIntervalSince1970];
 }
 
-- (void)failedMultiquery:(NSError *)error
+- (void)failedMultiquery:(NSError*)error
 {
   NSLog(@"multiquery failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 
@@ -194,7 +194,7 @@
   [self queryAfterDelay:kRetryQueryInterval];
 }
 
-- (void)processUserInfo:(NSXMLNode *)userInfo
+- (void)processUserInfo:(NSXMLNode*)userInfo
 {
   if (userInfo == nil) {
     return;
@@ -204,36 +204,36 @@
   [[parent menu] setProfileURL:[[userInfo childWithName:@"profile_url"] stringValue]];
 }
 
-- (void)processAppIcons:(NSXMLNode *)fqlResultSet
+- (void)processAppIcons:(NSXMLNode*)fqlResultSet
 {
-  for (NSXMLNode *xml in [fqlResultSet children]) {
-    NSString *appID = [[xml childWithName:@"app_id"] stringValue];
-    NSString *iconUrl = [[xml childWithName:@"icon_url"] stringValue];
+  for (NSXMLNode* xml in [fqlResultSet children]) {
+    NSString* appID   = [[xml childWithName:@"app_id"] stringValue];
+    NSString* iconUrl = [[xml childWithName:@"icon_url"] stringValue];
     if (iconUrl != nil && [iconUrl length] != 0) {
       [[parent appIcons] setImageURL:iconUrl forKey:appID];
     }
   }
 }
 
-- (void)processPics:(NSXMLNode *)fqlResultSet
+- (void)processPics:(NSXMLNode*)fqlResultSet
 {
-  for (NSXMLNode *xml in [fqlResultSet children]) {
-    NSString *uid = [[xml childWithName:@"uid"] stringValue];
-    NSString *picUrl = [[xml childWithName:@"pic_square"] stringValue];
+  for (NSXMLNode* xml in [fqlResultSet children]) {
+    NSString* uid    = [[xml childWithName:@"uid"] stringValue];
+    NSString* picUrl = [[xml childWithName:@"pic_square"] stringValue];
     if (picUrl != nil && [picUrl length] != 0) {
       [[parent profilePics] setImageURL:picUrl forKey:uid];
     }
   }
 }
 
-- (void)processNotifications:(NSXMLNode *)fqlResultSet
+- (void)processNotifications:(NSXMLNode*)fqlResultSet
 {
-  NSArray *newNotifications = [[parent notifications] addNotificationsFromXML:fqlResultSet];
+  NSArray* newNotifications = [[parent notifications] addNotificationsFromXML:fqlResultSet];
 
-  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
-    for (FBNotification *notification in newNotifications) {
+  if(lastQuery + (kQueryInterval* 5) > [[NSDate date] timeIntervalSince1970]) {
+    for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
-        NSImage *pic = [[parent profilePics] imageForKey:[notification objectForKey:@"sender_id"]];
+        NSImage* pic = [[parent profilePics] imageForKey:[notification objectForKey:@"sender_id"]];
         [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
                                           subText:[notification stringForKey:@"body_text"]
                                             image:pic
@@ -244,26 +244,26 @@
   }
 }
 
-- (void)processMessages:(NSXMLNode *)fqlResultSet
+- (void)processMessages:(NSXMLNode*)fqlResultSet
 {
-  NSArray *newMessages = [[parent messages] addMessagesFromXML:fqlResultSet];
+  NSArray* newMessages = [[parent messages] addMessagesFromXML:fqlResultSet];
 
-  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
-    for (FBMessage *message in newMessages) {
+  if(lastQuery + (kQueryInterval* 5) > [[NSDate date] timeIntervalSince1970]) {
+    for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSImage *pic = [[parent profilePics] imageForKey:[message objectForKey:@"snippet_author"]];
+        NSImage* pic = [[parent profilePics] imageForKey:[message objectForKey:@"snippet_author"]];
 
-        NSString *bubText = [message stringForKey:@"subject"];
-        NSString *bubSubText = [message stringForKey:@"snippet"];
+        NSString* bubText = [message stringForKey:@"subject"];
+        NSString* bubSubText = [message stringForKey:@"snippet"];
         if ([bubText length] == 0) {
           bubText = bubSubText;
           bubSubText = nil;
         }
         [[parent bubbleManager] addBubbleWithText:bubText
-                                 subText:bubSubText
-                                   image:pic
-                            notification:nil
-                                 message:message];
+                                          subText:bubSubText
+                                            image:pic
+                                     notification:nil
+                                          message:message];
       }
     }
   }

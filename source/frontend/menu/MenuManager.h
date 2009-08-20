@@ -20,35 +20,36 @@ enum {
 
 
 @interface MenuManager : NSObject {
-  NSImage *fbActiveIcon;
-  NSImage *fbEmptyIcon;
-  NSImage *fbFullIcon;
+  NSImage* fbActiveIcon;
+  NSImage* fbEmptyIcon;
+  NSImage* fbFullIcon;
 
-  NSImage *newsFeedIcon;
-  NSImage *profileIcon;
-  NSImage *notificationsIcon;
-  NSImage *messageIcon;
-  NSImage *inboxIcon;
+  NSImage* newsFeedIcon;
+  NSImage* profileIcon;
+  NSImage* notificationsIcon;
+  NSImage* messageIcon;
+  NSImage* inboxIcon;
 
-  NSImage *notificationsGhostIcon;
-  NSImage *inboxGhostIcon;
+  NSImage* notificationsGhostIcon;
+  NSImage* inboxGhostIcon;
 
-  ImageDictionary *profilePics;
-  ImageDictionary *appIcons;
+  ImageDictionary* profilePics;
+  ImageDictionary* appIcons;
 
-  NSStatusItem *statusItem;
-  NSMenu *statusItemMenu;
+  NSStatusItem* statusItem;
+  NSMenu*       statusItemMenu;
 
-  NSString *userName;
-  NSString *profileURL;
+  NSString* userName;
+  NSString* profileURL;
 }
 
-@property(retain) NSString *userName;
-@property(retain) NSString *profileURL;
-@property(retain) ImageDictionary *profilePics;
-@property(retain) ImageDictionary *appIcons;
+@property(retain) NSString* userName;
+@property(retain) NSString* profileURL;
+@property(retain) ImageDictionary* profilePics;
+@property(retain) ImageDictionary* appIcons;
 
 - (void)setIconByAreUnread:(BOOL)areUnread;
-- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages;
+- (void)constructWithNotifications:(NSArray*)notifications
+                          messages:(NSArray*)messages;
 
 @end

@@ -12,11 +12,11 @@
 
 
 @interface FBMessage : FBObject {
-  MessageManager *manager;
+  MessageManager* manager;
 }
 
-+ (FBMessage *)messageWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr;
-- (id)initWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr;
++ (FBMessage*)messageWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr;
+- (id)initWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr;
 
 - (void)markAsRead;
 

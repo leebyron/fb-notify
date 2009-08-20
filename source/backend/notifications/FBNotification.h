@@ -11,15 +11,17 @@
 
 
 @interface FBNotification : FBObject {
-  NotificationManager *manager;
-
-  NSURL *href;
+  NotificationManager* manager;
+  NSURL*               href;
 }
 
-@property(retain) NSURL *href;
+@property(retain) NSURL* href;
 
-+ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
-- (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
++ (FBNotification*)notificationWithXMLNode:(NSXMLNode*)node
+                                   manager:(NotificationManager*)mngr;
+
+- (id)initWithXMLNode:(NSXMLNode*)node
+              manager:(NotificationManager*)mngr;
 
 - (void)markAsReadWithSimilar:(BOOL)markSimilar;
 

@@ -10,14 +10,14 @@
 
 
 @interface FBObject : NSObject {
-  NSMutableDictionary *fields;
+  NSMutableDictionary* fields;
 }
 
-- (id)initWithXMLNode:(NSXMLNode *)node;
-- (void)setObject:(id)obj forKey:(NSString *)key;
-- (NSString *)objectForKey:(NSString *)key;
-- (NSString *)stringForKey:(NSString *)key;
-- (BOOL)boolForKey:(NSString *)key;
-- (NSURL *)urlForKey:(NSString *)key;
+- (id)initWithXMLNode:(NSXMLNode*)node;
+- (void)setObject:(id)obj forKey:(NSString*)key;
+- (NSString *)objectForKey:(NSString*)key;
+- (NSString *)stringForKey:(NSString*)key;
+- (BOOL)boolForKey:(NSString*)key;
+- (NSURL *)urlForKey:(NSString*)key;
 
 @end

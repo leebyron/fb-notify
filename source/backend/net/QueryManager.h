@@ -18,15 +18,13 @@ enum {
 @class ApplicationController;
 
 @interface QueryManager : NSObject {
-  int status;
-
-  ApplicationController *parent;
-
-  NSTimer         *queryTimer;
-  NSTimeInterval  lastQuery;
+  int                     status;
+  ApplicationController*  parent;
+  NSTimer*                queryTimer;
+  NSTimeInterval          lastQuery;
 }
 
--(id) initWithParent:(ApplicationController *)app;
+-(id) initWithParent:(ApplicationController*)app;
 
 -(void) start;
 -(void) stop;

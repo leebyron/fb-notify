@@ -10,19 +10,19 @@
 
 
 @interface ImageDictionary : NSObject {
-  NSMutableDictionary *images;
-  NSMutableDictionary *urls;
-  NSImage *backup;
-  BOOL allowUpdates;
+  NSMutableDictionary*  images;
+  NSMutableDictionary*  urls;
+  NSImage*              backup;
+  BOOL                  allowUpdates;
 }
 
--(id) initWithBackupImage:(NSImage *)img allowUpdates:(BOOL)updates;
+-(id) initWithBackupImage:(NSImage*)img allowUpdates:(BOOL)updates;
 
--(void) setImageURL:(NSString *)url forKey:(NSString *)key;
--(void) setImageFile:(NSString *)file forKey:(NSString *)key;
--(NSString *) urlForKey:(NSString *)key;
--(NSImage *) imageForKey:(NSString *)key;
+-(void) setImageURL:(NSString*)url forKey:(NSString*)key;
+-(void) setImageFile:(NSString*)file forKey:(NSString*)key;
+-(NSString*) urlForKey:(NSString*)key;
+-(NSImage*) imageForKey:(NSString*)key;
 -(void) setBackupImage:(NSImage *)image;
--(NSImage *) backupImage;
+-(NSImage*) backupImage;
 
 @end

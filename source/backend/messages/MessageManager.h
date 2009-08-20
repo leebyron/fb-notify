@@ -10,16 +10,16 @@
 
 
 @interface MessageManager : NSObject {
-  NSMutableDictionary *allDict;
-  NSMutableArray *allMessages;
-  NSMutableArray *unreadMessages;
-  int mostRecentUpdateTime;
+  NSMutableDictionary* allDict;
+  NSMutableArray*      allMessages;
+  NSMutableArray*      unreadMessages;
+  int                  mostRecentUpdateTime;
 }
 
-@property(retain) NSMutableArray *allMessages;
-@property(retain) NSMutableArray *unreadMessages;
+@property(retain) NSMutableArray* allMessages;
+@property(retain) NSMutableArray* unreadMessages;
 
--(NSArray *)addMessagesFromXML:(NSXMLNode *)xml;
+-(NSArray*)addMessagesFromXML:(NSXMLNode*)xml;
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
 

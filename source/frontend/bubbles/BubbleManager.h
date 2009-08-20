@@ -10,10 +10,10 @@
 #import "FBMessage.h"
 
 @interface BubbleManager : NSObject {
-  NSMutableArray *windows;
+  NSMutableArray* windows;
 }
 
-@property(retain) NSMutableArray *windows;
+@property(retain) NSMutableArray* windows;
 
 - (void)addBubbleWithText:(NSString *)text
                   subText:(NSString *)subText

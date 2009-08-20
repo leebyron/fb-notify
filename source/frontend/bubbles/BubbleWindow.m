@@ -13,13 +13,13 @@
 
 @implementation BubbleWindow
 
-- (id)initWithManager:(BubbleManager *)mngr
+- (id)initWithManager:(BubbleManager*)mngr
                 frame:(NSRect)frame
-                image:(NSImage *)image
-                 text:(NSString *)text
-              subText:(NSString *)subText
-         notification:(FBNotification *)notif
-              message:(FBMessage *)msg
+                image:(NSImage*)image
+                 text:(NSString*)text
+              subText:(NSString*)subText
+         notification:(FBNotification*)notif
+              message:(FBMessage*)msg
 {
   // need to make space for a shadow, add a 10px border
   NSRect wideFrame = NSMakeRect(frame.origin.x - kBubbleShadowSpacing,
@@ -46,12 +46,12 @@
     [view release];
 
     // set up fade in/out animation
-    CAAnimation *fadeAni = [CABasicAnimation animation];
+    CAAnimation* fadeAni = [CABasicAnimation animation];
     [fadeAni setDelegate:self];
     [fadeAni setDuration:kAnimationDuration];
 
     // set up drop-in animation
-    CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
+    CAKeyframeAnimation* moveAni = [CAKeyframeAnimation animation];
     [moveAni setDuration:kAnimationDuration];
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, [self frame].origin.x, [self frame].origin.y + kCloseSlideDistance);
@@ -107,7 +107,7 @@
   [[self animator] setAlphaValue:0.0];
 }
 
-- (void)mouseEntered:(NSEvent *)event
+- (void)mouseEntered:(NSEvent*)event
 {
   if (disappearing) {
     return;
@@ -118,7 +118,7 @@
                                              object:nil];
 }
 
-- (void)mouseExited:(NSEvent *)event
+- (void)mouseExited:(NSEvent*)event
 {
   if (disappearing) {
     return;
@@ -132,7 +132,7 @@
   [self disappear];
 }
 
-- (void)mouseUp:(NSEvent *)event
+- (void)mouseUp:(NSEvent*)event
 {
   if (notification != nil) {
     [[NSApp delegate] menuShowNotification:notification];
@@ -143,7 +143,7 @@
   [self disappear];
 }
 
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+- (void)animationDidStop:(CAAnimation*)theAnimation finished:(BOOL)flag
 {
   // If the alpha value is near 0, this means the "fade out" animation just finished
   // as part of the window going away.

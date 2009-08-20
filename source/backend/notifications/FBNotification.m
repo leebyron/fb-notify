@@ -11,7 +11,7 @@
 
 @interface FBNotification (Private)
 
-- (NSString *)lastURLInHTML:(NSString *)string;
+- (NSString*)lastURLInHTML:(NSString*)string;
 
 @end
 
@@ -19,19 +19,21 @@
 
 @synthesize href;
 
-+ (FBNotification *)notificationWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr
++ (FBNotification*)notificationWithXMLNode:(NSXMLNode*)node
+                                   manager:(NotificationManager*)mngr
 {
   return [[[self alloc] initWithXMLNode:node manager:mngr] autorelease];
 }
 
-- (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr
+- (id)initWithXMLNode:(NSXMLNode*)node
+              manager:(NotificationManager*)mngr
 {
   self = [super initWithXMLNode:node];
   if (self) {
     manager = mngr;
 
     // find and fill href var
-    NSString *hrefString = [self objectForKey:@"href"];
+    NSString* hrefString = [self objectForKey:@"href"];
 
     // this page is bogus.
     if ([hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
@@ -66,14 +68,14 @@
 
 - (void)markAsReadWithSimilar:(BOOL)markSimilar
 {
-  NSArray *notifs;
+  NSArray* notifs;
   if (markSimilar) {
     notifs = [manager notificationsWithTarget:href];
   } else {
     notifs = [NSArray arrayWithObject:self];
   }
   if ([notifs count] > 0) {
-    for (FBNotification *notif in notifs) {
+    for (FBNotification* notif in notifs) {
       [notif setObject:@"0" forKey:@"is_unread"];
     }
     [[manager unreadNotifications] removeObjectsInArray:notifs];
@@ -86,7 +88,7 @@
 }
 
 #pragma mark Private methods
-- (NSString *)lastURLInHTML:(NSString *)html
+- (NSString*)lastURLInHTML:(NSString*)html
 {
   NSRange startHref = [html rangeOfString:@"href=\""
                                   options:NSBackwardsSearch];
@@ -102,12 +104,12 @@
                                               endHref.location - startUrl)];
 }
 
-- (void)markReadError:(NSError *)error
+- (void)markReadError:(NSError*)error
 {
   NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
-- (NSString *)description {
+- (NSString*)description {
   return [self objectForKey:@"notification_id"];
 }
 

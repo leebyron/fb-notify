@@ -8,8 +8,8 @@
 #import "BubbleView.h"
 #import "BubbleDimensions.h"
 
-static NSDictionary *attrs = nil;
-static NSDictionary *subAttrs = nil;
+static NSDictionary* attrs = nil;
+static NSDictionary* subAttrs = nil;
 
 @implementation BubbleView
 
@@ -23,7 +23,7 @@ static NSDictionary *subAttrs = nil;
                NSForegroundColorAttributeName, nil] retain];
 }
 
-+ (float)heightOfText:(NSString *)text subText:(NSString *)subText maxWidth:(float)width
++ (float)heightOfText:(NSString*)text subText:(NSString*)subText maxWidth:(float)width
 {
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                      options:NSStringDrawingUsesLineFragmentOrigin
@@ -39,7 +39,7 @@ static NSDictionary *subAttrs = nil;
   }
 }
 
-+ (float)widthOfText:(NSString *)text subText:(NSString *)subText maxWidth:(float)width
++ (float)widthOfText:(NSString*)text subText:(NSString*)subText maxWidth:(float)width
 {
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                                    options:NSStringDrawingUsesLineFragmentOrigin
@@ -55,7 +55,7 @@ static NSDictionary *subAttrs = nil;
   }
 }
 
-+ (NSSize)totalSizeWithText:(NSString *)text subText:(NSString *)subText withImage:(BOOL)hasImage maxWidth:(float)maxWidth
++ (NSSize)totalSizeWithText:(NSString*)text subText:(NSString*)subText withImage:(BOOL)hasImage maxWidth:(float)maxWidth
 {
   float textHeight = [self heightOfText:text subText:subText maxWidth:maxWidth];
   float totalHeight;
@@ -75,9 +75,9 @@ static NSDictionary *subAttrs = nil;
 }
 
 - (id)initWithFrame:(NSRect)frame
-              image:(NSImage *)img
-               text:(NSString *)aString
-            subText:(NSString *)bString
+              image:(NSImage*)img
+               text:(NSString*)aString
+            subText:(NSString*)bString
 {
   self = [super initWithFrame:frame];
   if (self) {
@@ -112,17 +112,17 @@ static NSDictionary *subAttrs = nil;
 
   // create shadow
   [NSGraphicsContext saveGraphicsState];
-  NSShadow *shadow = [[NSShadow alloc] init];
+  NSShadow* shadow = [[NSShadow alloc] init];
   [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.5]];
   [shadow setShadowBlurRadius:kBubbleShadowRadius];
   [shadow setShadowOffset:NSMakeSize(0, -kBubbleShadowOffset)];
   [shadow set];
 
   // draw background space in order to get a knocked-out shadow
-  NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:trueBounds
+  NSBezierPath* roundedRect = [NSBezierPath bezierPathWithRoundedRect:trueBounds
                                                               xRadius:kBubbleRadius
                                                               yRadius:kBubbleRadius];
-  NSBezierPath *knockOut = [NSBezierPath bezierPathWithRect:rect];
+  NSBezierPath* knockOut = [NSBezierPath bezierPathWithRect:rect];
   [knockOut appendBezierPath:roundedRect];
   [knockOut setWindingRule:NSEvenOddWindingRule];
   [knockOut addClip];
@@ -182,7 +182,7 @@ static NSDictionary *subAttrs = nil;
                                 kBubbleShadowSpacing + trueBounds.size.height - kBubblePadding - kBubbleIconSize,
                                 kBubbleIconSize,
                                 kBubbleIconSize);
-  NSBezierPath *imgRoundedRect = [NSBezierPath bezierPathWithRoundedRect:imageRect
+  NSBezierPath* imgRoundedRect = [NSBezierPath bezierPathWithRoundedRect:imageRect
                                                                  xRadius:kPicRadius
                                                                  yRadius:kPicRadius];
   [imgRoundedRect addClip];

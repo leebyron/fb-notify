@@ -35,7 +35,7 @@ enum {
 @interface MenuManager (Private)
 
 - (void)addQuitItem;
-- (NSImage *)makeTinyMan:(NSImage *)pic;
+- (NSImage*)makeTinyMan:(NSImage*)pic;
 - (BOOL)wasLaunchedByProcess:(NSString*)creator;
 - (BOOL)wasLaunchedAsLoginItem;
 
@@ -105,7 +105,7 @@ enum {
   [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
 }
 
-- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages
+- (void)constructWithNotifications:(NSArray*)notifications messages:(NSArray*)messages
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
@@ -116,7 +116,7 @@ enum {
 
   if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
     // add new
-    NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
+    NSMenuItem* newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
                                                           action:@selector(menuShowNewsFeed:)
                                                    keyEquivalent:@""];
     [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
@@ -124,7 +124,7 @@ enum {
     [statusItemMenu addItem:newsFeedItem];
     [newsFeedItem release];
 
-    NSMenuItem *profileItem = [[NSMenuItem alloc] initWithTitle:userName
+    NSMenuItem* profileItem = [[NSMenuItem alloc] initWithTitle:userName
                                                          action:@selector(menuShowProfile:)
                                                   keyEquivalent:@""];
     [profileItem setTag:PROFILE_LINK_TAG];
@@ -133,7 +133,7 @@ enum {
     [statusItemMenu addItem:profileItem];
     [profileItem release];
 
-    NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
+    NSMenuItem* setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
                                                            action:@selector(beginUpdateStatus:)
                                                     keyEquivalent:@""];
     [setStatusItem setKeyEquivalent:@" "];
@@ -145,7 +145,7 @@ enum {
     [setStatusItem release];
 
     //compose message
-    NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
+    NSMenuItem* composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
                                                                 action:@selector(menuComposeMessage:)
                                                          keyEquivalent:@""];
     [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
@@ -154,14 +154,14 @@ enum {
     [composeMessageItem release];
   } else if ([[NetConnection netConnection] isOnline]) {
     // Connecting title
-    NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Connecting..."
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Connecting..."
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
     [offlineItem release];
   } else {
     // Offline title
-    NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Offline"
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Offline"
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
@@ -174,7 +174,7 @@ enum {
 
     if (notifications && [notifications count] > 0) {
       // Notifications title
-      NSMenuItem *notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
+      NSMenuItem* notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
                                                               action:nil
                                                        keyEquivalent:@""];
       [notifTitleItem setImage:notificationsGhostIcon];
@@ -185,7 +185,7 @@ enum {
       int addedNotifications = 0;
       int extraNotifications = 0;
       for (int i = [notifications count] - 1; i >= 0; i--) {
-        FBNotification *notification = [notifications objectAtIndex:i];
+        FBNotification* notification = [notifications objectAtIndex:i];
         // maintain between kMinNotifications and kMaxNotifications
         if (addedNotifications >= kMinNotifications &&
             (![notification boolForKey:@"is_unread"] || addedNotifications >= kMaxNotifications)) {
@@ -196,11 +196,11 @@ enum {
         }
 
         // add item to menu
-        NSString *title = [notification stringForKey:@"title_text"];
+        NSString* title = [notification stringForKey:@"title_text"];
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
         }
-        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+        NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title
                                                       action:@selector(menuShowNotification:)
                                                keyEquivalent:@""];
         if ([notification boolForKey:@"is_unread"]) {
@@ -215,11 +215,11 @@ enum {
       }
 
       if (extraNotifications > 0) {
-        NSString *more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
+        NSString* more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
         if (extraNotifications > 1) {
           more = [more stringByAppendingString:@"s"];
         }
-        NSMenuItem *moreItem = [[NSMenuItem alloc] initWithTitle:more
+        NSMenuItem* moreItem = [[NSMenuItem alloc] initWithTitle:more
                                                           action:@selector(menuShowAllNotifications:)
                                                    keyEquivalent:@""];
         [moreItem setTag:MORE_LINK_TAG];
@@ -233,7 +233,7 @@ enum {
 
     if (messages && [messages count] > 0) {
       // Inbox title
-      NSMenuItem *inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
+      NSMenuItem* inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
                                                               action:nil
                                                        keyEquivalent:@""];
       [inboxTitleItem setImage:inboxGhostIcon];
@@ -244,7 +244,7 @@ enum {
       int addedMessages = 0;
       int extraMessages = 0;
       for (int i = [messages count] - 1; i >= 0; i--) {
-        FBMessage *message = [messages objectAtIndex:i];
+        FBMessage* message = [messages objectAtIndex:i];
         // maintain between kMinMessages and kMaxMessages
         if (addedMessages >= kMinMessages &&
             (![message boolForKey:@"unread"] || addedMessages >= kMaxMessages)) {
@@ -255,14 +255,14 @@ enum {
         }
 
         // add item to menu
-        NSString *title = [message stringForKey:@"subject"];
+        NSString* title = [message stringForKey:@"subject"];
         if ([title length] == 0) {
           title = [message stringForKey:@"snippet"];
         }
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
         }
-        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
+        NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title
                                                       action:@selector(menuShowMessage:)
                                                keyEquivalent:@""];
         if ([message boolForKey:@"unread"]) {
@@ -272,7 +272,7 @@ enum {
         [item setRepresentedObject:message];
 
         // profile pic icon
-        NSImage *senderIcon = [self makeTinyMan:[profilePics imageForKey:[message objectForKey:@"snippet_author"]]];
+        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[message objectForKey:@"snippet_author"]]];
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];
@@ -280,11 +280,11 @@ enum {
       }
 
       if (extraMessages > 0) {
-        NSString *more = [NSString stringWithFormat:@"%i More Message", extraMessages];
+        NSString* more = [NSString stringWithFormat:@"%i More Message", extraMessages];
         if (extraMessages > 1) {
           more = [more stringByAppendingString:@"s"];
         }
-        NSMenuItem *moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
+        NSMenuItem* moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
                                                           action:@selector(menuShowInbox:)
                                                    keyEquivalent:@""];
         [moreMessagesItem setTag:SHOW_INBOX_TAG];
@@ -294,7 +294,7 @@ enum {
       }
 
     } else {
-      NSMenuItem *noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
+      NSMenuItem* noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
                                                               action:@selector(menuShowInbox:)
                                                        keyEquivalent:@""];
       [noMessagesItem setTag:SHOW_INBOX_TAG];
@@ -307,7 +307,7 @@ enum {
   }
 
   //start at login
-  NSMenuItem *startAtLoginItem = [[NSMenuItem alloc] initWithTitle:@"Start at Login"
+  NSMenuItem* startAtLoginItem = [[NSMenuItem alloc] initWithTitle:@"Start at Login"
                                                               action:@selector(changedStartAtLoginStatus:)
                                                        keyEquivalent:@""];
   [startAtLoginItem setTag:START_AT_LOGIN_TAG];
@@ -317,7 +317,7 @@ enum {
 
   // logout first
   if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
-    NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
+    NSMenuItem* logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
                                                         action:@selector(logout:)
                                                  keyEquivalent:@""];
     [logoutItem setTag:LOGOUT_TAG];
@@ -331,7 +331,7 @@ enum {
 #pragma mark Private methods
 - (void)addQuitItem
 {
-  NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
+  NSMenuItem* quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
                                                     action:@selector(terminate:)
                                              keyEquivalent:@""];
   [quitItem setTag:QUIT_TAG];
@@ -339,9 +339,9 @@ enum {
   [quitItem release];
 }
 
-- (NSImage *)makeTinyMan:(NSImage *)pic
+- (NSImage*)makeTinyMan:(NSImage*)pic
 {
-  NSImage *tinyMan = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
+  NSImage* tinyMan = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
   NSSize originalSize = [pic size];
 
   [tinyMan lockFocus];

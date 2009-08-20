@@ -9,18 +9,18 @@
 #import <Cocoa/Cocoa.h>
 
 @interface NotificationManager : NSObject {
-  NSMutableDictionary *allDict;
-  NSMutableArray *allNotifications;
-  NSMutableArray *unreadNotifications;
-  int mostRecentUpdateTime;
+  NSMutableDictionary*  allDict;
+  NSMutableArray*       allNotifications;
+  NSMutableArray*       unreadNotifications;
+  int                   mostRecentUpdateTime;
 }
 
-@property(retain) NSMutableArray *allNotifications;
-@property(retain) NSMutableArray *unreadNotifications;
+@property(retain) NSMutableArray* allNotifications;
+@property(retain) NSMutableArray* unreadNotifications;
 
--(NSArray *)addNotificationsFromXML:(NSXMLNode *)xml;
+-(NSArray*)addNotificationsFromXML:(NSXMLNode*)xml;
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
--(NSArray *)notificationsWithTarget:(NSURL *)url;
+-(NSArray*)notificationsWithTarget:(NSURL*)url;
 
 @end

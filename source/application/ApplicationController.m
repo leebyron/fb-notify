@@ -24,7 +24,6 @@
 - (void)setIsLoginItem:(BOOL)isLogin;
 - (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(CFURLRef)thePath;
 - (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(CFURLRef)thePath;
-- (void)query;
 - (void)loginToFacebook;
 
 @end
@@ -148,6 +147,26 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   }
 }
 
+- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
+{
+  [notification markAsReadWithSimilar:markSimilar];
+  [self updateMenu];
+}
+
+- (void)markMessageAsRead:(FBMessage *)message
+{
+  [message markAsRead];
+  [self updateMenu];
+}
+
+- (void)updateMenu
+{
+  [menu setIconByAreUnread:([[NetConnection netConnection] isOnline] &&
+                            ([notifications unreadCount] + [messages unreadCount] > 0))];
+  [menu constructWithNotifications:[notifications allNotifications]
+                          messages:[messages allMessages]];
+}
+
 #pragma mark IBActions
 - (IBAction)menuShowNewsFeed:(id)sender
 {
@@ -225,12 +244,12 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [connectSession logout];
 }
 
+
 #pragma mark Private methods
 - (void)updateNetStatus:(NSNotification *)notif
 {
   NSLog(@"Net status changed to %i", [[NetConnection netConnection] isOnline]);
 
-  [self updateMenu];
   if ([[NetConnection netConnection] isOnline]) {
     if ([connectSession isLoggedIn]) {
       [queryManager start];
@@ -241,6 +260,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     // if we just switched to offline, stop the query timer
     [queryManager stop];
   }
+
+  [self updateMenu];
 }
 
 - (void)loginToFacebook
@@ -248,25 +269,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox",  @"publish_stream", nil]];
 }
 
-- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
-{
-  [notification markAsReadWithSimilar:markSimilar];
-  [self updateMenu];
-}
-
-- (void)markMessageAsRead:(FBMessage *)message
-{
-  [message markAsRead];
-  [self updateMenu];
-}
-
-- (void)updateMenu
-{
-  [menu setIconByAreUnread:([[NetConnection netConnection] isOnline] &&
-                            ([notifications unreadCount] + [messages unreadCount] > 0))];
-  [menu constructWithNotifications:[notifications allNotifications]
-                          messages:[messages allMessages]];
-}
 
 #pragma mark Session delegate methods
 - (void)FBConnectLoggedIn:(FBConnect *)fbc
@@ -305,7 +307,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   NSLog(@"shit, couldn't connect");
   [NSApp terminate:self];
 }
-
 
 - (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {

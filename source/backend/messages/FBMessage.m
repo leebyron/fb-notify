@@ -12,7 +12,7 @@
 
 @implementation FBMessage
 
-+ (FBMessage *)messageWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr
++ (FBMessage*)messageWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr
 {
   return [[[self alloc] initWithXMLNode:node manager:mngr] autorelease];
 }

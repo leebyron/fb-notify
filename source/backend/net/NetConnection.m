@@ -12,16 +12,16 @@
 @interface NetConnection (Private)
 
 - (BOOL)isNetworkConnected;
-- (void)updateOnlineStatus:(NSNotification *)notif;
+- (void)updateOnlineStatus:(NSNotification*)notif;
 
 @end
 
 
 @implementation NetConnection
 
-NetConnection *instance;
+NetConnection* instance;
 
-+ (NetConnection *)netConnection
++ (NetConnection*)netConnection
 {
   if (instance == nil) {
     instance = [[NetConnection alloc] init];
@@ -63,12 +63,16 @@ NetConnection *instance;
 {
   SCNetworkConnectionFlags status;
   Boolean success = SCNetworkCheckReachabilityByName("www.facebook.com", &status);
-  success = success && (status & kSCNetworkFlagsReachable) && !(status & kSCNetworkFlagsConnectionRequired);
+  success = success &&
+            (status & kSCNetworkFlagsReachable) &&
+            !(status & kSCNetworkFlagsConnectionRequired);
 
   if (!success) {
     SCNetworkConnectionFlags status;
     Boolean success = SCNetworkCheckReachabilityByName("www.apple.com", &status);
-    success = success && (status & kSCNetworkFlagsReachable) && !(status & kSCNetworkFlagsConnectionRequired);
+    success = success &&
+              (status & kSCNetworkFlagsReachable) &&
+              !(status & kSCNetworkFlagsConnectionRequired);
   }
 
   return success;
