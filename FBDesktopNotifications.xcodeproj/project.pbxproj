@@ -62,7 +62,7 @@
 		5306FCC3103BC6E40061C722 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306FCC2103BC6E40061C722 /* Sparkle.framework */; };
 		5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5306FCC2103BC6E40061C722 /* Sparkle.framework */; };
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
-		5306FD6D103CD45C0061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FD6C103CD45C0061C722 /* NetConnection.m */; };
+		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -169,8 +169,8 @@
 		5306FBA4103B92110061C722 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainMenu.xib; sourceTree = "<group>"; };
 		5306FCC2103BC6E40061C722 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = resources/Sparkle.framework; sourceTree = "<group>"; };
 		5306FCFD103BCA860061C722 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = resources/dsa_pub.pem; sourceTree = "<group>"; };
-		5306FD6B103CD45C0061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetConnection.h; sourceTree = "<group>"; };
-		5306FD6C103CD45C0061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetConnection.m; sourceTree = "<group>"; };
+		5306FDEC103CDF370061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetConnection.m; path = source/backend/net/NetConnection.m; sourceTree = "<group>"; };
+		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetConnection.h; path = source/backend/net/NetConnection.h; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
@@ -374,10 +374,10 @@
 		5306F911103B813B0061C722 /* Net */ = {
 			isa = PBXGroup;
 			children = (
+				5306FDEC103CDF370061C722 /* NetConnection.m */,
+				5306FDED103CDF370061C722 /* NetConnection.h */,
 				5306F91B103B81870061C722 /* IXSCNotificationManager.h */,
 				5306F91C103B81870061C722 /* IXSCNotificationManager.m */,
-				5306FD6B103CD45C0061C722 /* NetConnection.h */,
-				5306FD6C103CD45C0061C722 /* NetConnection.m */,
 			);
 			name = Net;
 			sourceTree = "<group>";
@@ -559,7 +559,7 @@
 				5306F8ED103B7F600061C722 /* FBMessage.m in Sources */,
 				5306F8EE103B7F600061C722 /* MessageManager.m in Sources */,
 				5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */,
-				5306FD6D103CD45C0061C722 /* NetConnection.m in Sources */,
+				5306FDEE103CDF370061C722 /* NetConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

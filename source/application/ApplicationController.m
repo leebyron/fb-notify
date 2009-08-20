@@ -341,6 +341,18 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
                               error:@selector(failedMultiquery:)];
 }
 
+- (void)processUserInfo:(NSXMLNode *)userInfo
+{
+  if (userInfo == nil) {
+    return;
+  }
+  userInfo = [userInfo childWithName:@"user"];
+  userPic = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[userInfo childWithName:@"pic_square"] stringValue]]];
+  [menu setName:[[userInfo childWithName:@"name"] stringValue]
+     profileURL:[[userInfo childWithName:@"profile_url"] stringValue]
+        userPic:userPic];  
+}
+
 - (void)processAppIcons:(NSXMLNode *)fqlResultSet
 {
   for (NSXMLNode *xml in [fqlResultSet children]) {
@@ -437,42 +449,15 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)completedMultiquery:(NSXMLDocument *)response
 {
   NSLog(@"Query Response Recieved");
+  
+  NSDictionary *responses = [response parseMultiqueryResponse];
+//  NSLog(@"%@", responses);
 
-  //NSLog(@"%@", response);
-  NSXMLNode *node = [response rootElement];
-  while (node != nil && ![[node name] isEqualToString:@"fql_result"]) {
-    node = [node nextNode];
-  }
-
-  NSXMLNode *notificationsNode = nil;
-  NSXMLNode *messagesNode = nil;
-  NSXMLNode *picsNode = nil;
-  NSXMLNode *appIconsNode = nil;
-  while (node) {
-    NSXMLNode *nameNode = [node childWithName:@"name"];
-    NSXMLNode *resultSetNode = [node childWithName:@"fql_result_set"];
-
-    if ([[nameNode stringValue] isEqualToString:kInfoQueryName]) {
-      NSXMLNode *user = [resultSetNode childWithName:@"user"];
-      userPic = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[user childWithName:@"pic_square"] stringValue]]];
-      [menu setName:[[user childWithName:@"name"] stringValue]
-         profileURL:[[user childWithName:@"profile_url"] stringValue]
-            userPic:userPic];
-    } else if ([[nameNode stringValue] isEqualToString:kNotifQueryName]) {
-      notificationsNode = resultSetNode;
-    } else if ([[nameNode stringValue] isEqualToString:kMessageQueryName]){
-      messagesNode = resultSetNode;
-    } else if ([[nameNode stringValue] isEqualToString:kChainedPicQueryName]) {
-      picsNode = resultSetNode;
-    } else if ([[nameNode stringValue] isEqualToString:kChainedAppIconQueryName]) {
-      appIconsNode = resultSetNode;
-    }
-    node = [node nextSibling];
-  }
-  [self processAppIcons:appIconsNode];
-  [self processPics:picsNode];
-  [self processNotifications:notificationsNode];
-  [self processMessages:messagesNode];
+  [self processUserInfo:[responses objectForKey:kInfoQueryName]];
+  [self processAppIcons:[responses objectForKey:kChainedAppIconQueryName]];
+  [self processPics:[responses objectForKey:kChainedPicQueryName]];
+  [self processNotifications:[responses objectForKey:kNotifQueryName]];
+  [self processMessages:[responses objectForKey:kMessageQueryName]];
 
   [self updateMenu];
 
