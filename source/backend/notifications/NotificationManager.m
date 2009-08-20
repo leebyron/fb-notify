@@ -86,13 +86,13 @@
 -(NSArray *)notificationsWithTarget:(NSURL *)url
 {
   NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
-  
+
   for (FBNotification *notif in unreadNotifications) {
     if ([url isEqual:[notif href]]) {
       [hasTarget addObject:notif];
     }
   }
-  
+
   return hasTarget;
 }
 

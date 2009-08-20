@@ -29,10 +29,10 @@ enum {
   NSImage *notificationsIcon;
   NSImage *messageIcon;
   NSImage *inboxIcon;
-  
+
   NSImage *notificationsGhostIcon;
   NSImage *inboxGhostIcon;
-  
+
   ImageDictionary *profilePics;
   ImageDictionary *appIcons;
 

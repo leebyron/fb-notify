@@ -28,7 +28,7 @@ static NSDictionary *subAttrs = nil;
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                      options:NSStringDrawingUsesLineFragmentOrigin
                   attributes:attrs].size;
-  
+
   if (subText && [subText length] > 0) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
                                          options:NSStringDrawingTruncatesLastVisibleLine
@@ -44,7 +44,7 @@ static NSDictionary *subAttrs = nil;
   NSSize size = [text boundingRectWithSize:NSMakeSize(width, 1.0)
                                    options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:attrs].size;
-  
+
   if (subText && [subText length] > 0) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width - kBubblePadding, 1.0)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
@@ -99,13 +99,13 @@ static NSDictionary *subAttrs = nil;
 }
 
 - (void)drawRect:(NSRect)rect {
-  
+
   // true bounds
   NSRect trueBounds = NSMakeRect(rect.origin.x + kBubbleShadowSpacing,
                                  rect.origin.y + kBubbleShadowSpacing,
                                  rect.size.width - 2.0 * kBubbleShadowSpacing,
                                  rect.size.height - 2.0 * kBubbleShadowSpacing);
-  
+
   // clear everything
   [[NSColor clearColor] set];
   NSRectFill(rect);
@@ -117,11 +117,11 @@ static NSDictionary *subAttrs = nil;
   [shadow setShadowBlurRadius:kBubbleShadowRadius];
   [shadow setShadowOffset:NSMakeSize(0, -kBubbleShadowOffset)];
   [shadow set];
-  
+
   // draw background space in order to get a knocked-out shadow
   NSBezierPath *roundedRect = [NSBezierPath bezierPathWithRoundedRect:trueBounds
                                                               xRadius:kBubbleRadius
-                                                              yRadius:kBubbleRadius];  
+                                                              yRadius:kBubbleRadius];
   NSBezierPath *knockOut = [NSBezierPath bezierPathWithRect:rect];
   [knockOut appendBezierPath:roundedRect];
   [knockOut setWindingRule:NSEvenOddWindingRule];
@@ -165,7 +165,7 @@ static NSDictionary *subAttrs = nil;
   [text drawWithRect:textRect
              options:NSStringDrawingUsesLineFragmentOrigin
           attributes:attrs];
-  
+
   if (subText && [subText length] > 0) {
     textRect.size.height = [BubbleView heightOfText:nil
                                             subText:subText

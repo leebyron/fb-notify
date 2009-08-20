@@ -29,9 +29,9 @@
 
 /*!
  * @method         setObservedKeys:regExes:
- * @abstract       An optimisation method that restricts the keys that are observed 
+ * @abstract       An optimisation method that restricts the keys that are observed
  and for which Notification are posted to the Notification Center
- * @discussion     Default Value is inKeys:nil inRegExArray:[@".*"] which is in fact a 
+ * @discussion     Default Value is inKeys:nil inRegExArray:[@".*"] which is in fact a
  observe all
  */
 - (void)setObservedKeys:(NSArray *)inKeyArray regExes:(NSArray *)inRegExeArray;

@@ -6,10 +6,10 @@
 //
 
 #import "BubbleWindow.h"
-#import "NotificationResponder.h"
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import "BubbleDimensions.h"
+#import "ApplicationController.h"
 
 @implementation BubbleWindow
 
@@ -36,7 +36,7 @@
     notification = [notif retain];
     message      = [msg retain];
     disappearing = NO;
-    
+
     // Set up the BubbleView, which draws the black rounded-rect background
     view = [[BubbleView alloc] initWithFrame:frame
                                        image:image
@@ -135,7 +135,10 @@
 - (void)mouseUp:(NSEvent *)event
 {
   if (notification != nil) {
-    [[NSApp delegate] readNotification:notification];
+    [[NSApp delegate] menuShowNotification:notification];
+  }
+  if (message != nil) {
+    [[NSApp delegate] menuShowMessage:message];
   }
   [self disappear];
 }

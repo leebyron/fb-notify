@@ -24,6 +24,7 @@
 /* Begin PBXBuildFile section */
 		53060002103CFAF70061C722 /* ImageDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060001103CFAF70061C722 /* ImageDictionary.m */; };
 		53060106103D16D10061C722 /* FBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060105103D16D10061C722 /* FBObject.m */; };
+		5306016B103D1C940061C722 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306016A103D1C940061C722 /* QueryManager.m */; };
 		5306F86F103B7A0B0061C722 /* silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85C103B7A0B0061C722 /* silhouette.png */; };
 		5306F870103B7A0B0061C722 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85D103B7A0B0061C722 /* video.png */; };
 		5306F871103B7A0B0061C722 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85E103B7A0B0061C722 /* profile.png */; };
@@ -120,6 +121,8 @@
 		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageDictionary.m; path = source/backend/net/ImageDictionary.m; sourceTree = "<group>"; };
 		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBObject.h; path = source/backend/fbconnect/FBObject.h; sourceTree = "<group>"; };
 		53060105103D16D10061C722 /* FBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBObject.m; path = source/backend/fbconnect/FBObject.m; sourceTree = "<group>"; };
+		53060169103D1C940061C722 /* QueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueryManager.h; path = source/backend/net/QueryManager.h; sourceTree = "<group>"; };
+		5306016A103D1C940061C722 /* QueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueryManager.m; path = source/backend/net/QueryManager.m; sourceTree = "<group>"; };
 		5306F85C103B7A0B0061C722 /* silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silhouette.png; path = resources/images/silhouette.png; sourceTree = "<group>"; };
 		5306F85D103B7A0B0061C722 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = resources/images/video.png; sourceTree = "<group>"; };
 		5306F85E103B7A0B0061C722 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = resources/images/profile.png; sourceTree = "<group>"; };
@@ -148,7 +151,6 @@
 		5306F8D6103B7E660061C722 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationController.m; path = source/application/ApplicationController.m; sourceTree = "<group>"; };
 		5306F8DE103B7EF40061C722 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationManager.m; path = source/backend/notifications/NotificationManager.m; sourceTree = "<group>"; };
 		5306F8DF103B7EF40061C722 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBNotification.h; path = source/backend/notifications/FBNotification.h; sourceTree = "<group>"; };
-		5306F8E0103B7EF40061C722 /* NotificationResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationResponder.h; path = source/backend/notifications/NotificationResponder.h; sourceTree = "<group>"; };
 		5306F8E1103B7EF40061C722 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationManager.h; path = source/backend/notifications/NotificationManager.h; sourceTree = "<group>"; };
 		5306F8E2103B7EF40061C722 /* FBNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBNotification.m; path = source/backend/notifications/FBNotification.m; sourceTree = "<group>"; };
 		5306F8E9103B7F600061C722 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBMessage.m; path = source/backend/messages/FBMessage.m; sourceTree = "<group>"; };
@@ -319,7 +321,6 @@
 				5306F8E2103B7EF40061C722 /* FBNotification.m */,
 				5306F8E1103B7EF40061C722 /* NotificationManager.h */,
 				5306F8DE103B7EF40061C722 /* NotificationManager.m */,
-				5306F8E0103B7EF40061C722 /* NotificationResponder.h */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -386,6 +387,8 @@
 				5306F91C103B81870061C722 /* IXSCNotificationManager.m */,
 				53060000103CFAF70061C722 /* ImageDictionary.h */,
 				53060001103CFAF70061C722 /* ImageDictionary.m */,
+				53060169103D1C940061C722 /* QueryManager.h */,
+				5306016A103D1C940061C722 /* QueryManager.m */,
 			);
 			name = Net;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				5306FDEE103CDF370061C722 /* NetConnection.m in Sources */,
 				53060002103CFAF70061C722 /* ImageDictionary.m in Sources */,
 				53060106103D16D10061C722 /* FBObject.m in Sources */,
+				5306016B103D1C940061C722 /* QueryManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

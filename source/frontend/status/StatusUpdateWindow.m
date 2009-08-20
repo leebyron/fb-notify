@@ -23,8 +23,8 @@
     selector     = sel;
     isClosed     = NO;
     disappearing = NO;
-    
-    // what was the last active window?    
+
+    // what was the last active window?
     NSDictionary *app = [[NSWorkspace sharedWorkspace] activeApplication];
 
     if ([[app objectForKey:@"NSApplicationBundleIdentifier"] isEqual:@"com.facebook.notifications"]) {
@@ -36,17 +36,17 @@
     // Force the window to be loaded
     [[self window] center];
   }
-  
+
   return self;
 }
 
 - (void)windowDidLoad
-{  
+{
   // set up fade in/out animation
   CAAnimation *fadeAni = [CABasicAnimation animation];
   [fadeAni setDelegate:self];
   [fadeAni setDuration:kAnimationDuration];
-  
+
   // set up drop-in animation
   CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
   [moveAni setDuration:kAnimationDuration];
@@ -55,11 +55,11 @@
   CGPathAddLineToPoint(path, NULL, [[self window] frame].origin.x, [[self window] frame].origin.y);
   [moveAni setPath:path];
   CGPathRelease(path);
-  
+
   // assign animations
   [[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAni, @"alphaValue",
                                 moveAni, @"frameOrigin", nil]];
-  
+
   [NSApp activateIgnoringOtherApps:YES];
 
   [[self window] setAlphaValue:0.0];
@@ -83,7 +83,7 @@
   if (!disappearing) {
     disappearing = YES;
     [[[self window] animationForKey:@"alphaValue"] setDuration:kAnimationDurationOut];
-    [[[self window] animator] setAlphaValue:0.0];    
+    [[[self window] animator] setAlphaValue:0.0];
     [[self window] performSelector:@selector(close)
                         withObject:nil
                         afterDelay:kAnimationDurationOut];

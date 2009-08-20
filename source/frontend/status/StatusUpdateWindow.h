@@ -11,7 +11,7 @@
 
 @interface StatusUpdateWindow : NSWindowController {
   IBOutlet NSTextField *statusField;
-  
+
   id target;
   SEL selector;
   BOOL isClosed;

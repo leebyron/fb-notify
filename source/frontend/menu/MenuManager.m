@@ -58,7 +58,7 @@ enum {
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
     messageIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"message" ofType:@"png"]];
     inboxIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox" ofType:@"png"]];
-    
+
     notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
     inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
 
@@ -132,7 +132,7 @@ enum {
     [profileItem setRepresentedObject:self];
     [statusItemMenu addItem:profileItem];
     [profileItem release];
-    
+
     NSMenuItem *setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
                                                            action:@selector(beginUpdateStatus:)
                                                     keyEquivalent:@""];
@@ -143,7 +143,7 @@ enum {
     [setStatusItem setRepresentedObject:self];
     [statusItemMenu addItem:setStatusItem];
     [setStatusItem release];
-    
+
     //compose message
     NSMenuItem *composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
                                                                 action:@selector(menuComposeMessage:)
@@ -169,7 +169,7 @@ enum {
   }
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
-  
+
   if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
 
     if (notifications && [notifications count] > 0) {
@@ -238,7 +238,7 @@ enum {
                                                        keyEquivalent:@""];
       [inboxTitleItem setImage:inboxGhostIcon];
       [statusItemMenu addItem:inboxTitleItem];
-      [inboxTitleItem release];  
+      [inboxTitleItem release];
 
       // display the latest few notifications in the menu
       int addedMessages = 0;
@@ -253,7 +253,7 @@ enum {
           }
           continue;
         }
-        
+
         // add item to menu
         NSString *title = [message stringForKey:@"subject"];
         if ([title length] == 0) {
@@ -278,7 +278,7 @@ enum {
         [item release];
         addedMessages++;
       }
-      
+
       if (extraMessages > 0) {
         NSString *more = [NSString stringWithFormat:@"%i More Message", extraMessages];
         if (extraMessages > 1) {
@@ -291,8 +291,8 @@ enum {
         [moreMessagesItem setImage:inboxIcon];
         [statusItemMenu addItem:moreMessagesItem];
         [moreMessagesItem release];
-      }    
-      
+      }
+
     } else {
       NSMenuItem *noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
                                                               action:@selector(menuShowInbox:)
@@ -359,7 +359,7 @@ enum {
 - (BOOL)wasLaunchedByProcess:(NSString*)creator
 {
   BOOL wasLaunchedByProcess = NO;
-  
+
   // Get our PSN
   OSStatus  err;
   ProcessSerialNumber currPSN;
@@ -373,10 +373,10 @@ enum {
     err = GetProcessInformation (&currPSN, &procInfo);
     if (!err) {
       ProcessSerialNumber parentPSN = procInfo.processLauncher;
-      
+
       // Get info on the launching process
       NSDictionary* parentDict = (NSDictionary*)ProcessInformationCopyDictionary (&parentPSN, kProcessDictionaryIncludeAllInformationMask);
-      
+
       // Test the creator code of the launching app
       if (parentDict) {
         wasLaunchedByProcess = [[parentDict objectForKey:@"FileCreator"] isEqualToString:creator];
@@ -384,7 +384,7 @@ enum {
       }
     }
   }
-  
+
   return wasLaunchedByProcess;
 }
 
