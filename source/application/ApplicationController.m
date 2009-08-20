@@ -8,15 +8,15 @@
 #import "secret.h" // defines kAppKey and kAppSecret. Fill in for your own app!
 
 #import "ApplicationController.h"
+#import <Carbon/Carbon.h>
+#import <QuartzCore/QuartzCore.h>
 #import "BubbleWindow.h"
 #import "FBNotification.h"
 #import "FBMessage.h"
 #import "GlobalSession.h"
 #import "StatusUpdateWindow.h"
 #import "NotificationResponder.h"
-#import <Carbon/Carbon.h>
-#import <QuartzCore/QuartzCore.h>
-#import <ApplicationServices/ApplicationServices.h>
+#import "NetConnection.h"
 
 #define kQueryInterval 30
 #define kRetryQueryInterval 60
@@ -53,7 +53,6 @@ FBConnect *connectSession;
 - (void)setIsLoginItem:(BOOL)isLogin;
 - (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
 - (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath;
-- (BOOL)isNetworkConnected;
 - (void)query;
 - (void)loginToFacebook;
 
@@ -97,7 +96,6 @@ FBConnect *connectSession;
   [profileURLs        release];
   [statusUpdateWindow release];
   [queryTimer         release];
-  [systemConfigNotificationManager release];
   [super dealloc];
 }
 
@@ -144,21 +142,17 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     [self setIsLoginItem:YES];
   }
 
-  // checking if we're currently online
-  isOnline = [self isNetworkConnected];
-
   // check for future network connectivity changes
-  systemConfigNotificationManager = [[IXSCNotificationManager alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(updateNetStatus:)
-                                               name:@"State:/Network/Global/IPv4"
-                                             object:systemConfigNotificationManager];
+                                               name:kNetConnectionNotification
+                                             object:[NetConnection netConnection]];
 
   // show a default menu
-  [menu constructWithNotifications:nil messages:nil isOnline:isOnline];
+  [menu constructWithNotifications:nil messages:nil];
 
   // if possible, login to facebook!
-  if (isOnline) {
+  if ([[NetConnection netConnection] isOnline]) {
     [self loginToFacebook];
   }
 }
@@ -229,17 +223,16 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 #pragma mark Private methods
 - (void)updateNetStatus:(NSNotification *)notif
 {
-  BOOL wasOnline = isOnline;
-  isOnline = [notif userInfo] != nil;
-  NSLog(@"Net status changed from %i to %i", wasOnline, isOnline);
+  NSLog(@"Net status changed to %i", [[NetConnection netConnection] isOnline]);
+
   [self updateMenu];
-  if (!wasOnline && isOnline) {
+  if ([[NetConnection netConnection] isOnline]) {
     if ([connectSession isLoggedIn]) {
       [self query];
     } else {
       [self loginToFacebook];
     }
-  } else if (wasOnline && !isOnline) {
+  } else {
     // if we just switched to offline, stop the query timer
     [queryTimer invalidate];
     queryTimer = nil;
@@ -249,13 +242,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)loginToFacebook
 {
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox",  @"publish_stream", nil]];
-}
-
-- (BOOL)isNetworkConnected
-{
-  SCNetworkConnectionFlags status;
-  Boolean success = SCNetworkCheckReachabilityByName("www.facebook.com", &status);
-  return success && (status & kSCNetworkFlagsReachable) && !(status & kSCNetworkFlagsConnectionRequired);
 }
 
 - (void)readNotification:(FBNotification *)notification
@@ -307,7 +293,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   queryTimer = nil;
 
   // if we're not online, we shouldn't attempt a query.
-  if (!isOnline) {
+  if (![[NetConnection netConnection] isOnline]) {
     return;
   }
 
@@ -441,10 +427,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)updateMenu
 {
-  [menu setIconByAreUnread:(isOnline && ([notifications unreadCount] + [messages unreadCount] > 0))];
+  [menu setIconByAreUnread:([[NetConnection netConnection] isOnline] &&
+                            ([notifications unreadCount] + [messages unreadCount] > 0))];
   [menu constructWithNotifications:[notifications allNotifications]
-                          messages:[messages allMessages]
-                          isOnline:isOnline];
+                          messages:[messages allMessages]];
 }
 
 #pragma mark Session delegate methods

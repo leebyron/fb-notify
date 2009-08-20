@@ -50,7 +50,7 @@ enum {
 
 - (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic;
 - (void)setIconByAreUnread:(BOOL)areUnread;
-- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages isOnline:(BOOL)isOnline;
+- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages;
 - (void)setProfilePics:(NSDictionary *)pics;
 
 @end

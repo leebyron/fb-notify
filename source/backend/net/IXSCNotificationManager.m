@@ -17,7 +17,6 @@ void _IXSCNotificationCallback(SCDynamicStoreRef store, CFArrayRef changedKeys, 
   NSString *key = nil;
   NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
   while (key = [keysE nextObject]) {
-//    NSLog(@"just got a key: %@", key);
     [nc postNotificationName:key
                       object:(id)info 
                     userInfo:[(NSDictionary *)SCDynamicStoreCopyValue(store, (CFStringRef) key) autorelease]];

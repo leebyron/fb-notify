@@ -12,7 +12,6 @@
 #import "MenuManager.h"
 #import "NotificationManager.h"
 #import "MessageManager.h"
-#import "IXSCNotificationManager.h"
 
 @class StatusUpdateWindow;
 
@@ -36,9 +35,6 @@
   NSTimeInterval lastQuery;
   NSString *lastStatusUpdate;
   StatusUpdateWindow *statusUpdateWindow;
-
-  IXSCNotificationManager *systemConfigNotificationManager;
-  BOOL isOnline;
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "FBNotification.h"
 #import "FBMessage.h"
 #import "GlobalSession.h"
+#import "NetConnection.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
@@ -159,7 +160,7 @@ enum {
   [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
 }
 
-- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages isOnline:(BOOL)isOnline
+- (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
@@ -168,7 +169,7 @@ enum {
 
   BOOL isLoggedIn = [connectSession isLoggedIn] && userName != nil;
 
-  if (isOnline && isLoggedIn) {
+  if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
     // add new
     NSMenuItem *newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
                                                           action:@selector(menuShowNewsFeed:)
@@ -206,7 +207,7 @@ enum {
     [composeMessageItem setImage:messageIcon];
     [statusItemMenu addItem:composeMessageItem];
     [composeMessageItem release];
-  } else if (isOnline) {
+  } else if ([[NetConnection netConnection] isOnline]) {
     // Connecting title
     NSMenuItem *offlineItem = [[NSMenuItem alloc] initWithTitle:@"Connecting..."
                                                          action:nil
@@ -224,7 +225,7 @@ enum {
 
   [statusItemMenu addItem:[NSMenuItem separatorItem]];
   
-  if (isOnline && isLoggedIn) {
+  if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
 
     if (notifications && [notifications count] > 0) {
       // Notifications title
@@ -383,7 +384,7 @@ enum {
   [startAtLoginItem release];
 
   // logout first
-  if (isOnline && isLoggedIn) {
+  if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
     NSMenuItem *logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
                                                         action:@selector(logout:)
                                                  keyEquivalent:@""];
