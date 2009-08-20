@@ -243,27 +243,27 @@ enum {
         FBNotification *notification = [notifications objectAtIndex:i];
         // maintain between kMinNotifications and kMaxNotifications
         if (addedNotifications >= kMinNotifications &&
-            (![notification boolForKey:@"isUnread"] || addedNotifications >= kMaxNotifications)) {
-          if ([notification boolForKey:@"isUnread"]) {
+            (![notification boolForKey:@"is_unread"] || addedNotifications >= kMaxNotifications)) {
+          if ([notification boolForKey:@"is_unread"]) {
             extraNotifications++;
           }
           continue;
         }
 
         // add item to menu
-        NSString *title = [notification stringForKey:@"titleText"];
+        NSString *title = [notification stringForKey:@"title_text"];
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
         }
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title
                                                       action:@selector(menuShowNotification:)
                                                keyEquivalent:@""];
-        if ([notification boolForKey:@"isUnread"]) {
+        if ([notification boolForKey:@"is_unread"]) {
           [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
           [item setState:NSOnState];
         }
         [item setRepresentedObject:notification];
-        [item setImage:[appIcons objectForKey:[notification objForKey:@"appId"]]];
+        [item setImage:[appIcons objectForKey:[notification objForKey:@"app_id"]]];
         [statusItemMenu addItem:item];
         [item release];
         addedNotifications++;
@@ -328,7 +328,7 @@ enum {
 
         // profile pic icon
         NSImage *senderIcon;
-        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
+        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippet_author"]];
 
         senderIcon = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
         NSSize originalSize = [pic size];

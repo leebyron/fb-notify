@@ -41,11 +41,11 @@
   for (NSXMLNode *node in [xml children]) {
 
     FBNotification *notification = [FBNotification notificationWithXMLNode:node manager:self];
-    if ([notification boolForKey:@"isHidden"]) {
+    if ([notification boolForKey:@"is_hidden"]) {
       continue;
     }
 
-    NSString *notificationID = [notification objForKey:@"notificationId"];
+    NSString *notificationID = [notification objForKey:@"notification_id"];
     FBNotification *existingNotification = [allDict objectForKey:notificationID];
 
     if (existingNotification == nil) {
@@ -54,13 +54,13 @@
       [allNotifications addObject:notification];
       [newNotifications addObject:notification];
 
-      if ([notification boolForKey:@"isUnread"]) {
+      if ([notification boolForKey:@"is_unread"]) {
         [unreadNotifications addObject:notification];
       }
     } else {
       // remove it from the unread list if its been read on fb
-      if (![notification boolForKey:@"isUnread"] &&
-          [existingNotification boolForKey:@"isUnread"]) {
+      if (![notification boolForKey:@"is_unread"] &&
+          [existingNotification boolForKey:@"is_unread"]) {
         [allNotifications removeObject:existingNotification];
         [unreadNotifications removeObject:existingNotification];
         [allNotifications addObject:notification];
@@ -69,7 +69,7 @@
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
-                               [[notification objForKey:@"updatedTime"] intValue]);
+                               [[notification objForKey:@"updated_time"] intValue]);
   }
 
   return newNotifications;

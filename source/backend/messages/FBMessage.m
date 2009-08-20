@@ -30,16 +30,8 @@
       if ([[[child attributeForName:@"nil"] stringValue] isEqualToString:@"true"]) {
         continue;
       }
-      
-      // Convert from underscore_words to camelCase
-      NSArray *words = [[child name] componentsSeparatedByString:@"_"];
-      NSMutableString *key = [NSMutableString stringWithString:[words objectAtIndex:0]];
-      int i;
-      for (i = 1; i < [words count]; i++) {
-        [key appendString:[[words objectAtIndex:i] capitalizedString]];
-      }
-      
-      [fields setObject:[child stringValue] forKey:key];
+
+      [fields setObject:[child stringValue] forKey:[child name]];
     }
   }
   return self;
@@ -57,7 +49,7 @@
   [[manager unreadMessages] removeObject:self];
 
   [connectSession callMethod:@"message.setThreadReadStatus"
-               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objForKey:@"threadId"], @"thread_id",
+               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objForKey:@"thread_id"], @"thread_id",
                                                                         @"-1", @"status",
                                                                         [connectSession uid], @"uid", nil]
                       target:self
@@ -101,7 +93,7 @@
 }
 
 - (NSString *)description {
-  return [self objForKey:@"threadId"];
+  return [self objForKey:@"thread_id"];
 }
 
 @end

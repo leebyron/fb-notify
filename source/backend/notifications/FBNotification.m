@@ -38,15 +38,7 @@
         continue;
       }
 
-      // Convert from underscore_words to camelCase
-      NSArray *words = [[child name] componentsSeparatedByString:@"_"];
-      NSMutableString *key = [NSMutableString stringWithString:[words objectAtIndex:0]];
-      int i;
-      for (i = 1; i < [words count]; i++) {
-        [key appendString:[[words objectAtIndex:i] capitalizedString]];
-      }
-
-      [fields setObject:[child stringValue] forKey:key];
+      [fields setObject:[child stringValue] forKey:[child name]];
     }
 
     // find and fill href var
@@ -59,12 +51,12 @@
 
     if (hrefString == nil || [hrefString length] == 0) {
       // try to find it in the title html
-      hrefString = [self lastURLInHTML:[self stringForKey:@"titleHtml"]];
+      hrefString = [self lastURLInHTML:[self stringForKey:@"title_html"]];
     }
 
     if (hrefString == nil || [hrefString length] == 0) {
       // body html?
-      hrefString = [self lastURLInHTML:[self stringForKey:@"bodyHtml"]];
+      hrefString = [self lastURLInHTML:[self stringForKey:@"body_html"]];
     }
 
     if (hrefString == nil || [hrefString length] == 0) {
@@ -94,7 +86,7 @@
   }
   if ([notifs count] > 0) {
     for (FBNotification *notif in notifs) {
-      [notif setObject:@"0" forKey:@"isUnread"];
+      [notif setObject:@"0" forKey:@"is_unread"];
     }
     [[manager unreadNotifications] removeObjectsInArray:notifs];
     [connectSession callMethod:@"notifications.markRead"
@@ -157,7 +149,7 @@
 }
 
 - (NSString *)description {
-  return [self objForKey:@"notificationId"];
+  return [self objForKey:@"notification_id"];
 }
 
 @end

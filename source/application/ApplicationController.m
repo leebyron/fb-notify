@@ -258,7 +258,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   [self markMessageAsRead:message];
   NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@",
-                                                                    [message objForKey:@"threadId"]]];
+                                                                    [message objForKey:@"thread_id"]]];
   [[NSWorkspace sharedWorkspace] openURL:inboxURL];
 }
 
@@ -299,14 +299,14 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
   NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
   for (FBNotification *notification in [notifications unreadNotifications]) {
-    [unreadIDs addObject:[notification objForKey:@"notificationId"]];
+    [unreadIDs addObject:[notification objForKey:@"notification_id"]];
   }
   NSString *unreadIDsList = [unreadIDs componentsJoinedByString:@","];
   [unreadIDs release];
 
   NSMutableArray *unreadMessages = [[NSMutableArray alloc] init];
   for (FBMessage *message in [messages unreadMessages]) {
-    [unreadMessages addObject:[message objForKey:@"threadId"]];
+    [unreadMessages addObject:[message objForKey:@"thread_id"]];
   }
   NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
   [unreadMessages release];
@@ -400,10 +400,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification *notification in newNotifications) {
-      if ([notification boolForKey:@"isUnread"]) {
-        NSImage *pic = [profilePics objectForKey:[notification objForKey:@"senderId"]];
-        [bubbleManager addBubbleWithText:[notification stringForKey:@"titleText"]
-                                 subText:[notification stringForKey:@"bodyText"]
+      if ([notification boolForKey:@"is_unread"]) {
+        NSImage *pic = [profilePics objectForKey:[notification objForKey:@"sender_id"]];
+        [bubbleManager addBubbleWithText:[notification stringForKey:@"title_text"]
+                                 subText:[notification stringForKey:@"body_text"]
                                    image:pic
                             notification:notification
                                  message:nil];
@@ -419,7 +419,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage *message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippetAuthor"]];
+        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippet_author"]];
         
         NSString *bubText = [message stringForKey:@"subject"];
         NSString *bubSubText = [message stringForKey:@"snippet"];
