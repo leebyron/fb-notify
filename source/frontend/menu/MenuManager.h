@@ -9,15 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "ImageDictionary.h"
 
-#define kStartAtLoginOption @"StartAtLogin"
-#define kStartAtLoginOptionPath @"StartAtLoginPath"
-
-enum {
-  START_AT_LOGIN_UNKNOWN,
-  START_AT_LOGIN_NO,
-  START_AT_LOGIN_YES,
-};
-
 
 @interface MenuManager : NSObject {
   NSImage* fbActiveIcon;

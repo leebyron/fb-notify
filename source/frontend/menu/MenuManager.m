@@ -11,6 +11,7 @@
 #import "FBMessage.h"
 #import "GlobalSession.h"
 #import "NetConnection.h"
+#import "LoginItemManager.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
@@ -19,6 +20,7 @@
 #define kMaxStringLen 50
 #define kEllipsis @"\u2026"
 #define kUserIconSize 15.0
+
 
 enum {
   NEWS_FEED_LINK_TAG,
@@ -32,6 +34,7 @@ enum {
   QUIT_TAG
 };
 
+
 @interface MenuManager (Private)
 
 - (void)addQuitItem;
@@ -40,6 +43,7 @@ enum {
 - (BOOL)wasLaunchedAsLoginItem;
 
 @end
+
 
 @implementation MenuManager
 
@@ -311,7 +315,7 @@ enum {
                                                               action:@selector(changedStartAtLoginStatus:)
                                                        keyEquivalent:@""];
   [startAtLoginItem setTag:START_AT_LOGIN_TAG];
-  [startAtLoginItem setState:([[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption] == START_AT_LOGIN_YES ? NSOnState : NSOffState)];
+  [startAtLoginItem setState:[[LoginItemManager manager] isLoginItem]];
   [statusItemMenu addItem:startAtLoginItem];
   [startAtLoginItem release];
 
@@ -354,44 +358,6 @@ enum {
   [tinyMan unlockFocus];
 
   return tinyMan;
-}
-
-- (BOOL)wasLaunchedByProcess:(NSString*)creator
-{
-  BOOL wasLaunchedByProcess = NO;
-
-  // Get our PSN
-  OSStatus  err;
-  ProcessSerialNumber currPSN;
-  err = GetCurrentProcess (&currPSN);
-  if (!err) {
-    // We don't use ProcessInformationCopyDictionary() because the 'ParentPSN' item in the dictionary
-    // has endianness problems in 10.4, fixed in 10.5 however.
-    ProcessInfoRec  procInfo;
-    bzero (&procInfo, sizeof (procInfo));
-    procInfo.processInfoLength = (UInt32)sizeof (ProcessInfoRec);
-    err = GetProcessInformation (&currPSN, &procInfo);
-    if (!err) {
-      ProcessSerialNumber parentPSN = procInfo.processLauncher;
-
-      // Get info on the launching process
-      NSDictionary* parentDict = (NSDictionary*)ProcessInformationCopyDictionary (&parentPSN, kProcessDictionaryIncludeAllInformationMask);
-
-      // Test the creator code of the launching app
-      if (parentDict) {
-        wasLaunchedByProcess = [[parentDict objectForKey:@"FileCreator"] isEqualToString:creator];
-        [parentDict release];
-      }
-    }
-  }
-
-  return wasLaunchedByProcess;
-}
-
-- (BOOL)wasLaunchedAsLoginItem
-{
-  // If the launching process was 'loginwindow', we were launched as a login item
-  return [self wasLaunchedByProcess:@"lgnw"];
 }
 
 @end

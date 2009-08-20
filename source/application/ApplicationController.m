@@ -17,13 +17,11 @@
 #import "GlobalSession.h"
 #import "StatusUpdateWindow.h"
 #import "NetConnection.h"
+#import "LoginItemManager.h"
 
 
 @interface ApplicationController (Private)
 
-- (void)setIsLoginItem:(BOOL)isLogin;
-- (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(CFURLRef)thePath;
-- (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(CFURLRef)thePath;
 - (void)loginToFacebook;
 
 @end
@@ -118,19 +116,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
                       GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
 
-  int startupLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption];
-  NSString *startupPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
-  // if this is the first launch, set up persistant launch
-  if (startupLaunch == START_AT_LOGIN_UNKNOWN) {
-    [self setIsLoginItem:YES];
-
-  // otherwise check to make sure it's in the same position.
-  } else if (startupLaunch == START_AT_LOGIN_YES &&
-             startupPath && [startupPath length] > 0 &&
-             ![startupPath isEqual:[[NSBundle mainBundle] bundlePath]]) {
-    [self setIsLoginItem:NO];
-    [self setIsLoginItem:YES];
-  }
+  // setup login manager
+  [[LoginItemManager manager] loginItemAsDefault:YES];
 
   // check for future network connectivity changes
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -199,8 +186,19 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
         return;
       }
     }
-    statusUpdateWindow = [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
+    statusUpdateWindow = [[StatusUpdateWindow alloc] initWithTarget:self
+                                                           selector:@selector(didStatusUpdate:)];
   }
+}
+
+- (IBAction)didStatusUpdate:(id)sender
+{
+  lastStatusUpdate = [sender statusMessage];
+  [connectSession callMethod:@"Stream.publish"
+               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
+                      target:self
+                    selector:@selector(statusUpdateWasPublished:)
+                       error:nil];
 }
 
 - (IBAction)menuShowNotification:(id)sender
@@ -235,7 +233,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (IBAction)changedStartAtLoginStatus:(id)sender
 {
-  [self setIsLoginItem:([sender state] == NSOffState)];
+  [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOffState)];
   [sender setState:([sender state] == NSOffState ? NSOnState : NSOffState)];
 }
 
@@ -269,24 +267,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox",  @"publish_stream", nil]];
 }
 
-
-#pragma mark Session delegate methods
-- (void)FBConnectLoggedIn:(FBConnect *)fbc
-{
-  NSLog(@"must have logged in okay!");
-  [queryManager start];
-}
-
-- (void)didStatusUpdate:(id)sender
-{
-  lastStatusUpdate = [sender statusMessage];
-  [connectSession callMethod:@"Stream.publish"
-               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
-                      target:self
-                    selector:@selector(statusUpdateWasPublished:)
-                       error:nil];
-}
-
 - (void)statusUpdateWasPublished:(NSXMLDocument *)reply
 {
   [bubbleManager addBubbleWithText:lastStatusUpdate
@@ -294,6 +274,14 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
                              image:[profilePics imageForKey:[connectSession uid]]
                       notification:nil
                            message:nil];
+}
+
+
+#pragma mark FB Session delegate methods
+- (void)FBConnectLoggedIn:(FBConnect *)fbc
+{
+  NSLog(@"must have logged in okay!");
+  [queryManager start];
 }
 
 - (void)FBConnectLoggedOut:(FBConnect *)fbc
@@ -311,57 +299,6 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 - (void)session:(FBConnect *)session failedCallMethod:(NSError *)error
 {
   NSLog(@"callMethod: failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
-}
-
-- (void)setIsLoginItem:(BOOL)isLogin
-{
-	// Create a reference to the shared file list.
-	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
-
-	if (loginItems) {
-		if (isLogin) {
-      CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-      NSLog(@"adding to login items: %@", url);
-			[self enableLoginItemWithLoginItemsReference:loginItems ForPath:url];
-      [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
-      [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
-		} else {
-      NSString *existingPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
-      if (existingPath && [existingPath length] > 0) {
-        CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:existingPath];
-        NSLog(@"removing from login items: %@", url);
-        [self disableLoginItemWithLoginItemsReference:loginItems ForPath:url];
-        [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_NO forKey:kStartAtLoginOption];
-      }
-    }
-	}
-	CFRelease(loginItems);
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)enableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath {
-	// We call LSSharedFileListInsertItemURL to insert the item at the bottom of Login Items list.
-	LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(theLoginItemsRefs, kLSSharedFileListItemLast, NULL, NULL, thePath, NULL, NULL);
-	if (item)
-		CFRelease(item);
-}
-
-- (void)disableLoginItemWithLoginItemsReference:(LSSharedFileListRef )theLoginItemsRefs ForPath:(CFURLRef)thePath {
-	UInt32 seedValue;
-
-	// We're going to grab the contents of the shared file list (LSSharedFileListItemRef objects)
-	// and pop it in an array so we can iterate through it to find our item.
-	NSArray  *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(theLoginItemsRefs, &seedValue);
-	for (id item in loginItemsArray) {
-		LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
-		if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &thePath, NULL) == noErr) {
-			if ([[(NSURL *)thePath path] hasPrefix:[[NSBundle mainBundle] bundlePath]]) {
-				LSSharedFileListItemRemove(theLoginItemsRefs, itemRef); // Deleting the item
-      }
-		}
-	}
-
-	[loginItemsArray release];
 }
 
 @end

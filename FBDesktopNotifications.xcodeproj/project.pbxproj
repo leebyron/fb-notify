@@ -25,6 +25,7 @@
 		53060002103CFAF70061C722 /* ImageDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060001103CFAF70061C722 /* ImageDictionary.m */; };
 		53060106103D16D10061C722 /* FBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060105103D16D10061C722 /* FBObject.m */; };
 		5306016B103D1C940061C722 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306016A103D1C940061C722 /* QueryManager.m */; };
+		53060334103D37100061C722 /* LoginItemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060333103D37100061C722 /* LoginItemManager.m */; };
 		5306F86F103B7A0B0061C722 /* silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85C103B7A0B0061C722 /* silhouette.png */; };
 		5306F870103B7A0B0061C722 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85D103B7A0B0061C722 /* video.png */; };
 		5306F871103B7A0B0061C722 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85E103B7A0B0061C722 /* profile.png */; };
@@ -123,6 +124,8 @@
 		53060105103D16D10061C722 /* FBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBObject.m; path = source/backend/fbconnect/FBObject.m; sourceTree = "<group>"; };
 		53060169103D1C940061C722 /* QueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueryManager.h; path = source/backend/net/QueryManager.h; sourceTree = "<group>"; };
 		5306016A103D1C940061C722 /* QueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueryManager.m; path = source/backend/net/QueryManager.m; sourceTree = "<group>"; };
+		53060332103D37100061C722 /* LoginItemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginItemManager.h; path = source/backend/system/LoginItemManager.h; sourceTree = "<group>"; };
+		53060333103D37100061C722 /* LoginItemManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginItemManager.m; path = source/backend/system/LoginItemManager.m; sourceTree = "<group>"; };
 		5306F85C103B7A0B0061C722 /* silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silhouette.png; path = resources/images/silhouette.png; sourceTree = "<group>"; };
 		5306F85D103B7A0B0061C722 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = resources/images/video.png; sourceTree = "<group>"; };
 		5306F85E103B7A0B0061C722 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = resources/images/profile.png; sourceTree = "<group>"; };
@@ -285,6 +288,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5306032E103D36AC0061C722 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				53060332103D37100061C722 /* LoginItemManager.h */,
+				53060333103D37100061C722 /* LoginItemManager.m */,
+			);
+			name = System;
+			sourceTree = "<group>";
+		};
 		5306F8BF103B7D300061C722 /* Other */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,6 +322,7 @@
 				5306F8E6103B7F240061C722 /* Messages */,
 				5306F8DC103B7EC10061C722 /* Notifications */,
 				5306F911103B813B0061C722 /* Net */,
+				5306032E103D36AC0061C722 /* System */,
 			);
 			name = Backend;
 			sourceTree = "<group>";
@@ -576,6 +589,7 @@
 				53060002103CFAF70061C722 /* ImageDictionary.m in Sources */,
 				53060106103D16D10061C722 /* FBObject.m in Sources */,
 				5306016B103D1C940061C722 /* QueryManager.m in Sources */,
+				53060334103D37100061C722 /* LoginItemManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

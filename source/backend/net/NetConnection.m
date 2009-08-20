@@ -19,7 +19,7 @@
 
 @implementation NetConnection
 
-NetConnection* instance;
+static NetConnection* instance;
 
 + (NetConnection*)netConnection
 {
