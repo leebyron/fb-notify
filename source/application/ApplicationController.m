@@ -231,6 +231,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   BOOL wasOnline = isOnline;
   isOnline = [notif userInfo] != nil;
+  NSLog(@"Net status changed from %i to %i", wasOnline, isOnline);
   [self updateMenu];
   if (!wasOnline && isOnline) {
     if ([connectSession isLoggedIn]) {
@@ -238,12 +239,16 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     } else {
       [self loginToFacebook];
     }
+  } else if (wasOnline && !isOnline) {
+    // if we just switched to offline, stop the query timer
+    [queryTimer invalidate];
+    queryTimer = nil;
   }
 }
 
 - (void)loginToFacebook
 {
-  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox", @"read_mailbox", @"publish_stream", nil]];
+  [connectSession loginWithPermissions:[NSArray arrayWithObjects:@"manage_mailbox",  @"publish_stream", nil]];
 }
 
 - (BOOL)isNetworkConnected
@@ -295,6 +300,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)query
 {
+  NSLog(@"Query");
+
   // release the wait timer
   [queryTimer release];
   queryTimer = nil;
@@ -438,6 +445,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 #pragma mark Session delegate methods
 - (void)completedMultiquery:(NSXMLDocument *)response
 {
+  NSLog(@"Query Response Recieved");
+
   //NSLog(@"%@", response);
   NSXMLNode *node = [response rootElement];
   while (node != nil && ![[node name] isEqualToString:@"fql_result"]) {

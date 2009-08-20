@@ -51,15 +51,27 @@
 
     // find and fill href var
     NSString *hrefString = [self objForKey:@"href"];
+
+    // this page is bogus.
+    if ([hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
+      hrefString = nil;
+    }
+
     if (hrefString == nil || [hrefString length] == 0) {
       // try to find it in the title html
       hrefString = [self lastURLInHTML:[self stringForKey:@"titleHtml"]];
-
-      if (hrefString == nil || [hrefString length] == 0) {
-        // body html?
-        hrefString = [self lastURLInHTML:[self stringForKey:@"bodyHtml"]];
-      }
     }
+
+    if (hrefString == nil || [hrefString length] == 0) {
+      // body html?
+      hrefString = [self lastURLInHTML:[self stringForKey:@"bodyHtml"]];
+    }
+
+    if (hrefString == nil || [hrefString length] == 0) {
+      // fine, use the default notification url
+      hrefString = @"http://www.facebook.com/notifications.php";
+    }
+
     href = [[NSURL URLWithString:hrefString] retain];
   }
   return self;
