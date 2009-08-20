@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ImageDictionary.h"
 
 #define kStartAtLoginOption @"StartAtLogin"
 #define kStartAtLoginOptionPath @"StartAtLoginPath"
@@ -19,8 +20,6 @@ enum {
 
 
 @interface MenuManager : NSObject {
-  NSImage *userIcon;
-
   NSImage *fbActiveIcon;
   NSImage *fbEmptyIcon;
   NSImage *fbFullIcon;
@@ -33,9 +32,9 @@ enum {
   
   NSImage *notificationsGhostIcon;
   NSImage *inboxGhostIcon;
-
-  NSMutableDictionary *appIcons;
-  NSDictionary *profilePics;
+  
+  ImageDictionary *profilePics;
+  ImageDictionary *appIcons;
 
   NSStatusItem *statusItem;
   NSMenu *statusItemMenu;
@@ -46,11 +45,10 @@ enum {
 
 @property(retain) NSString *userName;
 @property(retain) NSString *profileURL;
-@property(retain) NSMutableDictionary *appIcons;
+@property(retain) ImageDictionary *profilePics;
+@property(retain) ImageDictionary *appIcons;
 
-- (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic;
 - (void)setIconByAreUnread:(BOOL)areUnread;
 - (void)constructWithNotifications:(NSArray *)notifications messages:(NSArray *)messages;
-- (void)setProfilePics:(NSDictionary *)pics;
 
 @end

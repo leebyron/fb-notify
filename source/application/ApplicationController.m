@@ -22,7 +22,7 @@
 #define kRetryQueryInterval 60
 
 #define kInfoQueryName @"info"
-#define kInfoQueryFmt @"SELECT name, profile_url, pic_square FROM user WHERE uid = %@"
+#define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
 
 #define kNotifQueryName @"notif"
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
@@ -71,11 +71,27 @@ FBConnect *connectSession;
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
-    profilePics   = [[NSMutableDictionary alloc] init];
-    profileURLs   = [[NSMutableDictionary alloc] init];
     menu          = [[MenuManager alloc] init];
 
+    NSImage *profilePicBackup = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
+    profilePics = [[ImageDictionary alloc] initWithBackupImage:profilePicBackup allowUpdates:YES];
+
+    NSImage *appIconBackup = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]];
+    appIcons = [[ImageDictionary alloc] initWithBackupImage:appIconBackup allowUpdates:NO];
+
+    // some nicer over-ridden icons
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"comment"    ofType:@"png"] forKey:@"19675640871"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"comment"    ofType:@"png"] forKey:@"2719290516"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"comment"    ofType:@"png"] forKey:@"219303305471"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"like"       ofType:@"png"] forKey:@"2409997254"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"photos"     ofType:@"png"] forKey:@"2305272732"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"video"      ofType:@"png"] forKey:@"2392950137"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"posteditem" ofType:@"png"] forKey:@"2309869772"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"events"     ofType:@"png"] forKey:@"2344061033"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"addfriend"  ofType:@"png"] forKey:@"2356318349"];    
+
     [menu setProfilePics:profilePics];
+    [menu setAppIcons:appIcons];
 
     lastQuery = 0;
   }
@@ -84,16 +100,13 @@ FBConnect *connectSession;
 
 - (void)dealloc
 {
-  if (silhouette != nil) {
-    [silhouette       release];
-  }
   [connectSession     release];
   [notifications      release];
   [messages           release];
   [bubbleManager      release];
   [menu               release];
   [profilePics        release];
-  [profileURLs        release];
+  [appIcons           release];
   [statusUpdateWindow release];
   [queryTimer         release];
   [super dealloc];
@@ -258,7 +271,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   [self markMessageAsRead:message];
   NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@",
-                                                                    [message objForKey:@"thread_id"]]];
+                                                                    [message objectForKey:@"thread_id"]]];
   [[NSWorkspace sharedWorkspace] openURL:inboxURL];
 }
 
@@ -299,14 +312,14 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
   NSMutableArray *unreadIDs = [[NSMutableArray alloc] init];
   for (FBNotification *notification in [notifications unreadNotifications]) {
-    [unreadIDs addObject:[notification objForKey:@"notification_id"]];
+    [unreadIDs addObject:[notification objectForKey:@"notification_id"]];
   }
   NSString *unreadIDsList = [unreadIDs componentsJoinedByString:@","];
   [unreadIDs release];
 
   NSMutableArray *unreadMessages = [[NSMutableArray alloc] init];
   for (FBMessage *message in [messages unreadMessages]) {
-    [unreadMessages addObject:[message objForKey:@"thread_id"]];
+    [unreadMessages addObject:[message objectForKey:@"thread_id"]];
   }
   NSString *unreadMessageList = [unreadMessages componentsJoinedByString:@","];
   [unreadMessages release];
@@ -347,10 +360,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     return;
   }
   userInfo = [userInfo childWithName:@"user"];
-  userPic = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[userInfo childWithName:@"pic_square"] stringValue]]];
-  [menu setName:[[userInfo childWithName:@"name"] stringValue]
-     profileURL:[[userInfo childWithName:@"profile_url"] stringValue]
-        userPic:userPic];  
+  [menu setUserName:[[userInfo childWithName:@"name"] stringValue]];
+  [menu setProfileURL:[[userInfo childWithName:@"profile_url"] stringValue]];
 }
 
 - (void)processAppIcons:(NSXMLNode *)fqlResultSet
@@ -358,14 +369,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   for (NSXMLNode *xml in [fqlResultSet children]) {
     NSString *appID = [[xml childWithName:@"app_id"] stringValue];
     NSString *iconUrl = [[xml childWithName:@"icon_url"] stringValue];
-    if ([iconUrl length] > 0) {
-      if ([[menu appIcons] objectForKey:appID] == nil) {
-        NSURL *url = [NSURL URLWithString:iconUrl];
-        NSImage *icon = [[NSImage alloc] initWithContentsOfURL:url];
-        NSLog(@"got icon:%@ for app:%@", iconUrl, appID);
-        [[menu appIcons] setObject:icon forKey:appID];
-        [icon release];
-      }
+    if (iconUrl != nil && [iconUrl length] != 0) {
+      [appIcons setImageURL:iconUrl forKey:appID];
     }
   }
 }
@@ -375,21 +380,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   for (NSXMLNode *xml in [fqlResultSet children]) {
     NSString *uid = [[xml childWithName:@"uid"] stringValue];
     NSString *picUrl = [[xml childWithName:@"pic_square"] stringValue];
-    if ([picUrl length] == 0) {
-      if (silhouette == nil) {
-        silhouette = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
-      }
-      [profilePics setObject:silhouette forKey:uid];
-    } else if ([profileURLs objectForKey:uid] == nil ||
-               ![[profilePics objectForKey:uid] isEqual:picUrl]) {
-      NSURL *url = [NSURL URLWithString:picUrl];
-      NSImage *pic = [[NSImage alloc] initWithContentsOfURL:url];
-      [profilePics setObject:pic    forKey:uid];
-      [profileURLs setObject:picUrl forKey:uid];
-      if ([uid isEqual:[connectSession uid]]) {
-        [menu setName:nil profileURL:nil userPic:pic];
-      }
-      [pic release];
+    if (picUrl != nil && [picUrl length] != 0) {
+      [profilePics setImageURL:picUrl forKey:uid];
     }
   }
 }
@@ -401,7 +393,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification *notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
-        NSImage *pic = [profilePics objectForKey:[notification objForKey:@"sender_id"]];
+        NSImage *pic = [profilePics imageForKey:[notification objectForKey:@"sender_id"]];
         [bubbleManager addBubbleWithText:[notification stringForKey:@"title_text"]
                                  subText:[notification stringForKey:@"body_text"]
                                    image:pic
@@ -419,7 +411,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage *message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippet_author"]];
+        NSImage *pic = [profilePics imageForKey:[message objectForKey:@"snippet_author"]];
         
         NSString *bubText = [message stringForKey:@"subject"];
         NSString *bubSubText = [message stringForKey:@"snippet"];
@@ -494,7 +486,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 {
   [bubbleManager addBubbleWithText:lastStatusUpdate
                            subText:nil
-                             image:userPic
+                             image:[profilePics imageForKey:[connectSession uid]]
                       notification:nil
                            message:nil];
 }

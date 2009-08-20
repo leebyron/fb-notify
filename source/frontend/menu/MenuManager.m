@@ -35,6 +35,7 @@ enum {
 @interface MenuManager (Private)
 
 - (void)addQuitItem;
+- (NSImage *)makeTinyMan:(NSImage *)pic;
 - (BOOL)wasLaunchedByProcess:(NSString*)creator;
 - (BOOL)wasLaunchedAsLoginItem;
 
@@ -42,7 +43,7 @@ enum {
 
 @implementation MenuManager
 
-@synthesize userName, profileURL, appIcons;
+@synthesize userName, profileURL, profilePics, appIcons;
 
 - (id)init
 {
@@ -52,8 +53,6 @@ enum {
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
 
-    userIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
-
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
     notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
@@ -62,27 +61,6 @@ enum {
     
     notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
     inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
-
-    appIcons      = [[NSMutableDictionary alloc] init];
-    // some nicer over-ridden icons
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
-                 forKey:@"19675640871"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
-                 forKey:@"2719290516"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]]
-                 forKey:@"219303305471"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"video" ofType:@"png"]]
-                 forKey:@"2392950137"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"photos" ofType:@"png"]]
-                 forKey:@"2305272732"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"posteditem" ofType:@"png"]]
-                 forKey:@"2309869772"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"like" ofType:@"png"]]
-                 forKey:@"2409997254"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"events" ofType:@"png"]]
-                 forKey:@"2344061033"];
-    [appIcons setObject:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"addfriend" ofType:@"png"]]
-                 forKey:@"2356318349"];
 
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
     statusItemMenu = [[NSMenu alloc] init];
@@ -97,8 +75,6 @@ enum {
 
 - (void)dealloc
 {
-  [userIcon release];
-
   [fbActiveIcon release];
   [fbEmptyIcon release];
   [fbFullIcon release];
@@ -122,37 +98,6 @@ enum {
   [statusItem release];
   [statusItemMenu release];
   [super dealloc];
-}
-
-- (void)setProfilePics:(NSDictionary *)pics
-{
-  profilePics = [pics retain];
-}
-
-- (void)setName:(NSString *)name profileURL:(NSString *)url userPic:(NSImage *)pic
-{
-  if (name) {
-    userName   = [name retain];
-  }
-
-  if (url) {
-    profileURL = [url retain];
-  }
-
-  if (pic) {
-    [userIcon release];
-    userIcon = [[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)];
-    NSSize originalSize = [pic size];
-    
-    [userIcon lockFocus];
-    [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-    [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
-    [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
-           fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
-          operation:NSCompositeSourceOver
-           fraction:1.0];  
-    [userIcon unlockFocus];
-  }
 }
 
 - (void)setIconByAreUnread:(BOOL)areUnread
@@ -183,7 +128,7 @@ enum {
                                                          action:@selector(menuShowProfile:)
                                                   keyEquivalent:@""];
     [profileItem setTag:PROFILE_LINK_TAG];
-    [profileItem setImage:userIcon];
+    [profileItem setImage:[self makeTinyMan:[profilePics imageForKey:[connectSession uid]]]];
     [profileItem setRepresentedObject:self];
     [statusItemMenu addItem:profileItem];
     [profileItem release];
@@ -263,7 +208,7 @@ enum {
           [item setState:NSOnState];
         }
         [item setRepresentedObject:notification];
-        [item setImage:[appIcons objectForKey:[notification objForKey:@"app_id"]]];
+        [item setImage:[appIcons imageForKey:[notification objectForKey:@"app_id"]]];
         [statusItemMenu addItem:item];
         [item release];
         addedNotifications++;
@@ -327,20 +272,7 @@ enum {
         [item setRepresentedObject:message];
 
         // profile pic icon
-        NSImage *senderIcon;
-        NSImage *pic = [profilePics objectForKey:[message objForKey:@"snippet_author"]];
-
-        senderIcon = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
-        NSSize originalSize = [pic size];
-
-        [senderIcon lockFocus];
-        [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
-        [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
-        [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
-               fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
-              operation:NSCompositeSourceOver
-               fraction:1.0];
-        [senderIcon unlockFocus];
+        NSImage *senderIcon = [self makeTinyMan:[profilePics imageForKey:[message objectForKey:@"snippet_author"]]];
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];
@@ -405,6 +337,23 @@ enum {
   [quitItem setTag:QUIT_TAG];
   [statusItemMenu addItem:quitItem];
   [quitItem release];
+}
+
+- (NSImage *)makeTinyMan:(NSImage *)pic
+{
+  NSImage *tinyMan = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
+  NSSize originalSize = [pic size];
+
+  [tinyMan lockFocus];
+  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.1] set];
+  [NSBezierPath fillRect: NSMakeRect(1.5, 0, 14.0, 16.0)];
+  [pic drawInRect:NSMakeRect(16.0 - kUserIconSize, 16.0 - kUserIconSize, kUserIconSize, kUserIconSize)
+         fromRect:NSMakeRect(0, 0, originalSize.width, originalSize.height)
+        operation:NSCompositeSourceOver
+         fraction:1.0];
+  [tinyMan unlockFocus];
+
+  return tinyMan;
 }
 
 - (BOOL)wasLaunchedByProcess:(NSString*)creator

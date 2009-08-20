@@ -7,7 +7,6 @@
 //
 
 #import "FBMessage.h"
-#import "NSString+.h"
 #import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
 
@@ -20,27 +19,11 @@
 
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr
 {
-  self = [super init];
+  self = [super initWithXMLNode:node];
   if (self) {
     manager = mngr;
-    fields = [[NSMutableDictionary alloc] init];
-    for (NSXMLElement *child in [node children]) {
-      
-      // skip nil values
-      if ([[[child attributeForName:@"nil"] stringValue] isEqualToString:@"true"]) {
-        continue;
-      }
-
-      [fields setObject:[child stringValue] forKey:[child name]];
-    }
   }
   return self;
-}
-
-- (void)dealloc
-{
-  [fields release];
-  [super dealloc];
 }
 
 - (void)markAsRead
@@ -49,41 +32,12 @@
   [[manager unreadMessages] removeObject:self];
 
   [connectSession callMethod:@"message.setThreadReadStatus"
-               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objForKey:@"thread_id"], @"thread_id",
+               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objectForKey:@"thread_id"], @"thread_id",
                                                                         @"-1", @"status",
                                                                         [connectSession uid], @"uid", nil]
                       target:self
                     selector:nil
                        error:@selector(markReadError:)];
-}
-
-- (void)setObject:(id)obj forKey:(NSString *)key
-{
-  [fields setObject:obj forKey:key];
-}
-
-- (NSString *)objForKey:(NSString *)key
-{
-  return [fields objectForKey:key];
-}
-
-- (NSString *)stringForKey:(NSString *)key
-{
-  NSString *obj = [fields objectForKey:key];
-  if (obj == nil) {
-    return nil;
-  }
-  return [obj stringByDecodingXMLEntities];
-}
-
-- (BOOL)boolForKey:(NSString *)key
-{
-  return ![[fields objectForKey:key] isEqualToString:@"0"];
-}
-
-- (NSURL *)urlForKey:(NSString *)key
-{
-  return [NSURL URLWithString:[fields objectForKey:key]];
 }
 
 #pragma mark Private methods
@@ -93,7 +47,7 @@
 }
 
 - (NSString *)description {
-  return [self objForKey:@"thread_id"];
+  return [self objectForKey:@"thread_id"];
 }
 
 @end

@@ -6,7 +6,6 @@
 //
 
 #import "FBNotification.h"
-#import "NSString+.h"
 #import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
 
@@ -27,22 +26,12 @@
 
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr
 {
-  self = [super init];
+  self = [super initWithXMLNode:node];
   if (self) {
     manager = mngr;
-    fields = [[NSMutableDictionary alloc] init];
-    for (NSXMLElement *child in [node children]) {
-
-      // skip nil values
-      if ([[[child attributeForName:@"nil"] stringValue] isEqualToString:@"true"]) {
-        continue;
-      }
-
-      [fields setObject:[child stringValue] forKey:[child name]];
-    }
 
     // find and fill href var
-    NSString *hrefString = [self objForKey:@"href"];
+    NSString *hrefString = [self objectForKey:@"href"];
 
     // this page is bogus.
     if ([hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
@@ -72,7 +61,6 @@
 - (void)dealloc
 {
   [href release];
-  [fields release];
   [super dealloc];
 }
 
@@ -95,35 +83,6 @@
                       selector:nil
                          error:@selector(markReadError:)];
   }
-}
-
-- (void)setObject:(id)obj forKey:(NSString *)key
-{
-  [fields setObject:obj forKey:key];
-}
-
-- (NSString *)objForKey:(NSString *)key
-{
-  return [fields objectForKey:key];
-}
-
-- (NSString *)stringForKey:(NSString *)key
-{
-  NSString *obj = [fields objectForKey:key];
-  if (obj == nil) {
-    return nil;
-  }
-  return [obj stringByDecodingXMLEntities];
-}
-
-- (BOOL)boolForKey:(NSString *)key
-{
-  return ![[fields objectForKey:key] isEqualToString:@"0"];
-}
-
-- (NSURL *)urlForKey:(NSString *)key
-{
-  return [NSURL URLWithString:[fields objectForKey:key]];
 }
 
 #pragma mark Private methods
@@ -149,7 +108,7 @@
 }
 
 - (NSString *)description {
-  return [self objForKey:@"notification_id"];
+  return [self objectForKey:@"notification_id"];
 }
 
 @end

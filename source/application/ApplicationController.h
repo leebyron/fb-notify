@@ -12,26 +12,24 @@
 #import "MenuManager.h"
 #import "NotificationManager.h"
 #import "MessageManager.h"
+#import "ImageDictionary.h"
 
 @class StatusUpdateWindow;
 
 @interface ApplicationController : NSObject {
   IBOutlet SUUpdater *updater;
 
-  NSImage *silhouette;
-  NSImage *userPic;
-
   MenuManager *menu;
   NotificationManager *notifications;
   MessageManager *messages;
 
-  NSMutableDictionary *profilePics;
-  NSMutableDictionary *profileURLs;
+  ImageDictionary *profilePics;
+  ImageDictionary *appIcons;
 
   BubbleManager *bubbleManager;
-  
+
   NSTimer *queryTimer;
-  
+
   NSTimeInterval lastQuery;
   NSString *lastStatusUpdate;
   StatusUpdateWindow *statusUpdateWindow;

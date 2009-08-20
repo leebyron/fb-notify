@@ -22,6 +22,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		53060002103CFAF70061C722 /* ImageDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060001103CFAF70061C722 /* ImageDictionary.m */; };
+		53060106103D16D10061C722 /* FBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060105103D16D10061C722 /* FBObject.m */; };
 		5306F86F103B7A0B0061C722 /* silhouette.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85C103B7A0B0061C722 /* silhouette.png */; };
 		5306F870103B7A0B0061C722 /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85D103B7A0B0061C722 /* video.png */; };
 		5306F871103B7A0B0061C722 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F85E103B7A0B0061C722 /* profile.png */; };
@@ -114,6 +116,10 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		53060000103CFAF70061C722 /* ImageDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageDictionary.h; path = source/backend/net/ImageDictionary.h; sourceTree = "<group>"; };
+		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageDictionary.m; path = source/backend/net/ImageDictionary.m; sourceTree = "<group>"; };
+		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBObject.h; path = source/backend/fbconnect/FBObject.h; sourceTree = "<group>"; };
+		53060105103D16D10061C722 /* FBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBObject.m; path = source/backend/fbconnect/FBObject.m; sourceTree = "<group>"; };
 		5306F85C103B7A0B0061C722 /* silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silhouette.png; path = resources/images/silhouette.png; sourceTree = "<group>"; };
 		5306F85D103B7A0B0061C722 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = resources/images/video.png; sourceTree = "<group>"; };
 		5306F85E103B7A0B0061C722 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = resources/images/profile.png; sourceTree = "<group>"; };
@@ -374,10 +380,12 @@
 		5306F911103B813B0061C722 /* Net */ = {
 			isa = PBXGroup;
 			children = (
-				5306FDEC103CDF370061C722 /* NetConnection.m */,
 				5306FDED103CDF370061C722 /* NetConnection.h */,
+				5306FDEC103CDF370061C722 /* NetConnection.m */,
 				5306F91B103B81870061C722 /* IXSCNotificationManager.h */,
 				5306F91C103B81870061C722 /* IXSCNotificationManager.m */,
+				53060000103CFAF70061C722 /* ImageDictionary.h */,
+				53060001103CFAF70061C722 /* ImageDictionary.m */,
 			);
 			name = Net;
 			sourceTree = "<group>";
@@ -386,6 +394,8 @@
 			isa = PBXGroup;
 			children = (
 				5306F923103B87530061C722 /* GlobalSession.h */,
+				53060104103D16D10061C722 /* FBObject.h */,
+				53060105103D16D10061C722 /* FBObject.m */,
 			);
 			name = FBConnect;
 			sourceTree = "<group>";
@@ -560,6 +570,8 @@
 				5306F8EE103B7F600061C722 /* MessageManager.m in Sources */,
 				5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */,
 				5306FDEE103CDF370061C722 /* NetConnection.m in Sources */,
+				53060002103CFAF70061C722 /* ImageDictionary.m in Sources */,
+				53060106103D16D10061C722 /* FBObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

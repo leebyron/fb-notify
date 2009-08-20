@@ -7,10 +7,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NotificationManager.h"
+#import "FBObject.h"
 
-@interface FBNotification : NSObject {
+
+@interface FBNotification : FBObject {
   NotificationManager *manager;
-  NSMutableDictionary *fields;
 
   NSURL *href;
 }
@@ -21,10 +22,5 @@
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(NotificationManager *)mngr;
 
 - (void)markAsReadWithSimilar:(BOOL)markSimilar;
-- (void)setObject:(id)obj forKey:(NSString *)key;
-- (NSString *)objForKey:(NSString *)key;
-- (NSString *)stringForKey:(NSString *)key;
-- (BOOL)boolForKey:(NSString *)key;
-- (NSURL *)urlForKey:(NSString *)key;
 
 @end

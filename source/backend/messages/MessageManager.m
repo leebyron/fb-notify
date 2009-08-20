@@ -41,11 +41,11 @@
   for (NSXMLNode *node in [xml children]) {
     FBMessage *message = [FBMessage messageWithXMLNode:node manager:self];
 
-    NSString *threadID = [message objForKey:@"thread_id"];
+    NSString *threadID = [message objectForKey:@"thread_id"];
     FBMessage *existingMessage = [allDict objectForKey:threadID];
 
     if (existingMessage) {
-      if (![[existingMessage objForKey:@"updated_time"] isEqual:[message objForKey:@"updated_time"]]) {
+      if (![[existingMessage objectForKey:@"updated_time"] isEqual:[message objectForKey:@"updated_time"]]) {
         [newMessages addObject:message];
       }
       [allMessages removeObject:existingMessage];
@@ -67,7 +67,7 @@
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
-                               [[message objForKey:@"updated_time"] intValue]);
+                               [[message objectForKey:@"updated_time"] intValue]);
   }
   return newMessages;
 }
