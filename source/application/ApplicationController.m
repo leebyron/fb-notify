@@ -19,6 +19,7 @@
 #import "LoginItemManager.h"
 #import "PreferencesWindow.h"
 #import "StatusKeyShortcut.h"
+#import "BubbleDimensions.h"
 
 
 @interface ApplicationController (Private)
@@ -103,6 +104,13 @@ FBConnect* connectSession;
 
 - (void)awakeFromNib
 {
+  // make sure there is a default for notification display time
+  if ([[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey] == 0) {
+    NSLog(@"resetting the default");
+    [[NSUserDefaults standardUserDefaults] setInteger:8 forKey:kDisplayTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+  
   // key shortcut please!
   [StatusKeyShortcut setupWithTarget:self selector:@selector(beginUpdateStatus:)];
 

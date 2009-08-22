@@ -10,6 +10,7 @@
 #import "ApplicationController.h"
 #import "StatusKeyShortcut.h"
 #import "LoginItemManager.h"
+#import "BubbleDimensions.h"
 
 
 @implementation PreferencesWindow
@@ -60,6 +61,9 @@ static PreferencesWindow* currentWindow;
     [statusKeyShortcut setKeyCombo:hotkey];
   }
 
+  // Notification Duration
+  [notificationDuration setIntegerValue:[[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey]];
+
   // Load window to front
   [NSApp activateIgnoringOtherApps:YES];
   [[self window] makeKeyAndOrderFront:self];
@@ -73,6 +77,12 @@ static PreferencesWindow* currentWindow;
 - (IBAction) startAtLoginChanged:(id) sender
 {
   [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOnState)];
+}
+
+- (IBAction) notificationDurationChanged:(id) sender
+{
+  [[NSUserDefaults standardUserDefaults] setInteger:[sender integerValue] forKey:kDisplayTimeKey];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

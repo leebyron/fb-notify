@@ -17,9 +17,10 @@
   IBOutlet NSSlider*          notificationDuration;
 }
 
-+(void) show;
++ (void)show;
 
 - (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey;
 - (IBAction) startAtLoginChanged:(id) sender;
+- (IBAction) notificationDurationChanged:(id) sender;
 
 @end

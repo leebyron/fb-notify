@@ -75,7 +75,7 @@
     // Prep to remove it
     [self performSelector:@selector(disappear)
                withObject:nil
-               afterDelay:kDisplayTime];
+               afterDelay:[[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey]];
   }
   return self;
 }

@@ -19,4 +19,4 @@
 #define kCloseSlideDistance 5.0
 
 #define kAnimationDuration 0.2 // seconds
-#define kDisplayTime 8.0
+#define kDisplayTimeKey @"NotificationDisplayTime"
