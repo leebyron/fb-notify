@@ -39,7 +39,6 @@ enum {
 
 @interface MenuManager (Private)
 
-- (void)addQuitItem;
 - (NSImage*)makeTinyMan:(NSImage*)pic;
 - (BOOL)wasLaunchedByProcess:(NSString*)creator;
 - (BOOL)wasLaunchedAsLoginItem;
@@ -331,12 +330,6 @@ enum {
     [logoutItem release];
   }
 
-  [self addQuitItem];
-}
-
-#pragma mark Private methods
-- (void)addQuitItem
-{
   NSMenuItem* quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
                                                     action:@selector(terminate:)
                                              keyEquivalent:@""];
@@ -345,6 +338,7 @@ enum {
   [quitItem release];
 }
 
+#pragma mark Private methods
 - (NSImage*)makeTinyMan:(NSImage*)pic
 {
   NSImage* tinyMan = [[[NSImage alloc] initWithSize: NSMakeSize(16.0, 16.0)] autorelease];
