@@ -18,7 +18,6 @@ static PreferencesWindow* currentWindow;
 
 +(void) show
 {
-  NSLog(@"showing currentWindow: %@", currentWindow);
   if (currentWindow != nil) {
     [NSApp activateIgnoringOtherApps:YES];
     [[currentWindow window] makeKeyAndOrderFront:nil];
