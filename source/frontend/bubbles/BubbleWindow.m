@@ -124,10 +124,10 @@
     return;
   }
   if (notification != nil) {
-    [[NSApp delegate] markNotificationAsRead:notification withSimilar:NO];
+    [notification markAsReadWithSimilar:NO];
   }
   if (message != nil) {
-    [[NSApp delegate] markMessageAsRead:message];
+    [message markAsRead];
   }
   [self disappear];
 }

@@ -8,7 +8,6 @@
 #import "secret.h" // defines kAppKey and kAppSecret. Fill in for your own app!
 
 #import "ApplicationController.h"
-#import <Carbon/Carbon.h>
 #import <QuartzCore/QuartzCore.h>
 #import <FBCocoa/FBCocoa.h>
 #import "BubbleWindow.h"
@@ -18,11 +17,14 @@
 #import "StatusUpdateWindow.h"
 #import "NetConnection.h"
 #import "LoginItemManager.h"
+#import "PreferencesWindow.h"
+#import "StatusKeyShortcut.h"
 
 
 @interface ApplicationController (Private)
 
 - (void)loginToFacebook;
+- (void)updateMenu;
 
 @end
 
@@ -87,13 +89,6 @@ FBConnect* connectSession;
   [super dealloc];
 }
 
-// Global hot key reciever
-OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent, void *userData)
-{
-  [[NSApp delegate] beginUpdateStatus:nil];
-  return noErr;
-}
-
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification
 {
   //automatically check for updates
@@ -108,19 +103,8 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void)awakeFromNib
 {
-  //create a carbon event handler for a global hot key
-  EventHotKeyRef globalStatusUpdateHotKeyRef;
-  EventHotKeyID  globalStatusUpdateHotKeyID;
-  globalStatusUpdateHotKeyID.signature = 'fbs1';
-  globalStatusUpdateHotKeyID.id        = 1;
-  EventTypeSpec  eventType;
-  eventType.eventClass = kEventClassKeyboard;
-  eventType.eventKind  = kEventHotKeyPressed;
-  InstallApplicationEventHandler(&globalHotKeyHandler, 1, &eventType, NULL, NULL);
-
-  // register our hot key: control + option + command + space
-  RegisterEventHotKey(49, cmdKey + optionKey + controlKey, globalStatusUpdateHotKeyID,
-                      GetApplicationEventTarget(), 0, &globalStatusUpdateHotKeyRef);
+  // key shortcut please!
+  [StatusKeyShortcut setupWithTarget:self selector:@selector(beginUpdateStatus:)];
 
   // show a default menu
   [menu constructWithNotifications:nil messages:nil];
@@ -131,16 +115,10 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   }
 }
 
-- (void)markNotificationAsRead:(FBNotification *)notification withSimilar:(BOOL)markSimilar
+- (void)invalidate
 {
-  [notification markAsReadWithSimilar:markSimilar];
-  [self updateMenu];
-}
-
-- (void)markMessageAsRead:(FBMessage *)message
-{
-  [message markAsRead];
-  [self updateMenu];
+  [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateMenu) object:nil];
+  [self performSelector:@selector(updateMenu) withObject:nil afterDelay:0];
 }
 
 - (void)updateMenu
@@ -174,7 +152,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (IBAction)beginUpdateStatus:(id)sender
 {
-  if ([connectSession isLoggedIn]) {
+  if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
     if (statusUpdateWindow) {
       if ([statusUpdateWindow isClosed]) {
         [statusUpdateWindow release];
@@ -203,7 +181,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   FBNotification *notification = ([sender isMemberOfClass:[FBNotification class]] ? sender : [sender representedObject]);
 
   // mark this notification as read
-  [self markNotificationAsRead:notification withSimilar:YES];
+  [notification markAsReadWithSimilar:YES];
 
   // load action url
   NSURL *url = [notification href];
@@ -215,7 +193,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   FBMessage *message = ([sender isMemberOfClass:[FBMessage class]] ? sender : [sender representedObject]);
 
   // mark this message as read
-  [self markMessageAsRead:message];
+  [message markAsRead];
 
   // load inbox url
   NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@",
@@ -228,10 +206,9 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
 }
 
-- (IBAction)changedStartAtLoginStatus:(id)sender
+-(IBAction) showPreferences:(id)sender
 {
-  [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOffState)];
-  [sender setState:([sender state] == NSOffState ? NSOnState : NSOffState)];
+  [PreferencesWindow show];
 }
 
 - (IBAction)logout:(id)sender
@@ -256,7 +233,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
     [queryManager stop];
   }
 
-  [self updateMenu];
+  [self invalidate];
 }
 
 - (void)loginToFacebook

@@ -30,6 +30,7 @@
 {
   [self setObject:@"0" forKey:@"unread"];
   [[manager unreadMessages] removeObject:self];
+  [[NSApp delegate] invalidate];
 
   [connectSession callMethod:@"message.setThreadReadStatus"
                withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[self objectForKey:@"thread_id"], @"thread_id",

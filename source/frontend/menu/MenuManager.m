@@ -12,6 +12,7 @@
 #import "GlobalSession.h"
 #import "NetConnection.h"
 #import "LoginItemManager.h"
+#import "StatusKeyShortcut.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
@@ -30,6 +31,7 @@ enum {
   SHOW_INBOX_TAG,
   COMPOSE_MESSAGE_TAG,
   START_AT_LOGIN_TAG,
+  PREFERENCES_TAG,
   LOGOUT_TAG,
   QUIT_TAG
 };
@@ -140,8 +142,10 @@ enum {
     NSMenuItem* setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
                                                            action:@selector(beginUpdateStatus:)
                                                     keyEquivalent:@""];
-    [setStatusItem setKeyEquivalent:@" "];
-    [setStatusItem setKeyEquivalentModifierMask:NSAlternateKeyMask|NSCommandKeyMask|NSControlKeyMask];
+    if ([[StatusKeyShortcut instance] keyCodeString]) {
+      [setStatusItem setKeyEquivalent:[[StatusKeyShortcut instance] keyCodeString]];
+      [setStatusItem setKeyEquivalentModifierMask:[[StatusKeyShortcut instance] keyFlags]];
+    }
     [setStatusItem setTag:STATUS_UPDATE_TAG];
     [setStatusItem setImage:profileIcon];
     [setStatusItem setRepresentedObject:self];
@@ -310,14 +314,12 @@ enum {
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
 
-  //start at login
-  NSMenuItem* startAtLoginItem = [[NSMenuItem alloc] initWithTitle:@"Start at Login"
-                                                              action:@selector(changedStartAtLoginStatus:)
-                                                       keyEquivalent:@""];
-  [startAtLoginItem setTag:START_AT_LOGIN_TAG];
-  [startAtLoginItem setState:[[LoginItemManager manager] isLoginItem]];
-  [statusItemMenu addItem:startAtLoginItem];
-  [startAtLoginItem release];
+  NSMenuItem* preferencesItem = [[NSMenuItem alloc] initWithTitle:@"Preferences..."
+                                                           action:@selector(showPreferences:)
+                                                    keyEquivalent:@""];
+  [preferencesItem setTag:PREFERENCES_TAG];
+  [statusItemMenu addItem:preferencesItem];
+  [preferencesItem release];
 
   // logout first
   if ([[NetConnection netConnection] isOnline] && isLoggedIn) {

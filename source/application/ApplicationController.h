@@ -13,6 +13,9 @@
 #import "MessageManager.h"
 #import "ImageDictionary.h"
 #import "QueryManager.h"
+#import "SRCommon.h"
+#import "StatusUpdateWindow.h"
+
 
 @class StatusUpdateWindow;
 
@@ -39,10 +42,7 @@
 @property(retain) ImageDictionary*      profilePics;
 @property(retain) ImageDictionary*      appIcons;
 
-
-- (void)markNotificationAsRead:(FBNotification*)notification withSimilar:(BOOL)markSimilar;
-- (void)markMessageAsRead:(FBMessage*)message;
-- (void)updateMenu;
+- (void)invalidate;
 
 - (IBAction)menuShowNewsFeed:(id)sender;
 - (IBAction)menuShowProfile:(id)sender;
@@ -52,7 +52,7 @@
 - (IBAction)menuShowNotification:(id)sender;
 - (IBAction)menuShowMessage:(id)sender;
 - (IBAction)menuShowAllNotifications:(id)sender;
-- (IBAction)changedStartAtLoginStatus:(id)sender;
 - (IBAction)logout:(id)sender;
+- (IBAction)showPreferences:(id)sender;
 
 @end

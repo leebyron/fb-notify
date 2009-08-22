@@ -14,7 +14,7 @@
 
 
 #define kQueryInterval 30
-#define kRetryQueryInterval 60
+#define kRetryQueryInterval 30
 
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
@@ -180,11 +180,12 @@
   [self processNotifications:[responses objectForKey:kNotifQueryName]];
   [self processMessages:[responses objectForKey:kMessageQueryName]];
 
-  [parent updateMenu];
+  [[NSApp delegate] invalidate];
+
+  lastQuery = [[NSDate date] timeIntervalSince1970];
 
   // get ready to query again shortly...
   [self queryAfterDelay:kQueryInterval];
-  lastQuery = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)failedMultiquery:(NSError*)error
@@ -204,6 +205,8 @@
           [error code],
           [[[[error userInfo] objectForKey:NSUnderlyingErrorKey] userInfo] objectForKey:NSLocalizedDescriptionKey]);
   }
+  
+  NSLog(@"suspect: %@", [error userInfo]);
 
   // get ready to query again in a reasonable amount of time
   [self queryAfterDelay:kRetryQueryInterval];

@@ -79,6 +79,8 @@
       [notif setObject:@"0" forKey:@"is_unread"];
     }
     [[manager unreadNotifications] removeObjectsInArray:notifs];
+    [[NSApp delegate] invalidate];
+
     [connectSession callMethod:@"notifications.markRead"
                  withArguments:[NSDictionary dictionaryWithObject:[notifs componentsJoinedByString:@","] forKey:@"notification_ids"]
                         target:self
