@@ -196,7 +196,7 @@
   }
 
   // let us know what happened
-  if ([[error userInfo] objectForKey:kFBErrorMessageKey]) {
+  if ([error code] > 0) {
     NSLog(@"multiquery failed (fb error:%i) -> %@",
           [error code],
           [[error userInfo] objectForKey:kFBErrorMessageKey]);
