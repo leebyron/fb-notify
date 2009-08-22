@@ -53,7 +53,7 @@ static StatusKeyShortcut* instance;
 
     // do the defaults exist? register something...
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kStatusKeyShortcutCode] == nil) {
-      [self registerKeyShortcutWithCode:49 flags:cmdKey + optionKey + controlKey];
+      [self registerKeyShortcutWithCode:49 flags:NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask];
     } else {
       [self registerKeyShortcut];
     }
