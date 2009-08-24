@@ -15,7 +15,7 @@
 #import <Carbon/Carbon.h>
 #import <CoreServices/CoreServices.h>
 
-#pragma mark Dummy class 
+#pragma mark Dummy class
 
 @interface SRDummyClass : NSObject {} @end
 
@@ -39,9 +39,9 @@ enum {
 	KeyboardShiftGlyph          = kShiftUnicode,
 	KeyboardControlGlyph        = kControlUnicode,
 	KeyboardReturnGlyph         = 0x2305,
-	KeyboardReturnR2LGlyph      = 0x21A9,	
+	KeyboardReturnR2LGlyph      = 0x21A9,
 	KeyboardDeleteLeftGlyph     = 0x232B,
-	KeyboardDeleteRightGlyph    = 0x2326,	
+	KeyboardDeleteRightGlyph    = 0x2326,
 	KeyboardPadClearGlyph       = 0x2327,
     KeyboardLeftArrowGlyph      = 0x2190,
 	KeyboardRightArrowGlyph     = 0x2192,
@@ -178,7 +178,7 @@ FOUNDATION_STATIC_INLINE BOOL SRIsSpecialKey(signed short keyCode) {
 // so to integrate well, we use an oddball method signature to not implement the same method twice.
 //
 // This code is originally from http://www.cocoadev.com/index.pl?RoundedRectangles and no license demands
-// (or Copyright demands) are stated, so we pretend it's public domain. 
+// (or Copyright demands) are stated, so we pretend it's public domain.
 //
 @interface NSBezierPath( SRAdditions )
 + (NSBezierPath*)bezierPathWithSRCRoundRectInRect:(NSRect)aRect radius:(float)radius;

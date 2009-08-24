@@ -28,8 +28,10 @@
 
 #define kMessageQueryName @"messages"
 #define kMessageQueryFmt @"SELECT thread_id, subject, snippet_author, snippet, unread, updated_time FROM thread " \
-@"WHERE folder_id = 0 AND ((unread = 0 AND thread_id IN (%@)) OR updated_time > %i)" \
-@"ORDER BY updated_time ASC"
+@"WHERE folder_id = 0 AND updated_time > %i"
+
+#define kVerifyMessageQueryName @"verify_messages"
+#define kVerifyMessageQueryFmt @"SELECT thread_id, unread FROM thread WHERE folder_id = 0"
 
 #define kChainedPicQueryName @"pic"
 #define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid = %@ " \
@@ -51,6 +53,7 @@
 - (void)processPics:(NSXMLNode*)fqlResultSet;
 - (void)processNotifications:(NSXMLNode*)fqlResultSet;
 - (void)processMessages:(NSXMLNode*)fqlResultSet;
+- (void)processVerifyMessages:(NSXMLNode*)fqlResultSet;
 
 @end
 
@@ -119,27 +122,14 @@
   }
 
   // build queries
-  NSMutableArray* unreadIDs = [[NSMutableArray alloc] init];
-  for (FBNotification* notification in [[parent notifications] unreadNotifications]) {
-    [unreadIDs addObject:[notification objectForKey:@"notification_id"]];
-  }
-  NSString* unreadIDsList = [unreadIDs componentsJoinedByString:@","];
-  [unreadIDs release];
-
-  NSMutableArray* unreadMessages = [[NSMutableArray alloc] init];
-  for (FBMessage* message in [[parent messages] unreadMessages]) {
-    [unreadMessages addObject:[message objectForKey:@"thread_id"]];
-  }
-  NSString* unreadMessageList = [unreadMessages componentsJoinedByString:@","];
-  [unreadMessages release];
-
+  NSString* unreadIDsList = [[[parent notifications] unreadNotifications] componentsJoinedByString:@","];
   NSString* notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
                                                     [connectSession uid],
                                                     unreadIDsList,
                                                     [[parent notifications] mostRecentUpdateTime]];
   NSString* messageQuery = [NSString stringWithFormat:kMessageQueryFmt,
-                                                      unreadMessageList,
                                                       [[parent messages] mostRecentUpdateTime]];
+  NSString* verifyMessageQuery = kVerifyMessageQueryFmt;
   NSString* picQuery = [NSString stringWithFormat:kChainedPicQueryFmt,
                                                   [connectSession uid],
                                                   kNotifQueryName,
@@ -149,6 +139,7 @@
   NSMutableDictionary* multiQuery =
   [NSMutableDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
                                                     messageQuery, kMessageQueryName,
+                                                    verifyMessageQuery, kVerifyMessageQueryName,
                                                     picQuery,     kChainedPicQueryName,
                                                     appIconQuery, kChainedAppIconQueryName, nil];
   if ([[parent menu] profileURL] == nil) {
@@ -172,13 +163,15 @@
   }
 
   NSDictionary* responses = [response parseMultiqueryResponse];
-  //  NSLog(@"%@", responses);
 
   [self processUserInfo:[responses objectForKey:kInfoQueryName]];
   [self processAppIcons:[responses objectForKey:kChainedAppIconQueryName]];
   [self processPics:[responses objectForKey:kChainedPicQueryName]];
   [self processNotifications:[responses objectForKey:kNotifQueryName]];
   [self processMessages:[responses objectForKey:kMessageQueryName]];
+  [self processVerifyMessages:[responses objectForKey:kVerifyMessageQueryName]];
+
+  [responses release];
 
   [[NSApp delegate] invalidate];
 
@@ -205,7 +198,7 @@
           [error code],
           [[[[error userInfo] objectForKey:NSUnderlyingErrorKey] userInfo] objectForKey:NSLocalizedDescriptionKey]);
   }
-  
+
   NSLog(@"suspect: %@", [error userInfo]);
 
   // get ready to query again in a reasonable amount of time
@@ -285,6 +278,11 @@
       }
     }
   }
+}
+
+- (void)processVerifyMessages:(NSXMLNode*)fqlResultSet
+{
+  [[parent messages] verifyMessagesFromXML:fqlResultSet];
 }
 
 @end

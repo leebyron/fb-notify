@@ -49,9 +49,6 @@
         [newMessages addObject:message];
       }
       [allMessages removeObject:existingMessage];
-      if ([existingMessage boolForKey:@"unread"]) {
-        [unreadMessages removeObject:existingMessage];
-      }
       [allDict removeObjectForKey:threadID];
     } else {
       [newMessages addObject:message];
@@ -59,18 +56,56 @@
 
     [allDict setObject:message forKey:threadID];
     [allMessages addObject:message];
-    if ([message boolForKey:@"unread"]) {
-      [unreadMessages addObject:message];
-    }
-
-    // at this point we need to sort allMessages based on latest time
-    [allMessages sortUsingFunction:sortMessages context:@"updated_time"];
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
                                [[message objectForKey:@"updated_time"] intValue]);
+
+    [message release];
   }
+
+  // at this point we need to sort allMessages based on latest time
+  [allMessages sortUsingFunction:sortMessages context:@"updated_time"];
+
   return newMessages;
+}
+
+-(void)verifyMessagesFromXML:(NSXMLNode*)xml
+{
+  // make a temporary dictionary of all messages:
+  NSMutableDictionary* verifiedMessages = [[NSMutableDictionary alloc] init];
+  for (NSXMLNode* node in [xml children]) {
+    FBMessage* verifiedMessage = [FBMessage messageWithXMLNode:node manager:self];
+    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage objectForKey:@"thread_id"]];
+    [verifiedMessage release];
+  }
+
+  // run through existing messages, updating status
+  NSDictionary* allDictClone = [[NSDictionary alloc] initWithDictionary:allDict copyItems:NO];
+  for (NSString* threadID in allDictClone) {
+
+    FBMessage* existingMessage = [allDict objectForKey:threadID];
+    FBMessage* verifiedMessage = [verifiedMessages objectForKey:threadID];
+    
+    // remove from unread, we'll add it back in if it needs to be
+    [unreadMessages removeObject:existingMessage];
+
+    // would be nil if it's been deleted
+    if (verifiedMessage == nil) {
+      [allDict removeObjectForKey:threadID];
+      [allMessages removeObject:existingMessage];
+    } else {
+      // update unread status
+      [existingMessage setObject:[verifiedMessage objectForKey:@"unread"] forKey:@"unread"];
+      if ([verifiedMessage boolForKey:@"unread"]) {
+        [unreadMessages addObject:existingMessage];
+      }
+    }
+  }
+
+  // release what we no longer need
+  [allDictClone release];
+  [verifiedMessages release];
 }
 
 NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {

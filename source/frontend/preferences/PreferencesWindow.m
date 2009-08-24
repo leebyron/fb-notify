@@ -34,7 +34,7 @@ static PreferencesWindow* currentWindow;
     // Force the window to be loaded
     [[self window] center];
   }
-  
+
   return self;
 }
 

@@ -38,18 +38,18 @@
 - (id)initWithFrame:(NSRect)frameRect
 {
 	self = [super initWithFrame: frameRect];
-	
+
 	[SRCell setDelegate: self];
-	
+
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
 	self = [super initWithCoder: aDecoder];
-	
+
 	[SRCell setDelegate: self];
-	
+
 	return self;
 }
 
@@ -78,14 +78,14 @@
 	return YES;
 }
 
-- (BOOL) becomeFirstResponder 
+- (BOOL) becomeFirstResponder
 {
     BOOL okToChange = [SRCell becomeFirstResponder];
     if (okToChange) [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
     return okToChange;
 }
 
-- (BOOL) resignFirstResponder 
+- (BOOL) resignFirstResponder
 {
     BOOL okToChange = [SRCell resignFirstResponder];
     if (okToChange) [super setKeyboardFocusRingNeedsDisplayInRect:[self bounds]];
@@ -116,10 +116,10 @@
 - (void)viewDidMoveToWindow
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    
+
     [center removeObserver: self];
 	[center addObserver:self selector:@selector(viewFrameDidChange:) name:NSViewFrameDidChangeNotification object:self];
-	
+
 	[self resetTrackingRects];
 }
 
@@ -134,7 +134,7 @@
 	NSSize correctedSize = newSize;
 	correctedSize.height = SRMaxHeight;
 	if (correctedSize.width < SRMinWidth) correctedSize.width = SRMinWidth;
-	
+
 	[super setFrameSize: correctedSize];
 }
 
@@ -152,7 +152,7 @@
 }
 
 - (NSString *)keyCharsIgnoringModifiers {
-	return [SRCell keyCharsIgnoringModifiers];	
+	return [SRCell keyCharsIgnoringModifiers];
 }
 
 #pragma mark *** Key Interception ***
@@ -162,7 +162,7 @@
 {
 	// Only if we're key, please. Otherwise hitting Space after having
 	// tabbed past SRRecorderControl will put you into recording mode.
-	if (([[[self window] firstResponder] isEqualTo:self])) { 
+	if (([[[self window] firstResponder] isEqualTo:self])) {
 		if ([SRCell performKeyEquivalent:theEvent]) return YES;
 	}
 
@@ -178,7 +178,7 @@
 {
 	if ( [SRCell performKeyEquivalent: theEvent] )
         return;
-    
+
     [super keyDown:theEvent];
 }
 

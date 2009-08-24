@@ -14,7 +14,7 @@
 
 + (FBMessage*)messageWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr
 {
-  return [[[self alloc] initWithXMLNode:node manager:mngr] autorelease];
+  return [[self alloc] initWithXMLNode:node manager:mngr];
 }
 
 - (id)initWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr

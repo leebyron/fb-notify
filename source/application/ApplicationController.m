@@ -109,7 +109,7 @@ FBConnect* connectSession;
     [[NSUserDefaults standardUserDefaults] setInteger:8 forKey:kDisplayTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
   }
-  
+
   // key shortcut please!
   [StatusKeyShortcut setupWithTarget:self selector:@selector(beginUpdateStatus:)];
 

@@ -78,7 +78,7 @@ static StatusKeyShortcut* instance;
   if (statusKeyRef) {
     UnregisterEventHotKey(statusKeyRef);
   }
-  
+
   // assign this new shortcut
   if ([self keyCode]) {
     EventHotKeyID statusKeyID;

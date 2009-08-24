@@ -28,14 +28,14 @@ static NSArray              *padKeysArray        = nil;
 
 @implementation SRKeyCodeTransformer
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 //  initialize
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 + (void) initialize;
 {
     if ( self != [SRKeyCodeTransformer class] )
         return;
-    
+
     // Some keys need a special glyph
 	keyCodeToStringDict = [[NSDictionary alloc] initWithObjectsAndKeys:
 		@"F1", SRInt(122),
@@ -74,10 +74,10 @@ static NSArray              *padKeysArray        = nil;
 		SRChar(KeyboardReturnGlyph), SRInt(76),
 		SRChar(KeyboardTabRightGlyph), SRInt(48),
 		SRChar(KeyboardHelpGlyph), SRInt(114),
-		nil];    
-    
+		nil];
+
     // We want to identify if the key was pressed on the numpad
-	padKeysArray = [[NSArray alloc] initWithObjects: 
+	padKeysArray = [[NSArray alloc] initWithObjects:
 		SRInt(65), // ,
 		SRInt(67), // *
 		SRInt(69), // +
@@ -95,72 +95,72 @@ static NSArray              *padKeysArray        = nil;
 		SRInt(91), // 8
 		SRInt(92), // 9
 		nil];
-    
+
     // generate the string to keycode mapping dict...
     stringToKeyCodeDict = [[NSMutableDictionary alloc] init];
     [self regenerateStringToKeyCodeMapping];
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 //  allowsReverseTransformation
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 + (BOOL) allowsReverseTransformation
 {
     return YES;
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 //  transformedValueClass
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 + (Class) transformedValueClass;
 {
     return [NSString class];
 }
 
-//---------------------------------------------------------- 
-//  transformedValue: 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
+//  transformedValue:
+//----------------------------------------------------------
 - (id) transformedValue:(id)value
 {
     if ( ![value isKindOfClass:[NSNumber class]] )
         return nil;
-    
+
     // Can be -1 when empty
     signed short keyCode = [value shortValue];
 	if ( keyCode < 0 ) return nil;
-	
+
 	// We have some special gylphs for some special keys...
 	NSString *unmappedString = [keyCodeToStringDict objectForKey: SRInt( keyCode )];
 	if ( unmappedString != nil ) return unmappedString;
-	
-	BOOL isPadKey = [padKeysArray containsObject: SRInt( keyCode )];	
+
+	BOOL isPadKey = [padKeysArray containsObject: SRInt( keyCode )];
 	KeyboardLayoutRef currentLayoutRef;
 	KeyboardLayoutKind currentLayoutKind;
     OSStatus err;
-	
+
 	err = KLGetCurrentKeyboardLayout( &currentLayoutRef );
     if (err != noErr) return nil;
-	
+
 	err = KLGetKeyboardLayoutProperty( currentLayoutRef, kKLKind,(const void **)&currentLayoutKind );
 	if ( err != noErr ) return nil;
-    
+
 	UInt32 keysDown = 0;
-	
+
 	if ( currentLayoutKind == kKLKCHRKind )
 	{
 		Handle kchrHandle;
-        
+
 		err = KLGetKeyboardLayoutProperty( currentLayoutRef, kKLKCHRData, (const void **)&kchrHandle );
 		if ( err != noErr ) return nil;
-		
+
 		UInt32 charCode = KeyTranslate( kchrHandle, keyCode, &keysDown );
-		
+
 		if (keysDown != 0) charCode = KeyTranslate( kchrHandle, keyCode, &keysDown );
-		
+
         char theChar = ( charCode & 0x00FF );
-		
+
 		NSString *keyString = [[[[NSString alloc] initWithData:[NSData dataWithBytes:&theChar length:1] encoding:NSMacOSRomanStringEncoding] autorelease] uppercaseString];
-		
+
         return ( isPadKey ? [NSString stringWithFormat: SRLoc(@"Pad %@"), keyString] : keyString );
 	}
 	else // kKLuchrKind, kKLKCHRuchrKind
@@ -168,11 +168,11 @@ static NSArray              *padKeysArray        = nil;
 		UCKeyboardLayout *keyboardLayout = NULL;
 		err = KLGetKeyboardLayoutProperty( currentLayoutRef, kKLuchrData, (const void **)&keyboardLayout );
 		if ( err != noErr ) return nil;
-		
+
 		UniCharCount length = 4, realLength;
         UniChar chars[4];
-        
-        err = UCKeyTranslate( keyboardLayout, 
+
+        err = UCKeyTranslate( keyboardLayout,
                               keyCode,
                               kUCKeyActionDisplay,
                               0,
@@ -182,25 +182,25 @@ static NSArray              *padKeysArray        = nil;
                               length,
                               &realLength,
                               chars);
-		
+
 		if ( err != noErr ) return nil;
-        
+
 		NSString *keyString = [[NSString stringWithCharacters:chars length:1] uppercaseString];
-		
+
         return ( isPadKey ? [NSString stringWithFormat: SRLoc(@"Pad %@"), keyString] : keyString );
 	}
-    
-	return nil;    
+
+	return nil;
 }
 
-//---------------------------------------------------------- 
-//  reverseTransformedValue: 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
+//  reverseTransformedValue:
+//----------------------------------------------------------
 - (id) reverseTransformedValue:(id)value
 {
     if ( ![value isKindOfClass:[NSString class]] )
         return nil;
-    
+
     // try and retrieve a mapped keycode from the reverse mapping dict...
     return [stringToKeyCodeDict objectForKey:value];
 }
@@ -211,14 +211,14 @@ static NSArray              *padKeysArray        = nil;
 
 @implementation SRKeyCodeTransformer( Private )
 
-//---------------------------------------------------------- 
-//  regenerateStringToKeyCodeMapping: 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
+//  regenerateStringToKeyCodeMapping:
+//----------------------------------------------------------
 + (void) regenerateStringToKeyCodeMapping;
 {
     SRKeyCodeTransformer *transformer = [[[self alloc] init] autorelease];
     [stringToKeyCodeDict removeAllObjects];
-    
+
     // loop over every keycode (0 - 127) finding its current string mapping...
 	unsigned i;
     for ( i = 0U; i < 128U; i++ )
