@@ -40,8 +40,7 @@ FBConnect* connectSession;
 {
   self = [super init];
   if (self) {
-    connectSession = [FBConnect sessionWithAPIKey:kAppKey
-                                           secret:kAppSecret
+    connectSession = [FBConnect sessionWithAPIKey:kAppKey // you need to define kAppKey
                                          delegate:self];
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
