@@ -70,6 +70,8 @@
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime,
                                [[notification objectForKey:@"updated_time"] intValue]);
+
+    [notification release];
   }
 
   return newNotifications;

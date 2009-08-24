@@ -22,7 +22,7 @@
 + (FBNotification*)notificationWithXMLNode:(NSXMLNode*)node
                                    manager:(NotificationManager*)mngr
 {
-  return [[[self alloc] initWithXMLNode:node manager:mngr] autorelease];
+  return [[self alloc] initWithXMLNode:node manager:mngr];
 }
 
 - (id)initWithXMLNode:(NSXMLNode*)node
