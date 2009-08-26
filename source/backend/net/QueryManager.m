@@ -13,8 +13,8 @@
 #import "GlobalSession.h"
 
 
-#define kQueryInterval 30
-#define kRetryQueryInterval 30
+#define kQueryInterval 60
+#define kRetryQueryInterval 60
 
 #define kInfoQueryName @"info"
 #define kInfoQueryFmt @"SELECT name, profile_url FROM user WHERE uid = %@"
