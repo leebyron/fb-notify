@@ -16,6 +16,7 @@
 
   // First iteration doesn't need to scan to & since we did that already, but for code simplicity's sake we'll do it again with the scanner.
   NSScanner *scanner = [NSScanner scannerWithString:self];
+  [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@""]];
   do {
     // Scan up to the next entity or the end of the string.
     NSString *nonEntityString;
@@ -53,19 +54,20 @@
       }
       else {
         NSString *unknownEntity = @"";
-        [scanner scanUpToString:@";" intoString:&unknownEntity];
+        [scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@";& "] intoString:&unknownEntity];
         [result appendFormat:@"&#%@%@;", xForHex, unknownEntity];
-        NSLog(@"Expected numeric character entity but got &#%@%@;", xForHex, unknownEntity);
+        //NSLog(@"Expected numeric character entity but got &#%@%@;", xForHex, unknownEntity);
       }
       [scanner scanString:@";" intoString:NULL];
     }
     else {
+      [scanner scanString:@"&" intoString:NULL];
       NSString *unknownEntity = @"";
-      [scanner scanUpToString:@";" intoString:&unknownEntity];
+      [scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@";& "] intoString:&unknownEntity];
       NSString *semicolon = @"";
       [scanner scanString:@";" intoString:&semicolon];
-      [result appendFormat:@"%@%@", unknownEntity, semicolon];
-      NSLog(@"Unsupported XML character entity %@%@", unknownEntity, semicolon);
+      [result appendFormat:@"&%@%@", unknownEntity, semicolon];
+      //NSLog(@"Unsupported XML character entity &%@%@", unknownEntity, semicolon);
     }
   }
   while (![scanner isAtEnd]);

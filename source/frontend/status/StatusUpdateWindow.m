@@ -60,8 +60,13 @@
   [[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAni, @"alphaValue",
                                 moveAni, @"frameOrigin", nil]];
 
-  [NSApp activateIgnoringOtherApps:YES];
+  // keep it on top so you don't lose it!
+//  [panel setFloatingPanel:YES];
+  [panel setWorksWhenModal:YES];
+  [[self window] setLevel:NSFloatingWindowLevel];
 
+  // open er up.
+  [NSApp activateIgnoringOtherApps:YES];
   [[self window] setAlphaValue:0.0];
   [[self window] makeKeyAndOrderFront:self];
   [[[self window] animator] setAlphaValue:1.0];

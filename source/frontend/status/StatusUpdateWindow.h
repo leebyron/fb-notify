@@ -11,6 +11,7 @@
 
 @interface StatusUpdateWindow : NSWindowController {
   IBOutlet NSTextField *statusField;
+  IBOutlet NSPanel *panel;
 
   id target;
   SEL selector;
