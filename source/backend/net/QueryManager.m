@@ -66,7 +66,7 @@
   self = [super init];
   if (self) {
     status    = QUERY_OFF;
-    lastQuery = [[NSDate date] timeIntervalSince1970];//0;
+    lastQuery = 0;
     parent    = app;
   }
   return self;
