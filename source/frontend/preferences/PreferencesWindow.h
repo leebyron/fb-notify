@@ -9,20 +9,31 @@
 #import <Cocoa/Cocoa.h>
 #import "SRRecorderControl.h"
 
+@class ApplicationController;
 
 @interface PreferencesWindow : NSWindowController {
   IBOutlet NSTextField*       version;
+
+  IBOutlet NSImageView*       pic;
+  IBOutlet NSTextField*       name;
+  IBOutlet NSButton*          logoutButton;
+
   IBOutlet NSButton*          startAtLogin;
   IBOutlet NSButton*          lightMode;
   IBOutlet SRRecorderControl* statusKeyShortcut;
   IBOutlet NSSlider*          notificationDuration;
 }
 
-+ (void)show;
++ (void) setupWithParent:(ApplicationController*)p;
++ (void) show;
++ (void) refresh;
+- (void) refresh;
 
-- (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey;
+- (IBAction) logoutButtonPressed:(id) sender;
+
 - (IBAction) startAtLoginChanged:(id) sender;
 - (IBAction) lightModeChanged:(id) sender;
+- (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey;
 - (IBAction) notificationDurationChanged:(id) sender;
 
 @end

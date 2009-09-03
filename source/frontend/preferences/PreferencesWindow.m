@@ -11,19 +11,28 @@
 #import "StatusKeyShortcut.h"
 #import "LoginItemManager.h"
 #import "BubbleDimensions.h"
-
+#import "GlobalSession.h"
+#import "NetConnection.h"
 
 @implementation PreferencesWindow
 
 static PreferencesWindow* currentWindow;
+static ApplicationController* parent;
+
++(void) setupWithParent:(ApplicationController*)p
+{
+  parent = p;
+}
 
 +(void) show
 {
   if (currentWindow != nil) {
+    [currentWindow refresh];
     [NSApp activateIgnoringOtherApps:YES];
     [[currentWindow window] makeKeyAndOrderFront:nil];
   } else {
     currentWindow = [[PreferencesWindow alloc] init];
+    [currentWindow refresh];
   }
 }
 
@@ -70,9 +79,35 @@ static PreferencesWindow* currentWindow;
   [[self window] makeKeyAndOrderFront:self];
 }
 
-- (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey
++ (void)refresh
 {
-  [[StatusKeyShortcut instance] registerKeyShortcutWithCode:hotkey.code flags:hotkey.flags];
+  if (!currentWindow) {
+    return;
+  }
+  [currentWindow refresh];
+}
+
+- (void)refresh
+{
+  // Set the image and title
+  NSImage* userpic   = [[parent profilePics] imageForKey:[connectSession uid]];
+  NSString* username = [[parent names] objectForKey:[connectSession uid]];
+  if ([connectSession isLoggedIn] && userpic && username) {
+    [pic setImage:userpic];
+    [name setStringValue:username];
+    [logoutButton setEnabled:YES];
+  } else {
+    [pic setImage:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]]];
+    [name setStringValue:@"Not Logged In"];
+    [logoutButton setEnabled:NO];
+  }
+}
+
+- (IBAction) logoutButtonPressed:(id) sender
+{
+  if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
+    [[NSApp delegate] logout:self];
+  }
 }
 
 - (IBAction) startAtLoginChanged:(id) sender
@@ -84,6 +119,11 @@ static PreferencesWindow* currentWindow;
 {
   [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:kBubbleLightMode];
   [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey
+{
+  [[StatusKeyShortcut instance] registerKeyShortcutWithCode:hotkey.code flags:hotkey.flags];
 }
 
 - (IBAction) notificationDurationChanged:(id) sender

@@ -11,6 +11,7 @@
 #import "ApplicationController.h"
 #import "NetConnection.h"
 #import "GlobalSession.h"
+#import "PreferencesWindow.h"
 #import "NSString+.h"
 
 
@@ -174,6 +175,8 @@
   [self processNotifications:[responses objectForKey:kNotifQueryName]];
   [self processMessages:[responses objectForKey:kMessageQueryName]];
   [self processVerifyMessages:[responses objectForKey:kVerifyMessageQueryName]];
+
+  [PreferencesWindow refresh];
 
   lastQuery = [[NSDate date] timeIntervalSince1970];
   [responses release];

@@ -320,16 +320,6 @@ enum {
   [statusItemMenu addItem:preferencesItem];
   [preferencesItem release];
 
-  // logout first
-  if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
-    NSMenuItem* logoutItem = [[NSMenuItem alloc] initWithTitle:@"Logout and Quit"
-                                                        action:@selector(logout:)
-                                                 keyEquivalent:@""];
-    [logoutItem setTag:LOGOUT_TAG];
-    [statusItemMenu addItem:logoutItem];
-    [logoutItem release];
-  }
-
   NSMenuItem* quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
                                                     action:@selector(terminate:)
                                              keyEquivalent:@""];

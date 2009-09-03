@@ -73,6 +73,9 @@ FBConnect* connectSession;
 
     // setup the query manager
     queryManager = [[QueryManager alloc] initWithParent:self];
+
+    // setup the preferences window
+    [PreferencesWindow setupWithParent:self];
   }
   return self;
 }
