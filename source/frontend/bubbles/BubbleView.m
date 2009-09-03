@@ -18,7 +18,7 @@ static NSDictionary* subAttrs = nil;
   attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:11.0],
             NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
             NSForegroundColorAttributeName, nil] retain];
-  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:9.5],
+  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:10.0],
                NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
                NSForegroundColorAttributeName, nil] retain];
 }
@@ -47,7 +47,7 @@ static NSDictionary* subAttrs = nil;
 
   if (subText && [subText length] > 0) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
-                                         options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
+                                         options:NSStringDrawingTruncatesLastVisibleLine
                                       attributes:subAttrs].size;
     return ceil(MAX(size.width, size2.width));
   } else {

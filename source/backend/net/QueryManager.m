@@ -163,8 +163,6 @@
     return;
   }
 
-  lastQuery = [[NSDate date] timeIntervalSince1970];
-
   // get ready to query again shortly...
   [self queryAfterDelay:kQueryInterval];
 
@@ -177,8 +175,8 @@
   [self processMessages:[responses objectForKey:kMessageQueryName]];
   [self processVerifyMessages:[responses objectForKey:kVerifyMessageQueryName]];
 
+  lastQuery = [[NSDate date] timeIntervalSince1970];
   [responses release];
-
   [[NSApp delegate] invalidate];
 }
 
@@ -247,8 +245,7 @@
 - (void)processNotifications:(NSXMLNode*)fqlResultSet
 {
   NSArray* newNotifications = [[parent notifications] addNotificationsFromXML:fqlResultSet];
-
-  if(lastQuery + (kQueryInterval* 5) > [[NSDate date] timeIntervalSince1970]) {
+  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
         NSImage* pic = [[parent profilePics] imageForKey:[notification objectForKey:@"sender_id"]];
@@ -266,7 +263,7 @@
 {
   NSArray* newMessages = [[parent messages] addMessagesFromXML:fqlResultSet];
 
-  if(lastQuery + (kQueryInterval* 5) > [[NSDate date] timeIntervalSince1970]) {
+  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
         NSString* uid = [message objectForKey:@"snippet_author"];
