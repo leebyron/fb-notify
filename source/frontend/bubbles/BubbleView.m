@@ -18,7 +18,7 @@ static NSDictionary* subAttrs = nil;
   attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:11.0],
             NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
             NSForegroundColorAttributeName, nil] retain];
-  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:10.0],
+  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:9.5],
                NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
                NSForegroundColorAttributeName, nil] retain];
 }
@@ -46,10 +46,10 @@ static NSDictionary* subAttrs = nil;
                                 attributes:attrs].size;
 
   if (subText && [subText length] > 0) {
-    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width - kBubblePadding, 1.0)
+    NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 1.0)
                                          options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
                                       attributes:subAttrs].size;
-    return ceil(MAX(size.width, size2.width + kBubblePadding));
+    return ceil(MAX(size.width, size2.width));
   } else {
     return ceil(size.width);
   }
@@ -57,7 +57,7 @@ static NSDictionary* subAttrs = nil;
 
 + (NSSize)totalSizeWithText:(NSString*)text subText:(NSString*)subText withImage:(BOOL)hasImage maxWidth:(float)maxWidth
 {
-  float textHeight = [self heightOfText:text subText:subText maxWidth:maxWidth];
+  float textHeight = [self heightOfText:text subText:subText maxWidth:(maxWidth - (hasImage?(kBubbleIconSize + kBubblePadding):0))];
   float totalHeight;
   if (hasImage) {
     totalHeight = MAX(textHeight, kBubbleIconSize) + 2 * kBubblePadding;

@@ -11,6 +11,7 @@
 #import "ApplicationController.h"
 #import "NetConnection.h"
 #import "GlobalSession.h"
+#import "NSString+.h"
 
 
 #define kQueryInterval 60
@@ -34,7 +35,7 @@
 #define kVerifyMessageQueryFmt @"SELECT thread_id, unread FROM thread WHERE folder_id = 0"
 
 #define kChainedPicQueryName @"pic"
-#define kChainedPicQueryFmt @"SELECT uid, pic_square FROM user WHERE uid = %@ " \
+#define kChainedPicQueryFmt @"SELECT uid, name, pic_square FROM user WHERE uid = %@ " \
 @" OR uid IN (SELECT sender_id FROM #%@) OR uid IN (SELECT snippet_author FROM #%@)"
 
 #define kChainedAppIconQueryName @"app_icon"
@@ -232,6 +233,10 @@
 {
   for (NSXMLNode* xml in [fqlResultSet children]) {
     NSString* uid    = [[xml childWithName:@"uid"] stringValue];
+    NSString* name   = [[[xml childWithName:@"name"] stringValue] stringByDecodingXMLEntities];
+    if (name != nil && [name length] != 0) {
+      [[parent names] setObject:name forKey:uid];
+    }
     NSString* picUrl = [[xml childWithName:@"pic_square"] stringValue];
     if (picUrl != nil && [picUrl length] != 0) {
       [[parent profilePics] setImageURL:picUrl forKey:uid];
@@ -264,11 +269,24 @@
   if(lastQuery + (kQueryInterval* 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSImage* pic = [[parent profilePics] imageForKey:[message objectForKey:@"snippet_author"]];
+        NSString* uid = [message objectForKey:@"snippet_author"];
+        NSImage* pic = [[parent profilePics] imageForKey:uid];
+        
+        NSString* name = [[parent names] objectForKey:uid];
+        NSString* subject = [message stringForKey:@"subject"];
 
-        NSString* bubText = [message stringForKey:@"subject"];
+        NSString* bubText;
+        if (name != nil && [name length] != 0) {
+          if (subject != nil && [subject length] != 0) {
+            bubText = [NSString stringWithFormat:@"%@: %@", name, subject];
+          } else {
+            bubText = name;
+          }
+        } else {
+          bubText = subject;
+        }
         NSString* bubSubText = [message stringForKey:@"snippet"];
-        if ([bubText length] == 0) {
+        if (bubText == nil || [bubText length] == 0) {
           bubText = bubSubText;
           bubSubText = nil;
         }

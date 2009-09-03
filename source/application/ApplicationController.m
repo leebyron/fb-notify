@@ -32,7 +32,7 @@
 
 @implementation ApplicationController
 
-@synthesize menu, notifications, messages, bubbleManager, profilePics, appIcons;
+@synthesize menu, notifications, messages, bubbleManager, names, profilePics, appIcons;
 
 FBConnect* connectSession;
 
@@ -45,6 +45,8 @@ FBConnect* connectSession;
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
+
+    names = [[NSMutableDictionary alloc] init];
 
     // setup the profile pic and app icon image stores
     NSImage *profilePicBackup = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
@@ -82,6 +84,7 @@ FBConnect* connectSession;
   [messages           release];
   [bubbleManager      release];
   [menu               release];
+  [names              release];
   [profilePics        release];
   [appIcons           release];
   [statusUpdateWindow release];

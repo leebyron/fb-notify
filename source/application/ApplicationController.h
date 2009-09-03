@@ -28,6 +28,7 @@
   BubbleManager*       bubbleManager;
   QueryManager*        queryManager;
 
+  NSMutableDictionary* names;
   ImageDictionary*     profilePics;
   ImageDictionary*     appIcons;
 
@@ -39,6 +40,7 @@
 @property(retain) NotificationManager*  notifications;
 @property(retain) MessageManager*       messages;
 @property(retain) BubbleManager*        bubbleManager;
+@property(retain) NSMutableDictionary*  names;
 @property(retain) ImageDictionary*      profilePics;
 @property(retain) ImageDictionary*      appIcons;
 
