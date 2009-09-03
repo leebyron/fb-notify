@@ -16,10 +16,10 @@ static NSDictionary* subAttrs = nil;
 + (void)initialize
 {
   attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:11.0],
-            NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
+            NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.8],
             NSForegroundColorAttributeName, nil] retain];
-  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:10.0],
-               NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.85],
+  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:9.0],
+               NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.8],
                NSForegroundColorAttributeName, nil] retain];
 }
 
@@ -110,6 +110,9 @@ static NSDictionary* subAttrs = nil;
   [[NSColor clearColor] set];
   NSRectFill(rect);
 
+  // light mode?
+  BOOL lightMode = [[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode];
+
   // create shadow
   [NSGraphicsContext saveGraphicsState];
   NSShadow* shadow = [[NSShadow alloc] init];
@@ -135,11 +138,19 @@ static NSDictionary* subAttrs = nil;
   [shadow release];
 
   // draw the background for real
-  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.75] set];
+  if (lightMode) {
+    [[NSColor colorWithCalibratedWhite:1.0 alpha:0.75] set];
+  } else {
+    [[NSColor colorWithCalibratedWhite:0.0 alpha:0.75] set];
+  }
   [roundedRect fill];
 
   // draw thin stroke on background
-  [[NSColor colorWithCalibratedWhite:0.0 alpha:0.25] set];
+  if (lightMode) {
+    [[NSColor colorWithCalibratedWhite:1.0 alpha:0.5] set];
+  } else {
+    [[NSColor colorWithCalibratedWhite:0.0 alpha:0.25] set];
+  }
   [roundedRect stroke];
 
   NSRect textRect;
@@ -159,12 +170,21 @@ static NSDictionary* subAttrs = nil;
                                          maxWidth:textRect.size.width];
 
   textRect.origin.y = (rect.size.height - fullHeight) / 2 + (fullHeight - textRect.size.height);
-  textRect.origin.y += 1.0;
+  textRect.origin.y += (subText && [subText length] > 0) ? 2.0 : 1.0;
   textRect.origin.x += kBubbleShadowSpacing;
+  
+  NSMutableDictionary* textAttrs = [NSMutableDictionary dictionaryWithDictionary:attrs];
+  NSMutableDictionary* subTextAttrs = [NSMutableDictionary dictionaryWithDictionary:subAttrs];
+  if (lightMode) {
+    [textAttrs setObject:[NSColor colorWithCalibratedWhite:0.0 alpha:1.0]
+                  forKey:NSForegroundColorAttributeName];
+    [subTextAttrs setObject:[NSColor colorWithCalibratedWhite:0.0 alpha:1.0]
+                     forKey:NSForegroundColorAttributeName];
+  }
 
   [text drawWithRect:textRect
              options:NSStringDrawingUsesLineFragmentOrigin
-          attributes:attrs];
+          attributes:textAttrs];
 
   if (subText && [subText length] > 0) {
     textRect.size.height = [BubbleView heightOfText:nil
@@ -173,7 +193,7 @@ static NSDictionary* subAttrs = nil;
     textRect.origin.y -= textRect.size.height + 2;
     [subText drawWithRect:textRect
                   options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin
-               attributes:subAttrs];
+               attributes:subTextAttrs];
   }
 
   // draw rounded profile pic

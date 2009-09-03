@@ -13,6 +13,7 @@
 @interface PreferencesWindow : NSWindowController {
   IBOutlet NSTextField*       version;
   IBOutlet NSButton*          startAtLogin;
+  IBOutlet NSButton*          lightMode;
   IBOutlet SRRecorderControl* statusKeyShortcut;
   IBOutlet NSSlider*          notificationDuration;
 }
@@ -21,6 +22,7 @@
 
 - (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey;
 - (IBAction) startAtLoginChanged:(id) sender;
+- (IBAction) lightModeChanged:(id) sender;
 - (IBAction) notificationDurationChanged:(id) sender;
 
 @end

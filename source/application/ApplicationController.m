@@ -106,10 +106,22 @@ FBConnect* connectSession;
 
 - (void)awakeFromNib
 {
+  // need a sync?
+  BOOL doSync = NO;
+
   // make sure there is a default for notification display time
   if ([[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey] == 0) {
-    NSLog(@"resetting the default");
     [[NSUserDefaults standardUserDefaults] setInteger:8 forKey:kDisplayTimeKey];
+    doSync = YES;
+  }
+
+  // make sure there is a default for notification display time
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode] == 0) {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBubbleLightMode];
+    doSync = YES;
+  }
+
+  if (doSync) {
     [[NSUserDefaults standardUserDefaults] synchronize];
   }
 

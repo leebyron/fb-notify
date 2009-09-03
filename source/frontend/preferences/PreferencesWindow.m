@@ -52,6 +52,7 @@ static PreferencesWindow* currentWindow;
 
   // Start at Login
   [startAtLogin setState:[[LoginItemManager manager] isLoginItem]];
+  [lightMode setState:[[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode]];
 
   // Status Update Key Shortcut
   KeyCombo hotkey;
@@ -77,6 +78,12 @@ static PreferencesWindow* currentWindow;
 - (IBAction) startAtLoginChanged:(id) sender
 {
   [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOnState)];
+}
+
+- (IBAction) lightModeChanged:(id) sender
+{
+  [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:kBubbleLightMode];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction) notificationDurationChanged:(id) sender

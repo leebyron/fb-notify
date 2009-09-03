@@ -20,3 +20,5 @@
 
 #define kAnimationDuration 0.2 // seconds
 #define kDisplayTimeKey @"NotificationDisplayTime"
+
+#define kBubbleLightMode @"BubbleLightMode"
