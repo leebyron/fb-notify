@@ -162,6 +162,11 @@
     return;
   }
 
+  lastQuery = [[NSDate date] timeIntervalSince1970];
+
+  // get ready to query again shortly...
+  [self queryAfterDelay:kQueryInterval];
+
   NSDictionary* responses = [response parseMultiqueryResponse];
 
   [self processUserInfo:[responses objectForKey:kInfoQueryName]];
@@ -174,11 +179,6 @@
   [responses release];
 
   [[NSApp delegate] invalidate];
-
-  lastQuery = [[NSDate date] timeIntervalSince1970];
-
-  // get ready to query again shortly...
-  [self queryAfterDelay:kQueryInterval];
 }
 
 - (void)failedMultiquery:(NSError*)error
@@ -186,6 +186,11 @@
   // if we're not online, it's obvious that this would fail
   if (![[NetConnection netConnection] isOnline]) {
     return;
+  }
+
+  // get ready to query again in a reasonable amount of time, if we're logged in
+  if ([connectSession isLoggedIn]) {
+    [self queryAfterDelay:kRetryQueryInterval];
   }
 
   // let us know what happened
@@ -200,9 +205,6 @@
   }
 
   NSLog(@"suspect: %@", [error userInfo]);
-
-  // get ready to query again in a reasonable amount of time
-  [self queryAfterDelay:kRetryQueryInterval];
 }
 
 - (void)processUserInfo:(NSXMLNode*)userInfo

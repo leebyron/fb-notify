@@ -7,7 +7,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>CFBundleVersion</key>
-	<string>0.3</string>
+	<string>0.3.1</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
