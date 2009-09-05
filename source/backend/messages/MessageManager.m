@@ -86,7 +86,7 @@
 
     FBMessage* existingMessage = [allDict objectForKey:threadID];
     FBMessage* verifiedMessage = [verifiedMessages objectForKey:threadID];
-    
+
     // remove from unread, we'll add it back in if it needs to be
     [unreadMessages removeObject:existingMessage];
 

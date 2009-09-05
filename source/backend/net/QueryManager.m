@@ -271,7 +271,7 @@
       if ([message boolForKey:@"unread"]) {
         NSString* uid = [message objectForKey:@"snippet_author"];
         NSImage* pic = [[parent profilePics] imageForKey:uid];
-        
+
         NSString* name = [[parent names] objectForKey:uid];
         NSString* subject = [message stringForKey:@"subject"];
 

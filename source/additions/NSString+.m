@@ -76,4 +76,11 @@ finish:
   return result;
 }
 
+- (NSString *) condenseString
+{
+  return [[[self stringByReplacingOccurrencesOfString:@" ..." withString:kEllipsis]
+                 stringByReplacingOccurrencesOfString:@"..." withString:kEllipsis]
+                 stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+}
+
 @end

@@ -7,11 +7,11 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>CFBundleVersion</key>
-	<string>0.32</string>
+	<string>0.4</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
-	<string>http://www.leebyron.com/else/fbnotify/appcast.php</string>
+	<string>http://www.facebook.com/fbdesknotify/appcast.php</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

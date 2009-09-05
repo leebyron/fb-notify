@@ -13,13 +13,13 @@
 #import "NetConnection.h"
 #import "LoginItemManager.h"
 #import "StatusKeyShortcut.h"
+#import "NSString+.h"
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
 #define kMaxMessages 6
 #define kMinMessages 3
 #define kMaxStringLen 50
-#define kEllipsis @"\u2026"
 #define kUserIconSize 15.0
 
 

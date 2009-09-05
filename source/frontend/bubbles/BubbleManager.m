@@ -9,6 +9,7 @@
 #import "BubbleWindow.h"
 #import "BubbleView.h"
 #import "BubbleDimensions.h"
+#import "NSString+.h"
 
 @implementation BubbleManager
 
@@ -35,6 +36,9 @@
              notification:(FBNotification*)notif
                   message:(FBMessage*)msg
 {
+  text = [text condenseString];
+  subText = [subText condenseString];
+
   NSSize windowSize = [BubbleView totalSizeWithText:text subText:subText withImage:(image != nil) maxWidth:kBubbleMaxWidth];
   float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
   NSSize screen = [[NSScreen mainScreen] frame].size;
