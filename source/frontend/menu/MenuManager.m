@@ -76,11 +76,11 @@ enum {
 
     NSStatusBar* bar = [NSStatusBar systemStatusBar];
     @try {
-      statusItem = [[bar _statusItemWithLength:28 withPriority:65536] retain];
+      statusItem = [[bar _statusItemWithLength:29 withPriority:65536] retain];
     } @catch (NSException* e) {
-      statusItem = [[bar statusItemWithLength:28] retain];
+      statusItem = [[bar statusItemWithLength:29] retain];
     }
-    [statusItem setLength:28];
+    [statusItem setLength:29];
     statusItemMenu = [[NSMenu alloc] init];
 
     [statusItem setMenu:statusItemMenu];
