@@ -13,9 +13,9 @@
   NSMutableDictionary* fields;
 }
 
-- (id)initWithXMLNode:(NSXMLNode*)node;
+- (id)initWithDictionary:(NSDictionary*)dict;
 - (void)setObject:(id)obj forKey:(NSString*)key;
-- (NSString *)objectForKey:(NSString*)key;
+- (id)objectForKey:(NSString*)key;
 - (NSString *)stringForKey:(NSString*)key;
 - (int)integerForKey:(NSString*)key;
 - (BOOL)boolForKey:(NSString*)key;

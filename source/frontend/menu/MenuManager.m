@@ -215,7 +215,7 @@ enum {
           [item setState:NSOnState];
         }
         [item setRepresentedObject:notification];
-        [item setImage:[appIcons imageForKey:[notification objectForKey:@"app_id"]]];
+        [item setImage:[appIcons imageForKey:[[notification objectForKey:@"app_id"] stringValue]]];
         [statusItemMenu addItem:item];
         [item release];
         addedNotifications++;
@@ -263,7 +263,7 @@ enum {
 
         // add item to menu
         NSString* title = [message stringForKey:@"subject"];
-        if ([title length] == 0) {
+        if (![NSString exists:title]) {
           title = [message stringForKey:@"snippet"];
         }
         if ([title length] > kMaxStringLen) {
@@ -279,7 +279,7 @@ enum {
         [item setRepresentedObject:message];
 
         // profile pic icon
-        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[message objectForKey:@"snippet_author"]]];
+        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[[message objectForKey:@"snippet_author"] stringValue]]];
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];

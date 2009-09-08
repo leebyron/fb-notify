@@ -17,11 +17,8 @@
 
 @property(retain) NSURL* href;
 
-+ (FBNotification*)notificationWithXMLNode:(NSXMLNode*)node
-                                   manager:(NotificationManager*)mngr;
-
-- (id)initWithXMLNode:(NSXMLNode*)node
-              manager:(NotificationManager*)mngr;
++ (FBNotification*)notificationWithDictionary:(NSDictionary*)dict
+                                      manager:(NotificationManager*)mngr;
 
 - (void)markAsReadWithSimilar:(BOOL)markSimilar;
 

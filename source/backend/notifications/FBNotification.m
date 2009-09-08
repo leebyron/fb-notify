@@ -8,9 +8,12 @@
 #import "FBNotification.h"
 #import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
+#import "NSString+.h"
 
 @interface FBNotification (Private)
 
+- (id)initWithDictionary:(NSDictionary*)dict
+                 manager:(NotificationManager*)mngr;
 - (NSString*)lastURLInHTML:(NSString*)string;
 
 @end
@@ -19,16 +22,16 @@
 
 @synthesize href;
 
-+ (FBNotification*)notificationWithXMLNode:(NSXMLNode*)node
-                                   manager:(NotificationManager*)mngr
++ (FBNotification*)notificationWithDictionary:(NSDictionary*)dict
+                                      manager:(NotificationManager*)mngr
 {
-  return [[self alloc] initWithXMLNode:node manager:mngr];
+  return [[self alloc] initWithDictionary:dict manager:mngr];
 }
 
-- (id)initWithXMLNode:(NSXMLNode*)node
+- (id)initWithDictionary:(NSDictionary*)dict
               manager:(NotificationManager*)mngr
 {
-  self = [super initWithXMLNode:node];
+  self = [super initWithDictionary:dict];
   if (self) {
     manager = mngr;
 
@@ -36,21 +39,21 @@
     NSString* hrefString = [self objectForKey:@"href"];
 
     // this page is bogus.
-    if ([hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
+    if ([NSString exists:hrefString] && [hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
       hrefString = nil;
     }
 
-    if (hrefString == nil || [hrefString length] == 0) {
+    if (![NSString exists:hrefString]) {
       // try to find it in the title html
       hrefString = [self lastURLInHTML:[self stringForKey:@"title_html"]];
     }
 
-    if (hrefString == nil || [hrefString length] == 0) {
+    if (![NSString exists:hrefString]) {
       // body html?
       hrefString = [self lastURLInHTML:[self stringForKey:@"body_html"]];
     }
 
-    if (hrefString == nil || [hrefString length] == 0) {
+    if (![NSString exists:hrefString]) {
       // fine, use the default notification url
       hrefString = @"http://www.facebook.com/notifications.php";
     }
@@ -92,6 +95,9 @@
 #pragma mark Private methods
 - (NSString*)lastURLInHTML:(NSString*)html
 {
+  if (![NSString exists:html]) {
+    return nil;
+  }
   NSRange startHref = [html rangeOfString:@"href=\""
                                   options:NSBackwardsSearch];
   if (startHref.location == NSNotFound) {

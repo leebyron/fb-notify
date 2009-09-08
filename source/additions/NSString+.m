@@ -3,7 +3,15 @@
 
 @implementation NSString (XML)
 
++ (BOOL)exists:(NSString *)string
+{
+  return string != nil && [string isKindOfClass:[NSString class]] && [string length] > 0;
+}
+
 - (NSString *) stringByDecodingXMLEntities {
+  if (![NSString exists:self]) {
+    return [NSString stringWithString:@""];
+  }
   NSUInteger myLength = [self length];
   NSUInteger ampIndex = [self rangeOfString:@"&" options:NSLiteralSearch].location;
 

@@ -15,8 +15,8 @@
   MessageManager* manager;
 }
 
-+ (FBMessage*)messageWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr;
-- (id)initWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr;
++ (FBMessage*)messageWithDictionary:(NSDictionary*)dict
+                            manager:(MessageManager*)mngr;
 
 - (void)markAsRead;
 

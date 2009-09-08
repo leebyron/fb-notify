@@ -194,7 +194,7 @@ FBConnect* connectSession;
 - (IBAction)didStatusUpdate:(id)sender
 {
   lastStatusUpdate = [sender statusMessage];
-  [connectSession callMethod:@"Stream.publish"
+  [connectSession callMethod:@"stream.publish"
                withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
                       target:self
                     selector:@selector(statusUpdateWasPublished:)
@@ -269,7 +269,7 @@ FBConnect* connectSession;
    [NSArray arrayWithObjects:@"offline_access", @"manage_mailbox",  @"publish_stream", nil]];
 }
 
-- (void)statusUpdateWasPublished:(NSXMLDocument *)reply
+- (void)statusUpdateWasPublished:(id)reply
 {
   [bubbleManager addBubbleWithText:lastStatusUpdate
                            subText:nil

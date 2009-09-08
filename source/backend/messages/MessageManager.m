@@ -33,13 +33,13 @@
   [super dealloc];
 }
 
--(NSArray*)addMessagesFromXML:(NSXMLNode*)xml
+-(NSArray*)addMessagesWithArray:(NSArray*)array
 {
   // remember the new messages
   NSMutableArray* newMessages = [[[NSMutableArray alloc] init] autorelease];
 
-  for (NSXMLNode* node in [xml children]) {
-    FBMessage* message = [FBMessage messageWithXMLNode:node manager:self];
+  for (NSDictionary* msg in array) {
+    FBMessage* message = [FBMessage messageWithDictionary:msg manager:self];
 
     NSString* threadID = [message objectForKey:@"thread_id"];
     FBMessage* existingMessage = [allDict objectForKey:threadID];
@@ -70,12 +70,12 @@
   return newMessages;
 }
 
--(void)verifyMessagesFromXML:(NSXMLNode*)xml
+-(void)verifyMessagesWithArray:(NSArray*)array
 {
   // make a temporary dictionary of all messages:
   NSMutableDictionary* verifiedMessages = [[NSMutableDictionary alloc] init];
-  for (NSXMLNode* node in [xml children]) {
-    FBMessage* verifiedMessage = [FBMessage messageWithXMLNode:node manager:self];
+  for (NSDictionary* msg in array) {
+    FBMessage* verifiedMessage = [FBMessage messageWithDictionary:msg manager:self];
     [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage objectForKey:@"thread_id"]];
     [verifiedMessage release];
   }

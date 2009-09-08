@@ -11,18 +11,11 @@
 
 @implementation FBObject
 
-- (id)initWithXMLNode:(NSXMLNode*)node
+- (id)initWithDictionary:(NSDictionary*)dict
 {
   self = [super init];
   if (self) {
-    fields = [[NSMutableDictionary alloc] init];
-    for (NSXMLElement* child in [node children]) {
-      // skip nil values
-      if ([[[child attributeForName:@"nil"] stringValue] isEqualToString:@"true"]) {
-        continue;
-      }
-      [fields setObject:[child stringValue] forKey:[child name]];
-    }
+    fields = [dict retain];
   }
   return self;
 }
@@ -38,7 +31,7 @@
   [fields setObject:obj forKey:key];
 }
 
-- (NSString*)objectForKey:(NSString*)key
+- (id)objectForKey:(NSString*)key
 {
   return [fields objectForKey:key];
 }
@@ -46,7 +39,7 @@
 - (NSString*)stringForKey:(NSString*)key
 {
   NSString* obj = [fields objectForKey:key];
-  if (obj == nil) {
+  if (![NSString exists:obj]) {
     return nil;
   }
   return [obj stringByDecodingXMLEntities];
@@ -59,12 +52,16 @@
 
 - (BOOL)boolForKey:(NSString*)key
 {
-  return ![[fields objectForKey:key] isEqualToString:@"0"];
+  return [[fields objectForKey:key] intValue] != 0;
 }
 
 - (NSURL*)urlForKey:(NSString*)key
 {
-  return [NSURL URLWithString:[fields objectForKey:key]];
+  NSString* obj = [fields objectForKey:key];
+  if (![NSString exists:obj]) {
+    return nil;
+  }
+  return [NSURL URLWithString:obj];
 }
 
 @end

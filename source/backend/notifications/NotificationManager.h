@@ -18,7 +18,7 @@
 @property(retain) NSMutableArray* allNotifications;
 @property(retain) NSMutableArray* unreadNotifications;
 
--(NSArray*)addNotificationsFromXML:(NSXMLNode*)xml;
+-(NSArray*)addNotificationsWithArray:(NSArray*)array;
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
 -(NSArray*)notificationsWithTarget:(NSURL*)url;

@@ -8,10 +8,13 @@
 
 #import "StatusUpdateWindow.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSString+.h"
+
 
 #define kAnimationDuration 0.1
 #define kAnimationDurationOut 0.2
 #define kSlideDistance 10
+
 
 @implementation StatusUpdateWindow
 
@@ -94,7 +97,7 @@
                         afterDelay:kAnimationDurationOut];
     // refocus last app!
     [NSApp deactivate];
-    if (lastApp && [lastApp length] > 0) {
+    if ([NSString exists:lastApp]) {
       [[NSWorkspace sharedWorkspace] launchApplication:lastApp];
     }
     return NO;

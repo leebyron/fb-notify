@@ -7,6 +7,7 @@
 //
 
 #import "ImageDictionary.h"
+#import "NSString+.h"
 
 
 @implementation ImageDictionary
@@ -33,7 +34,7 @@
 
 -(void) setImageURL:(NSString*)url forKey:(NSString*)key
 {
-  if (url == nil || [url length] == 0) {
+  if (![NSString exists:url]) {
     return;
   }
   if ([urls objectForKey:key] != nil &&
@@ -48,7 +49,7 @@
 }
 
 -(void) setImageFile:(NSString*)file forKey:(NSString*)key {
-  if (file == nil || [file length] == 0) {
+  if (![NSString exists:file]) {
     return;
   }
   if ([urls objectForKey:key] != nil &&

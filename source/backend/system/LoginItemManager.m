@@ -7,6 +7,7 @@
 //
 
 #import "LoginItemManager.h"
+#import "NSString+.h"
 
 
 #define kStartAtLoginOption @"StartAtLogin"
@@ -49,8 +50,7 @@ static LoginItemManager* instance;
   if (self) {
     // check to make sure it's in the same position if it is a login item
     NSString *startupPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
-    if ([self isLoginItem] &&
-         startupPath && [startupPath length] > 0 &&
+    if ([self isLoginItem] && [NSString exists:startupPath] &&
          ![startupPath isEqual:[[NSBundle mainBundle] bundlePath]]) {
       [self setIsLoginItem:NO];
       [self setIsLoginItem:YES];
@@ -92,7 +92,7 @@ static LoginItemManager* instance;
       [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
 		} else {
       NSString *existingPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
-      if (existingPath && [existingPath length] > 0) {
+      if ([NSString exists:existingPath]) {
         CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:existingPath];
         NSLog(@"removing from login items: %@", url);
         [self disableLoginItemWithLoginItemsReference:loginItems forPath:url];

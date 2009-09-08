@@ -48,14 +48,14 @@
 
 - (void)queryAfterDelay:(NSTimeInterval)delay;
 - (void)query;
-- (void)completedMultiquery:(NSXMLDocument*)response;
+- (void)completedMultiquery:(id)response;
 - (void)failedMultiquery:(NSError*)error;
-- (void)processUserInfo:(NSXMLNode*)userInfo;
-- (void)processAppIcons:(NSXMLNode*)fqlResultSet;
-- (void)processPics:(NSXMLNode*)fqlResultSet;
-- (void)processNotifications:(NSXMLNode*)fqlResultSet;
-- (void)processMessages:(NSXMLNode*)fqlResultSet;
-- (void)processVerifyMessages:(NSXMLNode*)fqlResultSet;
+- (void)processUserInfo:(id)userInfo;
+- (void)processAppIcons:(id)fqlResultSet;
+- (void)processPics:(id)fqlResultSet;
+- (void)processNotifications:(id)fqlResultSet;
+- (void)processMessages:(id)fqlResultSet;
+- (void)processVerifyMessages:(id)fqlResultSet;
 
 @end
 
@@ -151,13 +151,13 @@
   }
 
   status = QUERY_WAITING_FOR_RESPONSE;
-  [connectSession sendFQLMultiquery:multiQuery
-                             target:self
-                           selector:@selector(completedMultiquery:)
-                              error:@selector(failedMultiquery:)];
+  [connectSession fqlMultiquery:multiQuery
+                         target:self
+                       selector:@selector(completedMultiquery:)
+                          error:@selector(failedMultiquery:)];
 }
 
-- (void)completedMultiquery:(NSXMLDocument*)response
+- (void)completedMultiquery:(id)response
 {
   // if we're not online, this must be bogus.
   if (![[NetConnection netConnection] isOnline]) {
@@ -167,19 +167,17 @@
   // get ready to query again shortly...
   [self queryAfterDelay:kQueryInterval];
 
-  NSDictionary* responses = [response parseMultiqueryResponse];
-
-  [self processUserInfo:[responses objectForKey:kInfoQueryName]];
-  [self processAppIcons:[responses objectForKey:kChainedAppIconQueryName]];
-  [self processPics:[responses objectForKey:kChainedPicQueryName]];
-  [self processNotifications:[responses objectForKey:kNotifQueryName]];
-  [self processMessages:[responses objectForKey:kMessageQueryName]];
-  [self processVerifyMessages:[responses objectForKey:kVerifyMessageQueryName]];
+  // process query results
+  [self processUserInfo:[response objectForKey:kInfoQueryName]];
+  [self processAppIcons:[response objectForKey:kChainedAppIconQueryName]];
+  [self processPics:[response objectForKey:kChainedPicQueryName]];
+  [self processNotifications:[response objectForKey:kNotifQueryName]];
+  [self processMessages:[response objectForKey:kMessageQueryName]];
+  [self processVerifyMessages:[response objectForKey:kVerifyMessageQueryName]];
 
   [PreferencesWindow refresh];
 
   lastQuery = [[NSDate date] timeIntervalSince1970];
-  [responses release];
   [[NSApp delegate] invalidate];
 }
 
@@ -209,46 +207,46 @@
   NSLog(@"suspect: %@", [error userInfo]);
 }
 
-- (void)processUserInfo:(NSXMLNode*)userInfo
+- (void)processUserInfo:(id)userInfo
 {
   if (userInfo == nil) {
     return;
   }
-  userInfo = [userInfo childWithName:@"user"];
-  [[parent menu] setUserName:[[userInfo childWithName:@"name"] stringValue]];
-  [[parent menu] setProfileURL:[[userInfo childWithName:@"profile_url"] stringValue]];
+  userInfo = [userInfo objectAtIndex:0];
+  [[parent menu] setUserName:[userInfo objectForKey:@"name"]];
+  [[parent menu] setProfileURL:[userInfo objectForKey:@"profile_url"]];
 }
 
-- (void)processAppIcons:(NSXMLNode*)fqlResultSet
+- (void)processAppIcons:(id)result
 {
-  for (NSXMLNode* xml in [fqlResultSet children]) {
-    NSString* appID   = [[xml childWithName:@"app_id"] stringValue];
-    NSString* iconUrl = [[xml childWithName:@"icon_url"] stringValue];
-    if (iconUrl != nil && [iconUrl length] != 0) {
+  for (NSDictionary* icon in result) {
+    NSString* appID   = [[icon objectForKey:@"app_id"] stringValue];
+    NSString* iconUrl = [icon objectForKey:@"icon_url"];
+    if ([NSString exists:iconUrl]) {
       [[parent appIcons] setImageURL:iconUrl forKey:appID];
     }
   }
 }
 
-- (void)processPics:(NSXMLNode*)fqlResultSet
+- (void)processPics:(id)result
 {
-  for (NSXMLNode* xml in [fqlResultSet children]) {
-    NSString* uid    = [[xml childWithName:@"uid"] stringValue];
-    NSString* name   = [[[xml childWithName:@"name"] stringValue] stringByDecodingXMLEntities];
-    if (name != nil && [name length] != 0) {
+  for (NSDictionary* pic in result) {
+    NSString* uid    = [[pic objectForKey:@"uid"] stringValue];
+    NSString* name   = [[pic objectForKey:@"name"] stringByDecodingXMLEntities];
+    NSString* picUrl = [pic objectForKey:@"pic_square"];
+    if ([NSString exists:name]) {
       [[parent names] setObject:name forKey:uid];
     }
-    NSString* picUrl = [[xml childWithName:@"pic_square"] stringValue];
-    if (picUrl != nil && [picUrl length] != 0) {
+    if ([NSString exists:picUrl]) {
       [[parent profilePics] setImageURL:picUrl forKey:uid];
     }
   }
 }
 
-- (void)processNotifications:(NSXMLNode*)fqlResultSet
+- (void)processNotifications:(id)result
 {
-  NSArray* newNotifications = [[parent notifications] addNotificationsFromXML:fqlResultSet];
-  if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
+  NSArray* newNotifications = [[parent notifications] addNotificationsWithArray:result];
+  if (lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
         NSImage* pic = [[parent profilePics] imageForKey:[notification objectForKey:@"sender_id"]];
@@ -262,22 +260,22 @@
   }
 }
 
-- (void)processMessages:(NSXMLNode*)fqlResultSet
+- (void)processMessages:(id)result
 {
-  NSArray* newMessages = [[parent messages] addMessagesFromXML:fqlResultSet];
+  NSArray* newMessages = [[parent messages] addMessagesWithArray:result];
 
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSString* uid = [message objectForKey:@"snippet_author"];
+        NSString* uid = [[message objectForKey:@"snippet_author"] stringValue];
         NSImage* pic = [[parent profilePics] imageForKey:uid];
 
         NSString* name = [[parent names] objectForKey:uid];
         NSString* subject = [message stringForKey:@"subject"];
 
         NSString* bubText;
-        if (name != nil && [name length] != 0) {
-          if (subject != nil && [subject length] != 0) {
+        if ([NSString exists:name]) {
+          if ([NSString exists:subject]) {
             bubText = [NSString stringWithFormat:@"%@: %@", name, subject];
           } else {
             bubText = name;
@@ -286,7 +284,7 @@
           bubText = subject;
         }
         NSString* bubSubText = [message stringForKey:@"snippet"];
-        if (bubText == nil || [bubText length] == 0) {
+        if (![NSString exists:bubText]) {
           bubText = bubSubText;
           bubSubText = nil;
         }
@@ -300,9 +298,9 @@
   }
 }
 
-- (void)processVerifyMessages:(NSXMLNode*)fqlResultSet
+- (void)processVerifyMessages:(id)result
 {
-  [[parent messages] verifyMessagesFromXML:fqlResultSet];
+  [[parent messages] verifyMessagesWithArray:result];
 }
 
 @end

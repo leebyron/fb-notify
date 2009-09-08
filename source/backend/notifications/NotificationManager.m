@@ -33,14 +33,14 @@
   [super dealloc];
 }
 
--(NSArray*)addNotificationsFromXML:(NSXMLNode*)xml
+-(NSArray*)addNotificationsWithArray:(NSArray*)array
 {
   // remember the new notifications
   NSMutableArray* newNotifications = [[[NSMutableArray alloc] init] autorelease];
 
-  for (NSXMLNode* node in [xml children]) {
+  for (NSDictionary* node in array) {
 
-    FBNotification* notification = [FBNotification notificationWithXMLNode:node manager:self];
+    FBNotification* notification = [FBNotification notificationWithDictionary:node manager:self];
     if ([notification boolForKey:@"is_hidden"]) {
       continue;
     }

@@ -10,16 +10,24 @@
 #import "GlobalSession.h"
 #import <FBCocoa/FBCocoa.h>
 
+
+@interface FBMessage (Private)
+
+- (id)initWithDictionary:(NSDictionary*)dict manager:(MessageManager*)mngr;
+
+@end
+
+
 @implementation FBMessage
 
-+ (FBMessage*)messageWithXMLNode:(NSXMLNode*)node manager:(MessageManager*)mngr
++ (FBMessage*)messageWithDictionary:(NSDictionary*)dict manager:(MessageManager*)mngr
 {
-  return [[self alloc] initWithXMLNode:node manager:mngr];
+  return [[self alloc] initWithDictionary:dict manager:mngr];
 }
 
-- (id)initWithXMLNode:(NSXMLNode *)node manager:(MessageManager *)mngr
+- (id)initWithDictionary:(NSDictionary*)dict manager:(MessageManager *)mngr
 {
-  self = [super initWithXMLNode:node];
+  self = [super initWithDictionary:dict];
   if (self) {
     manager = mngr;
   }

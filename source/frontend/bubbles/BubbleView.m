@@ -7,6 +7,8 @@
 
 #import "BubbleView.h"
 #import "BubbleDimensions.h"
+#import "NSString+.h"
+
 
 static NSDictionary* attrs = nil;
 static NSDictionary* subAttrs = nil;
@@ -32,7 +34,7 @@ static NSDictionary* subAttrs = nil;
                      options:NSStringDrawingUsesLineFragmentOrigin
                   attributes:attrs].size;
 
-  if (subText && [subText length] > 0) {
+  if ([NSString exists:subText]) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 26.0)
                                          options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading
                                       attributes:subAttrs].size;
@@ -48,7 +50,7 @@ static NSDictionary* subAttrs = nil;
                                    options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:attrs].size;
 
-  if (subText && [subText length] > 0) {
+  if ([NSString exists:subText]) {
     NSSize size2 = [subText boundingRectWithSize:NSMakeSize(width, 26.0)
                                          options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading
                                       attributes:subAttrs].size;
@@ -195,7 +197,7 @@ static NSDictionary* subAttrs = nil;
                                          maxWidth:textRect.size.width];
 
   textRect.origin.y = (rect.size.height - fullHeight) / 2 + (fullHeight - textRect.size.height);
-  textRect.origin.y += (subText && [subText length] > 0) ? 2.0 : 1.0;
+  textRect.origin.y += [NSString exists:subText] ? 2.0 : 1.0;
   textRect.origin.x += kBubbleShadowSpacing;
 
   NSMutableDictionary* textAttrs = [NSMutableDictionary dictionaryWithDictionary:attrs];
@@ -211,11 +213,10 @@ static NSDictionary* subAttrs = nil;
              options:NSStringDrawingUsesLineFragmentOrigin
           attributes:textAttrs];
 
-  if (subText && [subText length] > 0) {
+  if ([NSString exists:subText]) {
     textRect.size.height = [BubbleView heightOfText:nil
                                             subText:subText
                                            maxWidth:textRect.size.width];
-//    textRect.size.height = 26.0;
     textRect.origin.y -= textRect.size.height + 2;
     [subText drawWithRect:textRect
                   options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine

@@ -21,8 +21,8 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
 @property(retain) NSMutableArray* allMessages;
 @property(retain) NSMutableArray* unreadMessages;
 
--(NSArray*)addMessagesFromXML:(NSXMLNode*)xml;
--(void)verifyMessagesFromXML:(NSXMLNode*)xml;
+-(NSArray*)addMessagesWithArray:(NSArray*)array;
+-(void)verifyMessagesWithArray:(NSArray*)array;
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
 
