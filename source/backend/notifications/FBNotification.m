@@ -36,7 +36,7 @@
     manager = mngr;
 
     // find and fill href var
-    NSString* hrefString = [self objectForKey:@"href"];
+    NSString* hrefString = [self stringForKey:@"href"];
 
     // this page is bogus.
     if ([NSString exists:hrefString] && [hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
@@ -118,7 +118,7 @@
 }
 
 - (NSString*)description {
-  return [self objectForKey:@"notification_id"];
+  return [self stringForKey:@"notification_id"];
 }
 
 @end

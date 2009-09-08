@@ -7,7 +7,8 @@
 //
 
 #import "FBObject.h"
-#import "NSString+.h"
+#import "NSDictionary+.h"
+
 
 @implementation FBObject
 
@@ -15,7 +16,7 @@
 {
   self = [super init];
   if (self) {
-    fields = [dict retain];
+    fields = [[dict mutableCopy] retain];
   }
   return self;
 }
@@ -38,30 +39,22 @@
 
 - (NSString*)stringForKey:(NSString*)key
 {
-  NSString* obj = [fields objectForKey:key];
-  if (![NSString exists:obj]) {
-    return nil;
-  }
-  return [obj stringByDecodingXMLEntities];
+  return [fields stringForKey:key];
 }
 
-- (int)integerForKey:(NSString*)key
+- (int)intForKey:(NSString*)key
 {
-  return [[self objectForKey:key] intValue];
+  return [fields intForKey:key];
 }
 
 - (BOOL)boolForKey:(NSString*)key
 {
-  return [[fields objectForKey:key] intValue] != 0;
+  return [fields boolForKey:key];
 }
 
 - (NSURL*)urlForKey:(NSString*)key
 {
-  NSString* obj = [fields objectForKey:key];
-  if (![NSString exists:obj]) {
-    return nil;
-  }
-  return [NSURL URLWithString:obj];
+  return [fields urlForKey:key];
 }
 
 @end

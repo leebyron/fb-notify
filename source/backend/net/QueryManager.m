@@ -13,6 +13,7 @@
 #import "GlobalSession.h"
 #import "PreferencesWindow.h"
 #import "NSString+.h"
+#import "NSDictionary+.h"
 
 
 #define kQueryInterval 60
@@ -213,16 +214,16 @@
     return;
   }
   userInfo = [userInfo objectAtIndex:0];
-  [[parent menu] setUserName:[userInfo objectForKey:@"name"]];
-  [[parent menu] setProfileURL:[userInfo objectForKey:@"profile_url"]];
+  [[parent menu] setUserName:[userInfo stringForKey:@"name"]];
+  [[parent menu] setProfileURL:[userInfo stringForKey:@"profile_url"]];
 }
 
 - (void)processAppIcons:(id)result
 {
   for (NSDictionary* icon in result) {
-    NSString* appID   = [[icon objectForKey:@"app_id"] stringValue];
-    NSString* iconUrl = [icon objectForKey:@"icon_url"];
-    if ([NSString exists:iconUrl]) {
+    NSString* appID   = [icon stringForKey:@"app_id"];
+    NSString* iconUrl = [icon stringForKey:@"icon_url"];
+    if (iconUrl) {
       [[parent appIcons] setImageURL:iconUrl forKey:appID];
     }
   }
@@ -231,13 +232,13 @@
 - (void)processPics:(id)result
 {
   for (NSDictionary* pic in result) {
-    NSString* uid    = [[pic objectForKey:@"uid"] stringValue];
-    NSString* name   = [[pic objectForKey:@"name"] stringByDecodingXMLEntities];
-    NSString* picUrl = [pic objectForKey:@"pic_square"];
-    if ([NSString exists:name]) {
+    NSString* uid    = [pic stringForKey:@"uid"];
+    NSString* name   = [pic stringForKey:@"name"];
+    NSString* picUrl = [pic stringForKey:@"pic_square"];
+    if (name) {
       [[parent names] setObject:name forKey:uid];
     }
-    if ([NSString exists:picUrl]) {
+    if (picUrl) {
       [[parent profilePics] setImageURL:picUrl forKey:uid];
     }
   }
@@ -249,9 +250,10 @@
   if (lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
-        NSImage* pic = [[parent profilePics] imageForKey:[notification objectForKey:@"sender_id"]];
+        NSImage* pic = [[parent profilePics] imageForKey:[notification stringForKey:@"sender_id"]];
         [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
-                                          subText:[notification stringForKey:@"body_text"]
+                                          // TODO - subText should use a properly encoded body_text when cortana 125906 is completed
+                                          subText:[[notification stringForKey:@"body_html"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"]
                                             image:pic
                                      notification:notification
                                           message:nil];
@@ -267,11 +269,12 @@
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSString* uid = [[message objectForKey:@"snippet_author"] stringValue];
+        NSString* uid = [message stringForKey:@"snippet_author"];
         NSImage* pic = [[parent profilePics] imageForKey:uid];
 
         NSString* name = [[parent names] objectForKey:uid];
-        NSString* subject = [message stringForKey:@"subject"];
+        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
+        NSString* subject = [[message stringForKey:@"subject"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
 
         NSString* bubText;
         if ([NSString exists:name]) {
@@ -283,7 +286,8 @@
         } else {
           bubText = subject;
         }
-        NSString* bubSubText = [message stringForKey:@"snippet"];
+        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
+        NSString* bubSubText = [[message stringForKey:@"snippet"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
         if (![NSString exists:bubText]) {
           bubText = bubSubText;
           bubSubText = nil;

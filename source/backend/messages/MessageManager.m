@@ -41,11 +41,11 @@
   for (NSDictionary* msg in array) {
     FBMessage* message = [FBMessage messageWithDictionary:msg manager:self];
 
-    NSString* threadID = [message objectForKey:@"thread_id"];
+    NSString* threadID = [message stringForKey:@"thread_id"];
     FBMessage* existingMessage = [allDict objectForKey:threadID];
 
     if (existingMessage) {
-      if (![[existingMessage objectForKey:@"updated_time"] isEqual:[message objectForKey:@"updated_time"]]) {
+      if (![existingMessage intForKey:@"updated_time"] == [message intForKey:@"updated_time"]) {
         [newMessages addObject:message];
       }
       [allMessages removeObject:existingMessage];
@@ -58,8 +58,7 @@
     [allMessages addObject:message];
 
     // update most recent time
-    mostRecentUpdateTime = MAX(mostRecentUpdateTime,
-                               [[message objectForKey:@"updated_time"] intValue]);
+    mostRecentUpdateTime = MAX(mostRecentUpdateTime, [message intForKey:@"updated_time"]);
 
     [message release];
   }
@@ -76,7 +75,7 @@
   NSMutableDictionary* verifiedMessages = [[NSMutableDictionary alloc] init];
   for (NSDictionary* msg in array) {
     FBMessage* verifiedMessage = [FBMessage messageWithDictionary:msg manager:self];
-    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage objectForKey:@"thread_id"]];
+    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage stringForKey:@"thread_id"]];
     [verifiedMessage release];
   }
 
@@ -109,8 +108,8 @@
 }
 
 NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
-  int a = [firstItem integerForKey:context];
-  int b = [secondItem integerForKey:context];
+  int a = [firstItem intForKey:context];
+  int b = [secondItem intForKey:context];
 
   if (a < b) {
     return NSOrderedAscending;

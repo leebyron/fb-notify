@@ -216,7 +216,11 @@ enum {
         }
 
         // add item to menu
-        NSString* title = [notification stringForKey:@"title_text"];
+        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
+        NSString* title = [[notification stringForKey:@"title_text"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
+        if (!title) {
+          title = [NSString stringWithString:@""];
+        }
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
         }
@@ -228,7 +232,7 @@ enum {
           [item setState:NSOnState];
         }
         [item setRepresentedObject:notification];
-        [item setImage:[appIcons imageForKey:[[notification objectForKey:@"app_id"] stringValue]]];
+        [item setImage:[appIcons imageForKey:[notification stringForKey:@"app_id"]]];
         [statusItemMenu addItem:item];
         [item release];
         addedNotifications++;
@@ -276,11 +280,18 @@ enum {
 
         // add item to menu
         NSString* title = [message stringForKey:@"subject"];
-        if (![NSString exists:title]) {
+        if (!title) {
           title = [message stringForKey:@"snippet"];
+        }
+        if (!title) {
+          title = [NSString stringWithString:@""];
         }
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
+        }
+        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
+        if (title) {
+          title = [title stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
         }
         NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title
                                                       action:@selector(menuShowMessage:)
@@ -292,7 +303,7 @@ enum {
         [item setRepresentedObject:message];
 
         // profile pic icon
-        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[[message objectForKey:@"snippet_author"] stringValue]]];
+        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[message stringForKey:@"snippet_author"]]];
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];
