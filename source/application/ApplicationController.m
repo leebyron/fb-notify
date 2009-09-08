@@ -266,7 +266,7 @@ FBConnect* connectSession;
   // for desktop applications, it's highly recommended you request the
   // "offline_access" permission. This returns a session which never expires.
   [connectSession loginWithPermissions:
-   [NSArray arrayWithObjects:@"offline_access", @"manage_mailbox",  @"publish_stream", nil]];
+   [NSArray arrayWithObjects:@"offline_access", @"publish_stream", @"manage_mailbox", nil]];
 }
 
 - (void)statusUpdateWasPublished:(id)reply
