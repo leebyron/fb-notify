@@ -46,6 +46,13 @@ enum {
 @end
 
 
+@interface NSStatusBar (Priority)
+
+- (NSStatusItem *)_statusItemWithLength:(CGFloat)length withPriority:(int)pri;
+
+@end
+
+
 @implementation MenuManager
 
 @synthesize userName, profileURL, profilePics, appIcons;
@@ -67,7 +74,13 @@ enum {
     notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
     inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
 
-    statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:28] retain];
+    NSStatusBar* bar = [NSStatusBar systemStatusBar];
+    @try {
+      statusItem = [[bar _statusItemWithLength:28 withPriority:65536] retain];
+    } @catch (NSException* e) {
+      statusItem = [[bar statusItemWithLength:28] retain];
+    }
+    [statusItem setLength:28];
     statusItemMenu = [[NSMenu alloc] init];
 
     [statusItem setMenu:statusItemMenu];
