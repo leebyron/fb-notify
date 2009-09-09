@@ -181,7 +181,7 @@ enum {
     [offlineItem release];
   } else {
     // Offline title
-    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Offline"
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Not Online"
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
