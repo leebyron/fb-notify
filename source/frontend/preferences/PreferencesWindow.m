@@ -7,9 +7,11 @@
 //
 
 #import "PreferencesWindow.h"
+#import <Growl/Growl.h>
 #import "ApplicationController.h"
 #import "StatusKeyShortcut.h"
 #import "LoginItemManager.h"
+#import "BubbleManager.h"
 #import "BubbleDimensions.h"
 #import "GlobalSession.h"
 #import "NetConnection.h"
@@ -74,6 +76,9 @@ static ApplicationController* parent;
   // Notification Duration
   [notificationDuration setIntegerValue:[[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey]];
 
+  // Setup the rest!
+  [self refresh];
+
   // Load window to front
   [NSApp activateIgnoringOtherApps:YES];
   [[self window] makeKeyAndOrderFront:self];
@@ -90,17 +95,21 @@ static ApplicationController* parent;
 - (void)refresh
 {
   // Set the image and title
-  NSImage* userpic   = [[parent profilePics] imageForKey:[connectSession uid]];
-  NSString* username = [[parent names] objectForKey:[connectSession uid]];
-  if ([connectSession isLoggedIn] && userpic && username) {
+  NSImage* userpic = [[parent profilePics] imageForKey:[connectSession uid]];
+  if ([connectSession isLoggedIn] && userpic) {
     [pic setImage:userpic];
-    [name setStringValue:username];
     [logoutButton setEnabled:YES];
   } else {
     [pic setImage:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]]];
-    [name setStringValue:@"Not Logged In"];
     [logoutButton setEnabled:NO];
   }
+  
+  // Growl?
+  BOOL hasGrowl = [GrowlApplicationBridge isGrowlInstalled];
+  [growlNotRunning setHidden:[GrowlApplicationBridge isGrowlRunning]];
+  [useGrowl setEnabled:hasGrowl];
+  [useGrowl setState:([[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_USE &&
+                      hasGrowl)];
 }
 
 - (IBAction) logoutButtonPressed:(id) sender
@@ -113,6 +122,13 @@ static ApplicationController* parent;
 - (IBAction) startAtLoginChanged:(id) sender
 {
   [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOnState)];
+}
+
+- (IBAction) useGrowlChanged:(id)sender
+{
+  NSLog(@"changed use growl to %i", [sender state] == NSOnState);
+  [[NSUserDefaults standardUserDefaults] setInteger:([sender state] == NSOnState ? GROWL_USE : GROWL_DO_NOT_USE) forKey:kUseGrowlOption];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction) lightModeChanged:(id) sender

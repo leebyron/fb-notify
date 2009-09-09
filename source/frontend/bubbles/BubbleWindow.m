@@ -64,7 +64,10 @@
                                                                    moveAni, @"frameOrigin", nil]];
 
     // Set some attributes of the window to make it work/look right
-    [self setLevel:NSFloatingWindowLevel];
+    if ([self respondsToSelector:@selector(setCollectionBehavior:)]) {
+      [self setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+    }
+    [self setLevel:NSStatusWindowLevel];
     [self setOpaque:NO];
     [self setAlphaValue:1.0];
     [self setReleasedWhenClosed:NO];

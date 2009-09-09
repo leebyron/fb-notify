@@ -10,6 +10,7 @@
 #import <FBCocoa/FBCocoa.h>
 #import "NSString+.h"
 
+
 @interface FBNotification (Private)
 
 - (id)initWithDictionary:(NSDictionary*)dict
@@ -17,6 +18,7 @@
 - (NSString*)lastURLInHTML:(NSString*)string;
 
 @end
+
 
 @implementation FBNotification
 

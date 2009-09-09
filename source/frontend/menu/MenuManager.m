@@ -19,7 +19,7 @@
 #define kMinNotifications 5
 #define kMaxMessages 6
 #define kMinMessages 3
-#define kMaxStringLen 50
+#define kMaxStringLen 45
 #define kUserIconSize 15.0
 
 

@@ -79,7 +79,10 @@
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
+		5382171410577ECA00DB967F /* Growl Registration Ticket.growlRegDict in Resources */ = {isa = PBXBuildFile; fileRef = 5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
+		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
+		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		93533ED61017AD35002C6CBD /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935340451017F5CB002C6CBD /* QuartzCore.framework */; };
@@ -117,6 +120,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */,
 				93533ED61017AD35002C6CBD /* FBCocoa.framework in CopyFiles */,
 				5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */,
 			);
@@ -211,10 +215,12 @@
 		5306FCFD103BCA860061C722 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = resources/dsa_pub.pem; sourceTree = "<group>"; };
 		5306FDEC103CDF370061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetConnection.m; path = source/backend/net/NetConnection.m; sourceTree = "<group>"; };
 		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetConnection.h; path = source/backend/net/NetConnection.h; sourceTree = "<group>"; };
+		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+.h"; path = "source/additions/NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+.m"; path = "source/additions/NSDictionary+.m"; sourceTree = "<group>"; };
+		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
 		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Facebook Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Facebook Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBCocoa.xcodeproj; path = "../fb-cocoa/FBCocoa.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -234,6 +240,7 @@
 				53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */,
 				537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */,
 				5306FCC3103BC6E40061C722 /* Sparkle.framework in Frameworks */,
+				53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +278,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53DAD1C910574F1100E664D2 /* Growl.framework */,
 				5306FCC2103BC6E40061C722 /* Sparkle.framework */,
 				93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */,
 			);
@@ -308,6 +316,7 @@
 				5306F882103B7A190061C722 /* fb-notify-icon.icns */,
 				53F6FCA1102133FA00CAE806 /* Images */,
 				5306051C103E5EC40061C722 /* preferences.xib */,
+				5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -612,6 +621,7 @@
 				5306FBA5103B92110061C722 /* InfoPlist.strings in Resources */,
 				5306FBA6103B92110061C722 /* MainMenu.xib in Resources */,
 				5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */,
+				5382171410577ECA00DB967F /* Growl Registration Ticket.growlRegDict in Resources */,
 				5306051D103E5EC40061C722 /* preferences.xib in Resources */,
 				53060598103FA0580061C722 /* ShortcutRecorder.strings in Resources */,
 			);

@@ -15,10 +15,11 @@
   IBOutlet NSTextField*       version;
 
   IBOutlet NSImageView*       pic;
-  IBOutlet NSTextField*       name;
   IBOutlet NSButton*          logoutButton;
-
   IBOutlet NSButton*          startAtLogin;
+
+  IBOutlet NSButton*          useGrowl;
+  IBOutlet NSTextField*       growlNotRunning;
   IBOutlet NSButton*          lightMode;
   IBOutlet SRRecorderControl* statusKeyShortcut;
   IBOutlet NSSlider*          notificationDuration;
@@ -29,11 +30,12 @@
 + (void) refresh;
 - (void) refresh;
 
-- (IBAction) logoutButtonPressed:(id) sender;
+- (IBAction) logoutButtonPressed:(id)sender;
+- (IBAction) startAtLoginChanged:(id)sender;
 
-- (IBAction) startAtLoginChanged:(id) sender;
-- (IBAction) lightModeChanged:(id) sender;
+- (IBAction) useGrowlChanged:(id)sender;
+- (IBAction) lightModeChanged:(id)sender;
 - (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey;
-- (IBAction) notificationDurationChanged:(id) sender;
+- (IBAction) notificationDurationChanged:(id)sender;
 
 @end

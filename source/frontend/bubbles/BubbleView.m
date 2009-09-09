@@ -160,7 +160,7 @@ static NSDictionary* subAttrs = nil;
 
   // draw the background for real
   if (lightMode) {
-    [[NSColor colorWithCalibratedWhite:1.0 alpha:0.8] set];
+    [[NSColor colorWithCalibratedWhite:1.0 alpha:0.9] set];
   } else {
     [[NSColor colorWithCalibratedWhite:0.0 alpha:0.7] set];
   }
