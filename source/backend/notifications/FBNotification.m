@@ -127,7 +127,7 @@
 }
 
 - (NSString*)description {
-  return [self stringForKey:@"notification_id"];
+  return [self uidForKey:@"notification_id"];
 }
 
 @end

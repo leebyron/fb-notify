@@ -41,7 +41,7 @@
   for (NSDictionary* msg in array) {
     FBMessage* message = [FBMessage messageWithDictionary:msg manager:self];
 
-    NSString* threadID = [message stringForKey:@"thread_id"];
+    NSString* threadID = [message uidForKey:@"thread_id"];
     FBMessage* existingMessage = [allDict objectForKey:threadID];
 
     if (existingMessage) {
@@ -75,7 +75,7 @@
   NSMutableDictionary* verifiedMessages = [[NSMutableDictionary alloc] init];
   for (NSDictionary* msg in array) {
     FBMessage* verifiedMessage = [FBMessage messageWithDictionary:msg manager:self];
-    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage stringForKey:@"thread_id"]];
+    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage uidForKey:@"thread_id"]];
     [verifiedMessage release];
   }
 

@@ -17,6 +17,7 @@
 - (void)setObject:(id)obj forKey:(NSString*)key;
 - (id)objectForKey:(NSString*)key;
 
+- (NSString*)uidForKey:(NSString*)key;
 - (NSString*)stringForKey:(NSString*)key;
 - (int)intForKey:(NSString*)key;
 - (BOOL)boolForKey:(NSString*)key;

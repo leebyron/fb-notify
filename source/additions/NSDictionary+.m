@@ -12,7 +12,7 @@
 
 @implementation NSDictionary (Additions)
 
-- (NSString*)stringForKey:(NSString*)key
+- (NSString*)uidForKey:(NSString*)key
 {
   NSString* obj = [self objectForKey:key];
   if ([obj isKindOfClass:[NSNull class]] || obj == nil) {
@@ -25,6 +25,11 @@
     return nil;
   }
   return obj;
+}
+
+- (NSString*)stringForKey:(NSString*)key
+{
+  return [[self uidForKey:key] stringByDecodingXMLEntities];
 }
 
 - (int)intForKey:(NSString*)key

@@ -45,7 +45,7 @@
       continue;
     }
 
-    NSString* notificationID = [notification stringForKey:@"notification_id"];
+    NSString* notificationID = [notification uidForKey:@"notification_id"];
     FBNotification* existingNotification = [allDict objectForKey:notificationID];
 
     if (existingNotification == nil) {

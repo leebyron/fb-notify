@@ -11,6 +11,7 @@
 
 @interface NSDictionary (Additions)
 
+- (NSString*)uidForKey:(NSString*)key;
 - (NSString*)stringForKey:(NSString*)key;
 - (int)intForKey:(NSString*)key;
 - (BOOL)boolForKey:(NSString*)key;

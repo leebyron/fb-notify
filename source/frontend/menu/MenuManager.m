@@ -232,7 +232,7 @@ enum {
           [item setState:NSOnState];
         }
         [item setRepresentedObject:notification];
-        [item setImage:[appIcons imageForKey:[notification stringForKey:@"app_id"]]];
+        [item setImage:[appIcons imageForKey:[notification uidForKey:@"app_id"]]];
         [statusItemMenu addItem:item];
         [item release];
         addedNotifications++;
@@ -303,7 +303,7 @@ enum {
         [item setRepresentedObject:message];
 
         // profile pic icon
-        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[message stringForKey:@"snippet_author"]]];
+        NSImage* senderIcon = [self makeTinyMan:[profilePics imageForKey:[message uidForKey:@"snippet_author"]]];
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];

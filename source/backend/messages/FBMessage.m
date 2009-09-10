@@ -56,7 +56,7 @@
 }
 
 - (NSString *)description {
-  return [self stringForKey:@"thread_id"];
+  return [self uidForKey:@"thread_id"];
 }
 
 @end

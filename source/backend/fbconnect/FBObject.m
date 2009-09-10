@@ -37,6 +37,11 @@
   return [fields objectForKey:key];
 }
 
+- (NSString*)uidForKey:(NSString*)key
+{
+  return [fields uidForKey:key];
+}
+
 - (NSString*)stringForKey:(NSString*)key
 {
   return [fields stringForKey:key];

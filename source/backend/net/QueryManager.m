@@ -221,7 +221,7 @@
 - (void)processAppIcons:(id)result
 {
   for (NSDictionary* icon in result) {
-    NSString* appID   = [icon stringForKey:@"app_id"];
+    NSString* appID   = [icon uidForKey:@"app_id"];
     NSString* iconUrl = [icon stringForKey:@"icon_url"];
     if (iconUrl) {
       [[parent appIcons] setImageURL:iconUrl forKey:appID];
@@ -232,7 +232,7 @@
 - (void)processPics:(id)result
 {
   for (NSDictionary* pic in result) {
-    NSString* uid    = [pic stringForKey:@"uid"];
+    NSString* uid    = [pic uidForKey:@"uid"];
     NSString* name   = [pic stringForKey:@"name"];
     NSString* picUrl = [pic stringForKey:@"pic_square"];
     if (name) {
@@ -250,7 +250,7 @@
   if (lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
-        NSImage* pic = [[parent profilePics] imageForKey:[notification stringForKey:@"sender_id"]];
+        NSImage* pic = [[parent profilePics] imageForKey:[notification uidForKey:@"sender_id"]];
         [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
                                           // TODO - subText should use a properly encoded body_text when cortana 125906 is completed
                                           subText:[[notification stringForKey:@"body_html"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"]
@@ -269,7 +269,7 @@
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
-        NSString* uid = [message stringForKey:@"snippet_author"];
+        NSString* uid = [message uidForKey:@"snippet_author"];
         NSImage* pic = [[parent profilePics] imageForKey:uid];
 
         NSString* name = [[parent names] objectForKey:uid];
