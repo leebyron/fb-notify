@@ -59,7 +59,7 @@
       // fine, use the default notification url
       hrefString = @"http://www.facebook.com/notifications.php";
     }
-    
+
     if (hrefString) {
       // make sure href string is healthy, and get rid of that pesky &comments barf.
       hrefString = [[[hrefString stringByDecodingXMLEntities]

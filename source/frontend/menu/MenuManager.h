@@ -9,11 +9,10 @@
 #import <Cocoa/Cocoa.h>
 #import "ImageDictionary.h"
 
+@class MenuIcon;
 
 @interface MenuManager : NSObject {
-  NSImage* fbActiveIcon;
-  NSImage* fbEmptyIcon;
-  NSImage* fbFullIcon;
+  MenuIcon* fbMenuIcon;
 
   NSImage* newsFeedIcon;
   NSImage* profileIcon;
@@ -34,13 +33,15 @@
   NSString* profileURL;
 }
 
+@property(retain) NSStatusItem* statusItem;
 @property(retain) NSString* userName;
 @property(retain) NSString* profileURL;
 @property(retain) ImageDictionary* profilePics;
 @property(retain) ImageDictionary* appIcons;
 
-- (void)setIconByAreUnread:(BOOL)areUnread;
+- (void)setIconIlluminated:(BOOL)illuminated;
 - (void)constructWithNotifications:(NSArray*)notifications
                           messages:(NSArray*)messages;
+- (void)openMenu;
 
 @end

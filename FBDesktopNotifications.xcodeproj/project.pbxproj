@@ -80,6 +80,7 @@
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
 		5382171410577ECA00DB967F /* Growl Registration Ticket.growlRegDict in Resources */ = {isa = PBXBuildFile; fileRef = 5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */; };
+		5397C1001063378500DAD78C /* MenuIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C05B106333BB00DAD78C /* MenuIcon.m */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -218,6 +219,8 @@
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
+		5397C05A106333BB00DAD78C /* MenuIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuIcon.h; path = source/frontend/menu/MenuIcon.h; sourceTree = "<group>"; };
+		5397C05B106333BB00DAD78C /* MenuIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuIcon.m; path = source/frontend/menu/MenuIcon.m; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+.h"; path = "source/additions/NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+.m"; path = "source/additions/NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -436,6 +439,8 @@
 			children = (
 				5306F8F9103B800B0061C722 /* MenuManager.h */,
 				5306F8F8103B800B0061C722 /* MenuManager.m */,
+				5397C05A106333BB00DAD78C /* MenuIcon.h */,
+				5397C05B106333BB00DAD78C /* MenuIcon.m */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -659,6 +664,7 @@
 				5306F927103B8A780061C722 /* NSString+.m in Sources */,
 				5306F8E4103B7EF40061C722 /* FBNotification.m in Sources */,
 				5306F8FA103B800B0061C722 /* MenuManager.m in Sources */,
+				5397C1001063378500DAD78C /* MenuIcon.m in Sources */,
 				5306F8E3103B7EF40061C722 /* NotificationManager.m in Sources */,
 				5306F90C103B80D40061C722 /* StatusUpdateWindow.m in Sources */,
 				5306F8ED103B7F600061C722 /* FBMessage.m in Sources */,

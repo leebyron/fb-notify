@@ -147,10 +147,21 @@ FBConnect* connectSession;
   [self performSelector:@selector(updateMenu) withObject:nil afterDelay:0];
 }
 
+- (void)updated
+{
+  lastUpdate = [[NSDate date] timeIntervalSince1970];
+  [self invalidate];
+}
+
+- (void)interacted
+{
+  lastInteraction = [[NSDate date] timeIntervalSince1970];
+  [self invalidate];
+}
+
 - (void)updateMenu
 {
-  [menu setIconByAreUnread:([[NetConnection netConnection] isOnline] &&
-                            ([notifications unreadCount] + [messages unreadCount] > 0))];
+  [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && lastUpdate >= lastInteraction)];
   [menu constructWithNotifications:[notifications allNotifications]
                           messages:[messages allMessages]];
 }
@@ -296,7 +307,7 @@ FBConnect* connectSession;
 }
 
 // Sent when the appcast has loaded
-- (void)updater:(SUUpdater *)update didFinishLoadingAppcast:(SUAppcast *)appcast {  
+- (void)updater:(SUUpdater *)update didFinishLoadingAppcast:(SUAppcast *)appcast {
   NSMutableArray* loadedVersions = [[NSMutableArray alloc] init];
   for (SUAppcastItem* item in [appcast items]) {
     [loadedVersions addObject:[item versionString]];

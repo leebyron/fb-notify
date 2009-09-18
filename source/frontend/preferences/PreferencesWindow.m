@@ -103,7 +103,7 @@ static ApplicationController* parent;
     [pic setImage:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]]];
     [logoutButton setEnabled:NO];
   }
-  
+
   // Growl?
   BOOL hasGrowl = [GrowlApplicationBridge isGrowlInstalled];
   [growlNotRunning setHidden:[GrowlApplicationBridge isGrowlRunning]];

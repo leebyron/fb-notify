@@ -34,6 +34,9 @@
 
   NSString*            lastStatusUpdate;
   StatusUpdateWindow*  statusUpdateWindow;
+
+  NSTimeInterval       lastUpdate;
+  NSTimeInterval       lastInteraction;
 }
 
 @property(retain) MenuManager*          menu;
@@ -45,6 +48,8 @@
 @property(retain) ImageDictionary*      appIcons;
 
 - (void)invalidate;
+- (void)updated;
+- (void)interacted;
 
 - (IBAction)menuShowNewsFeed:(id)sender;
 - (IBAction)menuShowProfile:(id)sender;

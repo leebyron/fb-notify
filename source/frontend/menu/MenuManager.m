@@ -14,6 +14,8 @@
 #import "LoginItemManager.h"
 #import "StatusKeyShortcut.h"
 #import "NSString+.h"
+#import "MenuIcon.h"
+
 
 #define kMaxNotifications 12
 #define kMinNotifications 5
@@ -56,15 +58,13 @@ enum {
 
 @implementation MenuManager
 
-@synthesize userName, profileURL, profilePics, appIcons;
+@synthesize statusItem, userName, profileURL, profilePics, appIcons;
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    fbActiveIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_active" ofType:@"png"]];
-    fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
-    fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
+    fbMenuIcon = [[MenuIcon alloc] initWithManager:self];
 
     newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
     profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
@@ -82,21 +82,16 @@ enum {
       statusItem = [[bar statusItemWithLength:29] retain];
     }
     [statusItem setLength:29];
-    statusItemMenu = [[NSMenu alloc] init];
+    [statusItem setView:fbMenuIcon];
 
-    [statusItem setMenu:statusItemMenu];
-    [statusItem setHighlightMode:YES];
-    [statusItem setImage:fbEmptyIcon];
-    [statusItem setAlternateImage:fbActiveIcon];
+    statusItemMenu = [[NSMenu alloc] init];
   }
   return self;
 }
 
 - (void)dealloc
 {
-  [fbActiveIcon release];
-  [fbEmptyIcon release];
-  [fbFullIcon release];
+  [fbMenuIcon release];
 
   [newsFeedIcon release];
   [profileIcon release];
@@ -119,9 +114,9 @@ enum {
   [super dealloc];
 }
 
-- (void)setIconByAreUnread:(BOOL)areUnread
+- (void)setIconIlluminated:(BOOL)illuminated
 {
-  [statusItem setImage:areUnread ? fbFullIcon : fbEmptyIcon];
+  [fbMenuIcon setIconIlluminated:illuminated];
 }
 
 - (void)constructWithNotifications:(NSArray*)notifications messages:(NSArray*)messages
@@ -208,11 +203,11 @@ enum {
       int unreadNotifications = 0;
       for (int i = [notifications count] - 1; i >= 0; i--) {
         FBNotification* notification = [notifications objectAtIndex:i];
-        
+
         if ([notification boolForKey:@"is_unread"]) {
           unreadNotifications++;
         }
-        
+
         // maintain between kMinNotifications and kMaxNotifications
         if (addedNotifications >= kMinNotifications &&
             (![notification boolForKey:@"is_unread"] || addedNotifications >= kMaxNotifications)) {
@@ -257,16 +252,6 @@ enum {
         [moreItem setImage:notificationsIcon];
         [statusItemMenu addItem:moreItem];
         [moreItem release];
-      }
-      
-      // mark all as read
-      if (unreadNotifications > 0) {
-        NSMenuItem* markUnreadItem = [[NSMenuItem alloc] initWithTitle:@"Mark All Read"
-                                                                action:@selector(menuMarkAsReadAllNotifications:)
-                                                         keyEquivalent:@""];
-        [markUnreadItem setTag:MARK_AS_READ_TAG];
-        [statusItemMenu addItem:markUnreadItem];
-        [markUnreadItem release];
       }
 
       [statusItemMenu addItem:[NSMenuItem separatorItem]];
@@ -367,6 +352,11 @@ enum {
   [quitItem setTag:QUIT_TAG];
   [statusItemMenu addItem:quitItem];
   [quitItem release];
+}
+
+- (void)openMenu
+{
+  [statusItem popUpStatusItemMenu:statusItemMenu];
 }
 
 #pragma mark Private methods

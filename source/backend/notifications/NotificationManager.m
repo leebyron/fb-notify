@@ -105,7 +105,7 @@
   }
   [unreadNotifications removeAllObjects];
   [[NSApp delegate] invalidate];
-  
+
   [connectSession callMethod:@"notifications.markRead"
                withArguments:[NSDictionary dictionaryWithObject:[unreadNotifications componentsJoinedByString:@","]
                                                          forKey:@"notification_ids"]

@@ -247,6 +247,11 @@
 - (void)processNotifications:(id)result
 {
   NSArray* newNotifications = [[parent notifications] addNotificationsWithArray:result];
+
+  if ([newNotifications count] > 0) {
+    [[NSApp delegate] updated];
+  }
+
   if (lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
@@ -264,6 +269,11 @@
 - (void)processMessages:(id)result
 {
   NSArray* newMessages = [[parent messages] addMessagesWithArray:result];
+
+  if ([newMessages count] > 0) {
+    [[NSApp delegate] updated];
+  }
+
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {
