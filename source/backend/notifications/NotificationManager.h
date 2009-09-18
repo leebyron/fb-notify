@@ -22,5 +22,6 @@
 -(int)unreadCount;
 -(int)mostRecentUpdateTime;
 -(NSArray*)notificationsWithTarget:(NSURL*)url;
+-(void)markAllRead;
 
 @end

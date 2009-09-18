@@ -252,8 +252,7 @@
       if ([notification boolForKey:@"is_unread"]) {
         NSImage* pic = [[parent profilePics] imageForKey:[notification uidForKey:@"sender_id"]];
         [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
-                                          // TODO - subText should use a properly encoded body_text when cortana 125906 is completed
-                                          subText:[[notification stringForKey:@"body_html"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"]
+                                          subText:[notification stringForKey:@"body_text"]
                                             image:pic
                                      notification:notification
                                           message:nil];
@@ -265,7 +264,6 @@
 - (void)processMessages:(id)result
 {
   NSArray* newMessages = [[parent messages] addMessagesWithArray:result];
-
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {
       if ([message boolForKey:@"unread"]) {

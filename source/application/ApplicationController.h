@@ -54,6 +54,7 @@
 - (IBAction)menuShowNotification:(id)sender;
 - (IBAction)menuShowMessage:(id)sender;
 - (IBAction)menuShowAllNotifications:(id)sender;
+- (IBAction)menuMarkAsReadAllNotifications:(id)sender;
 - (IBAction)logout:(id)sender;
 - (IBAction)showPreferences:(id)sender;
 

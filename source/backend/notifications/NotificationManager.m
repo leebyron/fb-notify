@@ -8,6 +8,7 @@
 
 #import "NotificationManager.h"
 #import "FBNotification.h"
+#import "GlobalSession.h"
 
 @implementation NotificationManager
 
@@ -95,6 +96,27 @@
   }
 
   return hasTarget;
+}
+
+-(void)markAllRead
+{
+  for (FBNotification* notif in unreadNotifications) {
+    [notif setObject:@"0" forKey:@"is_unread"];
+  }
+  [unreadNotifications removeAllObjects];
+  [[NSApp delegate] invalidate];
+  
+  [connectSession callMethod:@"notifications.markRead"
+               withArguments:[NSDictionary dictionaryWithObject:[unreadNotifications componentsJoinedByString:@","]
+                                                         forKey:@"notification_ids"]
+                      target:self
+                    selector:nil
+                       error:@selector(markReadError:)];
+}
+
+- (void)markReadError:(NSError*)error
+{
+  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 @end

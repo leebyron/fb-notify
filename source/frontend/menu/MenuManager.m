@@ -28,6 +28,7 @@ enum {
   PROFILE_LINK_TAG,
   STATUS_UPDATE_TAG,
   MORE_LINK_TAG,
+  MARK_AS_READ_TAG,
   SHOW_INBOX_TAG,
   COMPOSE_MESSAGE_TAG,
   START_AT_LOGIN_TAG,
@@ -202,10 +203,16 @@ enum {
       [notifTitleItem release];
 
       // display the latest few notifications in the menu
-      int addedNotifications = 0;
-      int extraNotifications = 0;
+      int addedNotifications  = 0;
+      int extraNotifications  = 0;
+      int unreadNotifications = 0;
       for (int i = [notifications count] - 1; i >= 0; i--) {
         FBNotification* notification = [notifications objectAtIndex:i];
+        
+        if ([notification boolForKey:@"is_unread"]) {
+          unreadNotifications++;
+        }
+        
         // maintain between kMinNotifications and kMaxNotifications
         if (addedNotifications >= kMinNotifications &&
             (![notification boolForKey:@"is_unread"] || addedNotifications >= kMaxNotifications)) {
@@ -216,8 +223,7 @@ enum {
         }
 
         // add item to menu
-        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
-        NSString* title = [[notification stringForKey:@"title_text"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
+        NSString* title = [notification stringForKey:@"title_text"];
         if (!title) {
           title = [NSString stringWithString:@""];
         }
@@ -238,6 +244,7 @@ enum {
         addedNotifications++;
       }
 
+      // are there any more unreads that we can't see?
       if (extraNotifications > 0) {
         NSString* more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
         if (extraNotifications > 1) {
@@ -250,6 +257,16 @@ enum {
         [moreItem setImage:notificationsIcon];
         [statusItemMenu addItem:moreItem];
         [moreItem release];
+      }
+      
+      // mark all as read
+      if (unreadNotifications > 0) {
+        NSMenuItem* markUnreadItem = [[NSMenuItem alloc] initWithTitle:@"Mark All Read"
+                                                                action:@selector(menuMarkAsReadAllNotifications:)
+                                                         keyEquivalent:@""];
+        [markUnreadItem setTag:MARK_AS_READ_TAG];
+        [statusItemMenu addItem:markUnreadItem];
+        [markUnreadItem release];
       }
 
       [statusItemMenu addItem:[NSMenuItem separatorItem]];

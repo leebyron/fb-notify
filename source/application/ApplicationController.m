@@ -232,6 +232,11 @@ FBConnect* connectSession;
   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
 }
 
+- (IBAction)menuMarkAsReadAllNotifications:(id)sender
+{
+  [notifications markAllRead];
+}
+
 -(IBAction) showPreferences:(id)sender
 {
   [PreferencesWindow show];
