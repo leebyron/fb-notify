@@ -1,0 +1,37 @@
+/* Link to the News Feed */
+"News Feed" = "News Feed";
+
+/* Link for Status HUD */
+"Update Status" = "Update Status";
+
+/* Link to Compose Message */
+"Compose New Message" = "Compose New Message";
+
+/* Online Status */
+"Connecting" = "Connecting";
+"Not Online" = "Not Online";
+
+/* Header for Notifications */
+"Notifications" = "Notifications";
+
+/* Link to view more notifications */
+"MORE_NOTIFICATIONS_1" = "More Notification"; /* 1 More Notification */
+"MORE_NOTIFICATIONS_2" = "More Notifications"; /* 2 More Notifications */
+"MORE_NOTIFICATIONS_MANY" = "More Notifications"; /* 5 More Notifications */
+
+/* Header for Inbox */
+"Inbox" = "Inbox";
+
+/* Link to view more messages */
+"MORE_MESSAGES_1" = "More Message"; /* 1 More Message */
+"MORE_MESSAGES_2" = "More Messages"; /* 2 More Messages */
+"MORE_MESSAGES_MANY" = "More Messages"; /* 5 More Messages */
+
+/* If you have an empty Inbox */
+"No Inbox Messages" = "No Inbox Messages";
+
+/* Link to Preferences Window */
+"Preferences" = "Preferences";
+
+/* Link to Quit */
+"Quit Facebook Notifications" = "Quit Facebook Notifications";

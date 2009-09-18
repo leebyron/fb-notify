@@ -281,8 +281,7 @@
         NSImage* pic = [[parent profilePics] imageForKey:uid];
 
         NSString* name = [[parent names] objectForKey:uid];
-        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
-        NSString* subject = [[message stringForKey:@"subject"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
+        NSString* subject = [message stringForKey:@"subject"];
 
         NSString* bubText;
         if ([NSString exists:name]) {
@@ -294,8 +293,7 @@
         } else {
           bubText = subject;
         }
-        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
-        NSString* bubSubText = [[message stringForKey:@"snippet"] stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
+        NSString* bubSubText = [message stringForKey:@"snippet"];
         if (![NSString exists:bubText]) {
           bubText = bubSubText;
           bubSubText = nil;

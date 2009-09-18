@@ -130,7 +130,7 @@ enum {
 
   if ([[NetConnection netConnection] isOnline] && isLoggedIn) {
     // add new
-    NSMenuItem* newsFeedItem = [[NSMenuItem alloc] initWithTitle:@"News Feed"
+    NSMenuItem* newsFeedItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"News Feed", @"Link to the News Feed")
                                                           action:@selector(menuShowNewsFeed:)
                                                    keyEquivalent:@""];
     [newsFeedItem setTag:NEWS_FEED_LINK_TAG];
@@ -147,7 +147,7 @@ enum {
     [statusItemMenu addItem:profileItem];
     [profileItem release];
 
-    NSMenuItem* setStatusItem = [[NSMenuItem alloc] initWithTitle:@"Update Status"
+    NSMenuItem* setStatusItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Update Status", @"Link for Status HUD")
                                                            action:@selector(beginUpdateStatus:)
                                                     keyEquivalent:@""];
     if ([[StatusKeyShortcut instance] keyCodeString]) {
@@ -161,7 +161,7 @@ enum {
     [setStatusItem release];
 
     //compose message
-    NSMenuItem* composeMessageItem = [[NSMenuItem alloc] initWithTitle:@"Compose New Message"
+    NSMenuItem* composeMessageItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Compose New Message", @"Link to Compose Message")
                                                                 action:@selector(menuComposeMessage:)
                                                          keyEquivalent:@""];
     [composeMessageItem setTag:COMPOSE_MESSAGE_TAG];
@@ -170,14 +170,14 @@ enum {
     [composeMessageItem release];
   } else if ([[NetConnection netConnection] isOnline]) {
     // Connecting title
-    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Connecting..."
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Connecting", nil), kEllipsis]
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
     [offlineItem release];
   } else {
     // Offline title
-    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:@"Not Online"
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Not Online", nil)
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
@@ -190,7 +190,7 @@ enum {
 
     if (notifications && [notifications count] > 0) {
       // Notifications title
-      NSMenuItem* notifTitleItem = [[NSMenuItem alloc] initWithTitle:@"Notifications"
+      NSMenuItem* notifTitleItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Notifications", @"Header for Notifications")
                                                               action:nil
                                                        keyEquivalent:@""];
       [notifTitleItem setImage:notificationsGhostIcon];
@@ -241,11 +241,15 @@ enum {
 
       // are there any more unreads that we can't see?
       if (extraNotifications > 0) {
-        NSString* more = [NSString stringWithFormat:@"%i More Notification", extraNotifications];
-        if (extraNotifications > 1) {
-          more = [more stringByAppendingString:@"s"];
+        NSString* moreText;
+        if (extraNotifications == 1) {
+          moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_1", @"1 More Notification");
+        } else if (extraNotifications == 2) {
+          moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_2", @"2 More Notifications");
+        } else {
+          moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_MANY", @"5 More Notifications");
         }
-        NSMenuItem* moreItem = [[NSMenuItem alloc] initWithTitle:more
+        NSMenuItem* moreItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", extraNotifications, moreText]
                                                           action:@selector(menuShowAllNotifications:)
                                                    keyEquivalent:@""];
         [moreItem setTag:MORE_LINK_TAG];
@@ -259,7 +263,7 @@ enum {
 
     if (messages && [messages count] > 0) {
       // Inbox title
-      NSMenuItem* inboxTitleItem = [[NSMenuItem alloc] initWithTitle:@"Inbox"
+      NSMenuItem* inboxTitleItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Inbox", @"Header for Inbox")
                                                               action:nil
                                                        keyEquivalent:@""];
       [inboxTitleItem setImage:inboxGhostIcon];
@@ -291,10 +295,6 @@ enum {
         if ([title length] > kMaxStringLen) {
           title = [[title substringToIndex:kMaxStringLen - 3] stringByAppendingString:kEllipsis];
         }
-        // TODO - should not need the manual <3 replacement after cortana 125906 is completed
-        if (title) {
-          title = [title stringByReplacingOccurrencesOfString:@"<3" withString:@"\u2665"];
-        }
         NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:title
                                                       action:@selector(menuShowMessage:)
                                                keyEquivalent:@""];
@@ -313,13 +313,17 @@ enum {
       }
 
       if (extraMessages > 0) {
-        NSString* more = [NSString stringWithFormat:@"%i More Message", extraMessages];
-        if (extraMessages > 1) {
-          more = [more stringByAppendingString:@"s"];
+        NSString* moreText;
+        if (extraMessages == 1) {
+          moreText = NSLocalizedString(@"MORE_MESSAGES_1", @"1 More Message");
+        } else if (extraMessages == 2) {
+          moreText = NSLocalizedString(@"MORE_MESSAGES_2", @"2 More Messages");
+        } else {
+          moreText = NSLocalizedString(@"MORE_MESSAGES_MANY", @"5 More Messages");
         }
-        NSMenuItem* moreMessagesItem = [[NSMenuItem alloc] initWithTitle:more
-                                                          action:@selector(menuShowInbox:)
-                                                   keyEquivalent:@""];
+        NSMenuItem* moreMessagesItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", extraMessages, moreText]
+                                                                  action:@selector(menuShowInbox:)
+                                                           keyEquivalent:@""];
         [moreMessagesItem setTag:SHOW_INBOX_TAG];
         [moreMessagesItem setImage:inboxIcon];
         [statusItemMenu addItem:moreMessagesItem];
@@ -327,7 +331,7 @@ enum {
       }
 
     } else {
-      NSMenuItem* noMessagesItem = [[NSMenuItem alloc] initWithTitle:@"No Inbox Messages"
+      NSMenuItem* noMessagesItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"No Inbox Messages", nil)
                                                               action:@selector(menuShowInbox:)
                                                        keyEquivalent:@""];
       [noMessagesItem setTag:SHOW_INBOX_TAG];
@@ -339,14 +343,14 @@ enum {
     [statusItemMenu addItem:[NSMenuItem separatorItem]];
   }
 
-  NSMenuItem* preferencesItem = [[NSMenuItem alloc] initWithTitle:@"Preferences..."
+  NSMenuItem* preferencesItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Preferences", nil), kEllipsis]
                                                            action:@selector(showPreferences:)
                                                     keyEquivalent:@""];
   [preferencesItem setTag:PREFERENCES_TAG];
   [statusItemMenu addItem:preferencesItem];
   [preferencesItem release];
 
-  NSMenuItem* quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit Facebook Notifications"
+  NSMenuItem* quitItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Quit Facebook Notifications", nil)
                                                     action:@selector(terminate:)
                                              keyEquivalent:@""];
   [quitItem setTag:QUIT_TAG];

@@ -15,12 +15,19 @@
   NSImage* fbActiveIcon;
   NSImage* fbEmptyIcon;
   NSImage* fbFullIcon;
+  NSImage* fbShareIcon1;
+  NSImage* fbShareIcon2;
+  NSImage* fbShareIcon3;
+  NSImage* fbShareIcon4;
 
   BOOL menuOpen;
+  int iconStatus;
+  BOOL animateUp;
   BOOL iconIlluminated;
 }
 
 -(id)initWithManager:(MenuManager*)mngr;
+-(void)setIconStatus:(int)status;
 -(void)setIconIlluminated:(BOOL)illuminated;
 
 @end
