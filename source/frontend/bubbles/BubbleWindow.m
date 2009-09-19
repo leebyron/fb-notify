@@ -115,6 +115,13 @@
   if (disappearing) {
     return;
   }
+  if (notification != nil) {
+    [notification markAsSeen];
+  }
+  if (message != nil) {
+    [message markAsSeen];
+  }
+  [[NSApp delegate] invalidate];
   [self setAlphaValue:1.0];
   [NSObject cancelPreviousPerformRequestsWithTarget:self
                                            selector:@selector(disappear)
@@ -126,12 +133,11 @@
   if (disappearing) {
     return;
   }
+  // if there is a notification, mark it as read since they're usually short
   if (notification != nil) {
     [notification markAsReadWithSimilar:NO];
   }
-  if (message != nil) {
-    [message markAsRead];
-  }
+  // we could mark messages as read if dismissed, but I don't think we should
   [self disappear];
 }
 

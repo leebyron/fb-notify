@@ -20,6 +20,7 @@
 + (FBNotification*)notificationWithDictionary:(NSDictionary*)dict
                                       manager:(NotificationManager*)mngr;
 
+- (void)markAsSeen;
 - (void)markAsReadWithSimilar:(BOOL)markSimilar;
 
 @end

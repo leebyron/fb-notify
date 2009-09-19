@@ -7,21 +7,34 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "HashArray.h"
+
+
+@class FBNotification;
 
 @interface NotificationManager : NSObject {
-  NSMutableDictionary*  allDict;
-  NSMutableArray*       allNotifications;
-  NSMutableArray*       unreadNotifications;
-  int                   mostRecentUpdateTime;
+  HashArray*    all;
+  NSMutableSet* unread;
+  NSMutableSet* unseen;
+  int           mostRecentUpdateTime;
 }
 
-@property(retain) NSMutableArray* allNotifications;
-@property(retain) NSMutableArray* unreadNotifications;
+@property(retain) HashArray* all;
 
 -(NSArray*)addNotificationsWithArray:(NSArray*)array;
+
+-(NSArray*)unread;
 -(int)unreadCount;
+-(int)unseenCount;
 -(int)mostRecentUpdateTime;
--(NSArray*)notificationsWithTarget:(NSURL*)url;
+
+-(void)markAsSeen:(FBNotification*)notif;
+-(void)markAllSeen;
+
+/*!
+ * Marking as Read will also mark as Seen.
+ */
+-(void)markAsRead:(FBNotification*)notif withSimilar:(BOOL)similar;
 -(void)markAllRead;
 
 @end

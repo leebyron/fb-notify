@@ -6,8 +6,6 @@
 //
 
 #import "FBNotification.h"
-#import "GlobalSession.h"
-#import <FBCocoa/FBCocoa.h>
 #import "NSString+.h"
 
 
@@ -15,6 +13,7 @@
 
 - (id)initWithDictionary:(NSDictionary*)dict
                  manager:(NotificationManager*)mngr;
+- (NSURL*)findActionURL;
 - (NSString*)lastURLInHTML:(NSString*)string;
 
 @end
@@ -36,38 +35,7 @@
   self = [super initWithDictionary:dict];
   if (self) {
     manager = mngr;
-
-    // find and fill href var
-    NSString* hrefString = [self stringForKey:@"href"];
-
-    // this page is bogus.
-    if ([NSString exists:hrefString] && [hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
-      hrefString = nil;
-    }
-
-    if (![NSString exists:hrefString]) {
-      // try to find it in the title html
-      hrefString = [self lastURLInHTML:[self stringForKey:@"title_html"]];
-    }
-
-    if (![NSString exists:hrefString]) {
-      // body html?
-      hrefString = [self lastURLInHTML:[self stringForKey:@"body_html"]];
-    }
-
-    if (![NSString exists:hrefString]) {
-      // fine, use the default notification url
-      hrefString = @"http://www.facebook.com/notifications.php";
-    }
-
-    if (hrefString) {
-      // make sure href string is healthy, and get rid of that pesky &comments barf.
-      hrefString = [[[hrefString stringByDecodingXMLEntities]
-                     stringByReplacingOccurrencesOfString:@"&comments" withString:@""]
-                    stringByReplacingOccurrencesOfString:@"&alert" withString:@""];
-    }
-
-    href = [[NSURL URLWithString:hrefString] retain];
+    href = [[self findActionURL] retain];
   }
   return self;
 }
@@ -78,30 +46,53 @@
   [super dealloc];
 }
 
-- (void)markAsReadWithSimilar:(BOOL)markSimilar
+- (void)markAsSeen
 {
-  NSArray* notifs;
-  if (markSimilar) {
-    notifs = [manager notificationsWithTarget:href];
-  } else {
-    notifs = [NSArray arrayWithObject:self];
-  }
-  if ([notifs count] > 0) {
-    for (FBNotification* notif in notifs) {
-      [notif setObject:@"0" forKey:@"is_unread"];
-    }
-    [[manager unreadNotifications] removeObjectsInArray:notifs];
-    [[NSApp delegate] invalidate];
-
-    [connectSession callMethod:@"notifications.markRead"
-                 withArguments:[NSDictionary dictionaryWithObject:[notifs componentsJoinedByString:@","] forKey:@"notification_ids"]
-                        target:self
-                      selector:nil
-                         error:@selector(markReadError:)];
-  }
+  [manager markAsSeen:self];
 }
 
+- (void)markAsReadWithSimilar:(BOOL)markSimilar
+{
+  [manager markAsRead:self withSimilar:markSimilar];
+}
+
+
 #pragma mark Private methods
+- (NSURL*)findActionURL
+{
+  // find and fill href var
+  NSString* hrefString = [self stringForKey:@"href"];
+
+  // this page is bogus.
+  if ([NSString exists:hrefString] && [hrefString rangeOfString:@"facebook.com/notifications.php"].location != NSNotFound) {
+    hrefString = nil;
+  }
+
+  if (![NSString exists:hrefString]) {
+    // try to find it in the title html
+    hrefString = [self lastURLInHTML:[self stringForKey:@"title_html"]];
+  }
+
+  if (![NSString exists:hrefString]) {
+    // body html?
+    hrefString = [self lastURLInHTML:[self stringForKey:@"body_html"]];
+  }
+
+  if (![NSString exists:hrefString]) {
+    // fine, use the default notification url
+    hrefString = @"http://www.facebook.com/notifications.php";
+  }
+
+  if (hrefString) {
+    // make sure href string is healthy, and get rid of that pesky &comments barf.
+    hrefString = [[[hrefString stringByDecodingXMLEntities]
+                   stringByReplacingOccurrencesOfString:@"&comments" withString:@""]
+                  stringByReplacingOccurrencesOfString:@"&alert" withString:@""];
+  }
+
+  return [NSURL URLWithString:hrefString];
+}
+
 - (NSString*)lastURLInHTML:(NSString*)html
 {
   if (![NSString exists:html]) {
@@ -119,11 +110,6 @@
                                                     [html length] - startUrl)];
   return [html substringWithRange:NSMakeRange(startUrl,
                                               endHref.location - startUrl)];
-}
-
-- (void)markReadError:(NSError*)error
-{
-  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 - (NSString*)description {

@@ -31,7 +31,7 @@ enum {
     fbActiveIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_active" ofType:@"png"]];
     fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
     fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
-    
+
     fbShareIcon1 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_1" ofType:@"png"]];
     fbShareIcon2 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_2" ofType:@"png"]];
     fbShareIcon3 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_3" ofType:@"png"]];
@@ -41,7 +41,7 @@ enum {
                                                           NSFilenamesPboardType,
                                                           NSTIFFPboardType,
                                                           NSURLPboardType, nil];
-//    [self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
+    [self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
     [self setIconStatus:MENU_ICON_NORMAL];
   }
   return self;
@@ -107,9 +107,9 @@ enum {
 
 - (void)viewWillDraw
 {
-  //int eventualLength = (iconStatus == MENU_ICON_NORMAL ? MENU_ICON_NORMAL : MENU_ICON_SHARE_FULL);
-  [self setFrame:NSMakeRect(0, 0, iconStatus, 22)];
-  [[manager statusItem] setLength:iconStatus];
+  int eventualLength = (iconStatus == MENU_ICON_NORMAL ? MENU_ICON_NORMAL : MENU_ICON_SHARE_FULL);
+  [self setFrame:NSMakeRect(0, 0, eventualLength, 22)];
+  [[manager statusItem] setLength:eventualLength];
 }
 
 - (void)drawRect:(NSRect)rect
@@ -161,8 +161,8 @@ enum {
   menuOpen = YES;
   [self setNeedsDisplay:YES];
 
-  // mark as interacted
-  [[NSApp delegate] interacted];
+  // mark errrverything seen
+  [[NSApp delegate] markEverythingSeen];
 
   // open the manager's menu
   [manager openMenu];

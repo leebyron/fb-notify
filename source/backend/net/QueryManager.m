@@ -16,7 +16,7 @@
 #import "NSDictionary+.h"
 
 
-#define kQueryInterval 60
+#define kQueryInterval 10
 #define kRetryQueryInterval 60
 
 #define kInfoQueryName @"info"
@@ -26,7 +26,7 @@
 #define kNotifQueryFmt @"SELECT notification_id, sender_id, recipient_id, " \
 @"created_time, updated_time, title_html, title_text, body_html, body_text, " \
 @"href, app_id, is_unread, is_hidden FROM notification "\
-@"WHERE recipient_id = %@ AND ((is_unread = 0 AND notification_id IN (%@)) OR updated_time > %i) " \
+@"WHERE recipient_id = %@ AND (notification_id IN (%@) OR updated_time > %i) " \
 @"ORDER BY created_time ASC"
 
 #define kMessageQueryName @"messages"
@@ -125,7 +125,7 @@
   }
 
   // build queries
-  NSString* unreadIDsList = [[[parent notifications] unreadNotifications] componentsJoinedByString:@","];
+  NSString* unreadIDsList = [[[parent notifications] unread] componentsJoinedByString:@","];
   NSString* notifQuery = [NSString stringWithFormat:kNotifQueryFmt,
                                                     [connectSession uid],
                                                     unreadIDsList,
@@ -248,10 +248,6 @@
 {
   NSArray* newNotifications = [[parent notifications] addNotificationsWithArray:result];
 
-  if ([newNotifications count] > 0) {
-    [[NSApp delegate] updated];
-  }
-
   if (lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
@@ -269,10 +265,6 @@
 - (void)processMessages:(id)result
 {
   NSArray* newMessages = [[parent messages] addMessagesWithArray:result];
-
-  if ([newMessages count] > 0) {
-    [[NSApp delegate] updated];
-  }
 
   if(lastQuery + (kQueryInterval * 5) > [[NSDate date] timeIntervalSince1970]) {
     for (FBMessage* message in newMessages) {

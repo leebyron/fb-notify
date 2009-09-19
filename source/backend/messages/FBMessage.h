@@ -18,6 +18,7 @@
 + (FBMessage*)messageWithDictionary:(NSDictionary*)dict
                             manager:(MessageManager*)mngr;
 
+- (void)markAsSeen;
 - (void)markAsRead;
 
 @end

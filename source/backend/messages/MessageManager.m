@@ -8,18 +8,23 @@
 
 #import "MessageManager.h"
 #import "FBMessage.h"
+#import "GlobalSession.h"
+#import "NSDictionary+.h"
+
+
+NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
 
 @implementation MessageManager
 
-@synthesize allMessages, unreadMessages;
+@synthesize all;
 
 -(id)init
 {
   self = [super init];
   if (self) {
-    allDict               = [[NSMutableDictionary alloc] init];
-    allMessages           = [[NSMutableArray alloc] init];
-    unreadMessages        = [[NSMutableArray alloc] init];
+    all     = [[HashArray alloc] init];
+    unread  = [[NSMutableSet alloc] init];
+    unseen  = [[NSMutableSet alloc] init];
     mostRecentUpdateTime  = 0;
   }
   return self;
@@ -27,10 +32,10 @@
 
 - (void)dealloc
 {
-  [allDict        release];
-  [allMessages    release];
-  [unreadMessages release];
-  [super dealloc];
+  [all    release];
+  [unread release];
+  [unseen release];
+  [super  dealloc];
 }
 
 -(NSArray*)addMessagesWithArray:(NSArray*)array
@@ -40,22 +45,38 @@
 
   for (NSDictionary* msg in array) {
     FBMessage* message = [FBMessage messageWithDictionary:msg manager:self];
-
     NSString* threadID = [message uidForKey:@"thread_id"];
-    FBMessage* existingMessage = [allDict objectForKey:threadID];
+    FBMessage* existingMessage = [all objectForKey:threadID];
 
-    if (existingMessage) {
-      if (![existingMessage intForKey:@"updated_time"] == [message intForKey:@"updated_time"]) {
-        [newMessages addObject:message];
-      }
-      [allMessages removeObject:existingMessage];
-      [allDict removeObjectForKey:threadID];
-    } else {
+    if (existingMessage == nil) {
+      // add to all sets
       [newMessages addObject:message];
+
+      // add to the unread set if applicable
+      if ([message boolForKey:@"unread"]) {
+        [unseen addObject:threadID];
+        [unread addObject:threadID];
+      }
+    } else {
+      // if recently updated, mark as unseen
+      if ([existingMessage intForKey:@"updated_time"] != [message intForKey:@"updated_time"]) {
+        [newMessages addObject:message];
+        [unseen addObject:threadID];
+      }
+
+      // if unread status changed...
+      if ([existingMessage boolForKey:@"unread"] != [message boolForKey:@"unread"]) {
+        if ([message boolForKey:@"unread"]) {
+          [unread addObject:threadID];
+        } else {
+          [unread removeObject:threadID];
+          [unseen removeObject:threadID];
+        }
+      }
     }
 
-    [allDict setObject:message forKey:threadID];
-    [allMessages addObject:message];
+    // replace existing message
+    [all setObject:message forKey:threadID];
 
     // update most recent time
     mostRecentUpdateTime = MAX(mostRecentUpdateTime, [message intForKey:@"updated_time"]);
@@ -64,47 +85,52 @@
   }
 
   // at this point we need to sort allMessages based on latest time
-  [allMessages sortUsingFunction:sortMessages context:@"updated_time"];
+  [all sortUsingFunction:sortMessages context:@"updated_time"];
 
   return newMessages;
 }
 
 -(void)verifyMessagesWithArray:(NSArray*)array
 {
-  // make a temporary dictionary of all messages:
-  NSMutableDictionary* verifiedMessages = [[NSMutableDictionary alloc] init];
+  // make a set with incoming array
+  NSMutableSet* verifiedSet = [[[NSMutableSet alloc] init] autorelease];
   for (NSDictionary* msg in array) {
-    FBMessage* verifiedMessage = [FBMessage messageWithDictionary:msg manager:self];
-    [verifiedMessages setObject:verifiedMessage forKey:[verifiedMessage uidForKey:@"thread_id"]];
-    [verifiedMessage release];
+    [verifiedSet addObject:[msg uidForKey:@"thread_id"]];
   }
 
-  // run through existing messages, updating status
-  NSDictionary* allDictClone = [[NSDictionary alloc] initWithDictionary:allDict copyItems:NO];
-  for (NSString* threadID in allDictClone) {
+  // make a set with existing list
+  NSMutableSet* existingSet = [[[NSMutableSet alloc] init] autorelease];
+  for (FBMessage* msg in all) {
+    [existingSet addObject:[msg uidForKey:@"thread_id"]];
+  }
 
-    FBMessage* existingMessage = [allDict objectForKey:threadID];
-    FBMessage* verifiedMessage = [verifiedMessages objectForKey:threadID];
+  // find members of the existing set which do not exist in the verified set
+  [existingSet minusSet:verifiedSet];
 
-    // remove from unread, we'll add it back in if it needs to be
-    [unreadMessages removeObject:existingMessage];
+  // remove these members
+  for (NSString* threadID in existingSet) {
+    [all removeObjectForKey:threadID];
+    [unread removeObject:threadID];
+    [unseen removeObject:threadID];
+  }
 
-    // would be nil if it's been deleted
-    if (verifiedMessage == nil) {
-      [allDict removeObjectForKey:threadID];
-      [allMessages removeObject:existingMessage];
-    } else {
-      // update unread status
-      [existingMessage setObject:[verifiedMessage objectForKey:@"unread"] forKey:@"unread"];
-      if ([verifiedMessage boolForKey:@"unread"]) {
-        [unreadMessages addObject:existingMessage];
+  // iterate through array, updating unread status
+  for (NSDictionary* msg in array) {
+    NSString* threadID = [msg uidForKey:@"thread_id"];
+    FBMessage* existingMessage = [all objectForKey:threadID];
+
+    // if unread status changed...
+    if ([existingMessage boolForKey:@"unread"] != [msg boolForKey:@"unread"]) {
+      if ([msg boolForKey:@"unread"]) {
+        [unread addObject:threadID];
+        [existingMessage setObject:@"1" forKey:@"unread"];
+      } else {
+        [unread removeObject:threadID];
+        [unseen removeObject:threadID];
+        [existingMessage setObject:@"0" forKey:@"unread"];
       }
     }
   }
-
-  // release what we no longer need
-  [allDictClone release];
-  [verifiedMessages release];
 }
 
 NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
@@ -119,12 +145,52 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
   return NSOrderedSame;
 }
 
+-(NSArray*)unread
+{
+  return [unread allObjects];
+}
+
 -(int)unreadCount {
-  return [unreadMessages count];
+  return [unread count];
+}
+
+-(int)unseenCount {
+  return [unseen count];
 }
 
 -(int)mostRecentUpdateTime {
   return mostRecentUpdateTime;
+}
+
+-(void)markAsSeen:(FBMessage*)msg
+{
+  [unseen removeObject:[msg uidForKey:@"thread_id"]];
+}
+
+-(void)markAllSeen
+{
+  [unseen removeAllObjects];
+}
+
+-(void)markAsRead:(FBMessage*)msg
+{
+  [msg setObject:@"0" forKey:@"unread"];
+  [unread removeObject:[msg uidForKey:@"thread_id"]];
+  [unseen removeObject:[msg uidForKey:@"thread_id"]];
+
+  [connectSession callMethod:@"message.setThreadReadStatus"
+               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[msg objectForKey:@"thread_id"], @"thread_id",
+                                                                        @"-1", @"status",
+                                                                        [connectSession uid], @"uid", nil]
+                      target:self
+                    selector:nil
+                       error:@selector(markReadError:)];
+  [[NSApp delegate] invalidate];
+}
+
+- (void)markReadError:(NSError*)error
+{
+  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
 }
 
 @end

@@ -147,23 +147,20 @@ FBConnect* connectSession;
   [self performSelector:@selector(updateMenu) withObject:nil afterDelay:0];
 }
 
-- (void)updated
+- (void)markEverythingSeen
 {
-  lastUpdate = [[NSDate date] timeIntervalSince1970];
-  [self invalidate];
-}
-
-- (void)interacted
-{
-  lastInteraction = [[NSDate date] timeIntervalSince1970];
+  [notifications markAllSeen];
+  [messages markAllSeen];
   [self invalidate];
 }
 
 - (void)updateMenu
 {
-  [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && lastUpdate >= lastInteraction)];
-  [menu constructWithNotifications:[notifications allNotifications]
-                          messages:[messages allMessages]];
+  NSLog(@"unseen: %i %i",[notifications unseenCount] , [messages unseenCount]);
+  int unseen = [notifications unseenCount] + [messages unseenCount];
+  [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
+  [menu constructWithNotifications:[notifications all]
+                          messages:[messages all]];
 }
 
 #pragma mark IBActions

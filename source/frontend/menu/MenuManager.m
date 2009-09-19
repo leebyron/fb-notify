@@ -119,7 +119,8 @@ enum {
   [fbMenuIcon setIconIlluminated:illuminated];
 }
 
-- (void)constructWithNotifications:(NSArray*)notifications messages:(NSArray*)messages
+- (void)constructWithNotifications:(HashArray*)notifications
+                          messages:(HashArray*)messages
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
