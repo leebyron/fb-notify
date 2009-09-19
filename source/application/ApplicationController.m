@@ -156,7 +156,6 @@ FBConnect* connectSession;
 
 - (void)updateMenu
 {
-  NSLog(@"unseen: %i %i",[notifications unseenCount] , [messages unseenCount]);
   int unseen = [notifications unseenCount] + [messages unseenCount];
   [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
   [menu constructWithNotifications:[notifications all]

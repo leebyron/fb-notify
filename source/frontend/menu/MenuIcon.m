@@ -41,7 +41,7 @@ enum {
                                                           NSFilenamesPboardType,
                                                           NSTIFFPboardType,
                                                           NSURLPboardType, nil];
-    [self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
+    //[self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
     [self setIconStatus:MENU_ICON_NORMAL];
   }
   return self;
