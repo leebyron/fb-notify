@@ -16,7 +16,7 @@
 #import "NSDictionary+.h"
 
 
-#define kQueryInterval 60
+#define kQueryInterval 30
 #define kRetryQueryInterval 60
 
 #define kInfoQueryName @"info"

@@ -100,7 +100,7 @@ static ApplicationController* parent;
     [pic setImage:userpic];
     [logoutButton setEnabled:YES];
   } else {
-    [pic setImage:[[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]]];
+    [pic setImage:[NSImage bundlePNG:@"silhouette"]];
     [logoutButton setEnabled:NO];
   }
 

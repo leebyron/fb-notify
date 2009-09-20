@@ -100,8 +100,8 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
 
   // make a set with existing list
   NSMutableSet* existingSet = [[[NSMutableSet alloc] init] autorelease];
-  for (FBMessage* msg in all) {
-    [existingSet addObject:[msg uidForKey:@"thread_id"]];
+  for (NSString* threadID in all) {
+    [existingSet addObject:threadID];
   }
 
   // find members of the existing set which do not exist in the verified set

@@ -8,6 +8,7 @@
 
 #import "MenuIcon.h"
 #import "ApplicationController.h"
+#import "NSImage+.h"
 
 enum {
   MENU_ICON_NORMAL     = 29, //21
@@ -28,14 +29,14 @@ enum {
   self = [super init];
   if (self) {
     manager = [mngr retain];
-    fbActiveIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_active" ofType:@"png"]];
-    fbEmptyIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_empty" ofType:@"png"]];
-    fbFullIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_full" ofType:@"png"]];
+    fbActiveIcon = [[NSImage bundlePNG:@"fb_active"] retain];
+    fbEmptyIcon  = [[NSImage bundlePNG:@"fb_empty"] retain];
+    fbFullIcon   = [[NSImage bundlePNG:@"fb_full"] retain];
 
-    fbShareIcon1 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_1" ofType:@"png"]];
-    fbShareIcon2 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_2" ofType:@"png"]];
-    fbShareIcon3 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_3" ofType:@"png"]];
-    fbShareIcon4 = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"fb_share_4" ofType:@"png"]];
+    fbShareIcon1 = [[NSImage bundlePNG:@"fb_share_1"] retain];
+    fbShareIcon2 = [[NSImage bundlePNG:@"fb_share_2"] retain];
+    fbShareIcon3 = [[NSImage bundlePNG:@"fb_share_3"] retain];
+    fbShareIcon4 = [[NSImage bundlePNG:@"fb_share_4"] retain];
 
     NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSStringPboardType,
                                                           NSFilenamesPboardType,

@@ -64,9 +64,9 @@
                                 moveAni, @"frameOrigin", nil]];
 
   // keep it on top so you don't lose it!
-//  [panel setFloatingPanel:YES];
+  //  [panel setFloatingPanel:YES];
   [panel setWorksWhenModal:YES];
-  [[self window] setLevel:NSFloatingWindowLevel];
+  [[self window] setLevel:kCGUtilityWindowLevel];
 
   // open er up.
   [NSApp activateIgnoringOtherApps:YES];

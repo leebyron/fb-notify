@@ -86,6 +86,7 @@
 		5397C398106407FB00DAD78C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5397C397106407FB00DAD78C /* MainMenu.xib */; };
 		5397C3E51064166E00DAD78C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5397C3E31064166E00DAD78C /* Localizable.strings */; };
 		5397C49E1064416500DAD78C /* HashArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C49D1064416500DAD78C /* HashArray.m */; };
+		5397C7051066D11000DAD78C /* NSImage+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C7041066D11000DAD78C /* NSImage+.m */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -233,6 +234,8 @@
 		5397C3F010641B1D00DAD78C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = resources/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5397C49C1064416500DAD78C /* HashArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HashArray.h; path = source/additions/HashArray.h; sourceTree = "<group>"; };
 		5397C49D1064416500DAD78C /* HashArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HashArray.m; path = source/additions/HashArray.m; sourceTree = "<group>"; };
+		5397C7031066D11000DAD78C /* NSImage+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSImage+.h"; path = "source/additions/NSImage+.h"; sourceTree = "<group>"; };
+		5397C7041066D11000DAD78C /* NSImage+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSImage+.m"; path = "source/additions/NSImage+.m"; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+.h"; path = "source/additions/NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+.m"; path = "source/additions/NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -516,6 +519,8 @@
 				53DAD12B1056F67E00E664D2 /* NSDictionary+.m */,
 				5397C49C1064416500DAD78C /* HashArray.h */,
 				5397C49D1064416500DAD78C /* HashArray.m */,
+				5397C7031066D11000DAD78C /* NSImage+.h */,
+				5397C7041066D11000DAD78C /* NSImage+.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -715,6 +720,7 @@
 				530605C3103FB5340061C722 /* StatusKeyShortcut.m in Sources */,
 				53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */,
 				5397C49E1064416500DAD78C /* HashArray.m in Sources */,
+				5397C7051066D11000DAD78C /* NSImage+.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

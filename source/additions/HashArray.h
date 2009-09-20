@@ -8,7 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-
+/*!
+ * HashArray
+ * A combination of a dictionary and array. You can use this as a sorted
+ * dictionary or an array with keys. Allows for insert O(1), access O(1),
+ * query O(1), remove O(n), sort O(nlogn)
+ * Uses NSFastEnumeration, for(* in *) queries the keys of the dictionary in the
+ * order of the array.
+ *
+ * @author leebyron
+ */
 @interface HashArray : NSObject <NSFastEnumeration> {
   NSMutableArray*      list;
   NSMutableDictionary* hash;

@@ -14,6 +14,7 @@
 #import "LoginItemManager.h"
 #import "StatusKeyShortcut.h"
 #import "NSString+.h"
+#import "NSImage+.h"
 #import "MenuIcon.h"
 
 
@@ -66,14 +67,13 @@ enum {
   if (self) {
     fbMenuIcon = [[MenuIcon alloc] initWithManager:self];
 
-    newsFeedIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"newsfeed" ofType:@"png"]];
-    profileIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"profile" ofType:@"png"]];
-    notificationsIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications" ofType:@"png"]];
-    messageIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"message" ofType:@"png"]];
-    inboxIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox" ofType:@"png"]];
-
-    notificationsGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"notifications_ghost" ofType:@"png"]];
-    inboxGhostIcon = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"inbox_ghost" ofType:@"png"]];
+    newsFeedIcon    = [[NSImage bundlePNG:@"newsfeed"] retain];
+    profileIcon     = [[NSImage bundlePNG:@"profile"] retain];
+    notifsIcon      = [[NSImage bundlePNG:@"notifications"] retain];
+    messageIcon     = [[NSImage bundlePNG:@"message"] retain];
+    inboxIcon       = [[NSImage bundlePNG:@"inbox"] retain];
+    notifsGhostIcon = [[NSImage bundlePNG:@"notifications_ghost"] retain];
+    inboxGhostIcon  = [[NSImage bundlePNG:@"inbox_ghost"] retain];
 
     NSStatusBar* bar = [NSStatusBar systemStatusBar];
     @try {
@@ -95,11 +95,10 @@ enum {
 
   [newsFeedIcon release];
   [profileIcon release];
-  [notificationsIcon release];
+  [notifsIcon release];
   [messageIcon release];
   [inboxIcon release];
-
-  [notificationsGhostIcon release];
+  [notifsGhostIcon release];
   [inboxGhostIcon release];
 
   [appIcons release];
@@ -194,7 +193,7 @@ enum {
       NSMenuItem* notifTitleItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Notifications", @"Header for Notifications")
                                                               action:nil
                                                        keyEquivalent:@""];
-      [notifTitleItem setImage:notificationsGhostIcon];
+      [notifTitleItem setImage:notifsGhostIcon];
       [statusItemMenu addItem:notifTitleItem];
       [notifTitleItem release];
 
@@ -254,7 +253,7 @@ enum {
                                                           action:@selector(menuShowAllNotifications:)
                                                    keyEquivalent:@""];
         [moreItem setTag:MORE_LINK_TAG];
-        [moreItem setImage:notificationsIcon];
+        [moreItem setImage:notifsIcon];
         [statusItemMenu addItem:moreItem];
         [moreItem release];
       }

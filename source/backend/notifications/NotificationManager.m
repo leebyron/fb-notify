@@ -45,7 +45,7 @@
 {
   // remember the new notifications
   NSMutableArray* newNotifications = [[[NSMutableArray alloc] init] autorelease];
-  
+
   // by definition of the query, this array should contain all currently unread
   // notifications, if one is missing it has been deleted and should removed
   NSMutableSet* verifiedSet = [[[NSMutableSet alloc] init] autorelease];
@@ -157,8 +157,9 @@
     return;
   }
 
-  for (NSString* notificationID in notifs) {
-    [[all objectForKey:notificationID] setObject:@"0" forKey:@"is_unread"];
+  for (FBNotification* notification in notifs) {
+    NSString* notificationID = [notification uidForKey:@"notification_id"];
+    [notification setObject:@"0" forKey:@"is_unread"];
     [unread removeObject:notificationID];
     [unseen removeObject:notificationID];
   }

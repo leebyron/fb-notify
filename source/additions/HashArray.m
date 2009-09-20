@@ -205,7 +205,7 @@ NSComparisonResult sortHashArrayList(id firstItem, id secondItem, void* context)
   NSUInteger currentNode = state->state;
   NSUInteger listLength = [self count];
   while (batchCount < len && currentNode < listLength) {
-    stackbuf[batchCount] = [self objectAtIndex:currentNode];
+    stackbuf[batchCount] = [self keyAtIndex:currentNode];
     batchCount++;
     currentNode++;
   }

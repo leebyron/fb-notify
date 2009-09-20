@@ -20,6 +20,7 @@
 #import "PreferencesWindow.h"
 #import "StatusKeyShortcut.h"
 #import "BubbleDimensions.h"
+#import "NSImage+.h"
 
 
 @interface ApplicationController (Private)
@@ -49,11 +50,8 @@ FBConnect* connectSession;
     names = [[NSMutableDictionary alloc] init];
 
     // setup the profile pic and app icon image stores
-    NSImage *profilePicBackup = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"silhouette" ofType:@"png"]];
-    profilePics = [[ImageDictionary alloc] initWithBackupImage:profilePicBackup allowUpdates:YES];
-
-    NSImage *appIconBackup = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"comment" ofType:@"png"]];
-    appIcons = [[ImageDictionary alloc] initWithBackupImage:appIconBackup allowUpdates:NO];
+    profilePics = [[ImageDictionary alloc] initWithBackupImage:[NSImage bundlePNG:@"silhouette"] allowUpdates:YES];
+    appIcons = [[ImageDictionary alloc] initWithBackupImage:[NSImage bundlePNG:@"comment"] allowUpdates:NO];
 
     // some nicer over-ridden icons
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"comment"    ofType:@"png"] forKey:@"19675640871"];
@@ -211,7 +209,7 @@ FBConnect* connectSession;
 
 - (IBAction)menuShowNotification:(id)sender
 {
-  FBNotification *notification = ([sender isMemberOfClass:[FBNotification class]] ? sender : [sender representedObject]);
+  FBNotification *notification = ([sender isKindOfClass:[FBNotification class]] ? sender : [sender representedObject]);
 
   // mark this notification as read
   [notification markAsReadWithSimilar:YES];
@@ -223,7 +221,7 @@ FBConnect* connectSession;
 
 - (IBAction)menuShowMessage:(id)sender
 {
-  FBMessage *message = ([sender isMemberOfClass:[FBMessage class]] ? sender : [sender representedObject]);
+  FBMessage *message = ([sender isKindOfClass:[FBMessage class]] ? sender : [sender representedObject]);
 
   // mark this message as read
   [message markAsRead];

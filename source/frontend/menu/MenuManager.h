@@ -18,11 +18,11 @@
 
   NSImage* newsFeedIcon;
   NSImage* profileIcon;
-  NSImage* notificationsIcon;
+  NSImage* notifsIcon;
   NSImage* messageIcon;
   NSImage* inboxIcon;
 
-  NSImage* notificationsGhostIcon;
+  NSImage* notifsGhostIcon;
   NSImage* inboxGhostIcon;
 
   ImageDictionary* profilePics;
