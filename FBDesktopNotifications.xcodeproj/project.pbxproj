@@ -89,6 +89,7 @@
 		5397C7051066D11000DAD78C /* NSImage+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C7041066D11000DAD78C /* NSImage+.m */; };
 		5397C84410672FBA00DAD78C /* SUTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C84310672FBA00DAD78C /* SUTextView.m */; };
 		5397C87A106737B000DAD78C /* NSEvent+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C879106737B000DAD78C /* NSEvent+.m */; };
+		5397CA72106832D300DAD78C /* discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 5397CA71106832D300DAD78C /* discussion.png */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -242,6 +243,7 @@
 		5397C84310672FBA00DAD78C /* SUTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SUTextView.m; path = source/frontend/status/SUTextView.m; sourceTree = "<group>"; };
 		5397C878106737B000DAD78C /* NSEvent+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSEvent+.h"; path = "source/additions/NSEvent+.h"; sourceTree = "<group>"; };
 		5397C879106737B000DAD78C /* NSEvent+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSEvent+.m"; path = "source/additions/NSEvent+.m"; sourceTree = "<group>"; };
+		5397CA71106832D300DAD78C /* discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discussion.png; path = resources/images/discussion.png; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+.h"; path = "source/additions/NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+.m"; path = "source/additions/NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 		53F6FCA1102133FA00CAE806 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5397CA71106832D300DAD78C /* discussion.png */,
 				5397C2931063616D00DAD78C /* fb_share_1.png */,
 				5397C2921063616D00DAD78C /* fb_share_2.png */,
 				5397C2941063616D00DAD78C /* fb_share_3.png */,
@@ -674,6 +677,7 @@
 				53060598103FA0580061C722 /* ShortcutRecorder.strings in Resources */,
 				5397C398106407FB00DAD78C /* MainMenu.xib in Resources */,
 				5397C3E51064166E00DAD78C /* Localizable.strings in Resources */,
+				5397CA72106832D300DAD78C /* discussion.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
