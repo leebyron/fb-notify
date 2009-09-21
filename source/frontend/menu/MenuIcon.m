@@ -37,12 +37,13 @@ enum {
     fbShareIcon2 = [[NSImage bundlePNG:@"fb_share_2"] retain];
     fbShareIcon3 = [[NSImage bundlePNG:@"fb_share_3"] retain];
     fbShareIcon4 = [[NSImage bundlePNG:@"fb_share_4"] retain];
-
+/*
     NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSStringPboardType,
                                                           NSFilenamesPboardType,
                                                           NSTIFFPboardType,
                                                           NSURLPboardType, nil];
-    //[self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
+    [self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
+ */
     [self setIconStatus:MENU_ICON_NORMAL];
   }
   return self;

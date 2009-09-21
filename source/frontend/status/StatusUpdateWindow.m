@@ -10,7 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSString+.h"
 
-
 #define kAnimationDuration 0.1
 #define kAnimationDurationOut 0.2
 #define kSlideDistance 10
@@ -27,17 +26,9 @@
     isClosed     = NO;
     disappearing = NO;
 
-    // what was the last active window?
-    NSDictionary *app = [[NSWorkspace sharedWorkspace] activeApplication];
-
-    if ([[app objectForKey:@"NSApplicationBundleIdentifier"] isEqual:@"com.facebook.notifications"]) {
-      lastApp = nil;
-    } else {
-      lastApp = [app objectForKey:@"NSApplicationName"];
-    }
-
     // Force the window to be loaded
-    [[self window] center];
+    [[self window] setLevel:NSFloatingWindowLevel];
+    [[self window] display];
   }
 
   return self;
@@ -63,11 +54,6 @@
   [[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAni, @"alphaValue",
                                 moveAni, @"frameOrigin", nil]];
 
-  // keep it on top so you don't lose it!
-  //  [panel setFloatingPanel:YES];
-  [panel setWorksWhenModal:YES];
-  [[self window] setLevel:kCGUtilityWindowLevel];
-
   // open er up.
   [NSApp activateIgnoringOtherApps:YES];
   [[self window] setAlphaValue:0.0];
@@ -76,14 +62,17 @@
   [[[self window] animator] setFrameOrigin:[[self window] frame].origin];
 }
 
-- (BOOL)control: (NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
-  if ([NSStringFromSelector(commandSelector) isEqual:@"insertNewline:"] &&
-      [[statusField stringValue] length] > 0) {
+- (IBAction)cancel:(id)sender
+{
+  [[self window] performClose:self];
+}
+
+- (IBAction)share:(id)sender
+{
+  if ([[statusField string] length] > 0) {
     [target performSelector:selector withObject:self];
     [[self window] performClose:self];
-    return YES;
   }
-  return NO;
 }
 
 - (BOOL)windowShouldClose:(id)window
@@ -92,17 +81,18 @@
     disappearing = YES;
     [[[self window] animationForKey:@"alphaValue"] setDuration:kAnimationDurationOut];
     [[[self window] animator] setAlphaValue:0.0];
-    [[self window] performSelector:@selector(close)
-                        withObject:nil
-                        afterDelay:kAnimationDurationOut];
-    // refocus last app!
-    [NSApp deactivate];
-    if ([NSString exists:lastApp]) {
-      [[NSWorkspace sharedWorkspace] launchApplication:lastApp];
-    }
+    [self performSelector:@selector(close)
+               withObject:nil
+               afterDelay:kAnimationDurationOut];
     return NO;
   }
   return YES;
+}
+
+- (void)close
+{
+  [[self window] close];
+  [NSApp deactivate];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -117,7 +107,7 @@
 
 - (NSString *)statusMessage
 {
-  return [statusField stringValue];
+  return [statusField string];
 }
 
 @end

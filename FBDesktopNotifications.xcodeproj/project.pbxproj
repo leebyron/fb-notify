@@ -87,6 +87,8 @@
 		5397C3E51064166E00DAD78C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5397C3E31064166E00DAD78C /* Localizable.strings */; };
 		5397C49E1064416500DAD78C /* HashArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C49D1064416500DAD78C /* HashArray.m */; };
 		5397C7051066D11000DAD78C /* NSImage+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C7041066D11000DAD78C /* NSImage+.m */; };
+		5397C84410672FBA00DAD78C /* SUTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C84310672FBA00DAD78C /* SUTextView.m */; };
+		5397C87A106737B000DAD78C /* NSEvent+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C879106737B000DAD78C /* NSEvent+.m */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -236,6 +238,10 @@
 		5397C49D1064416500DAD78C /* HashArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HashArray.m; path = source/additions/HashArray.m; sourceTree = "<group>"; };
 		5397C7031066D11000DAD78C /* NSImage+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSImage+.h"; path = "source/additions/NSImage+.h"; sourceTree = "<group>"; };
 		5397C7041066D11000DAD78C /* NSImage+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSImage+.m"; path = "source/additions/NSImage+.m"; sourceTree = "<group>"; };
+		5397C84210672FBA00DAD78C /* SUTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SUTextView.h; path = source/frontend/status/SUTextView.h; sourceTree = "<group>"; };
+		5397C84310672FBA00DAD78C /* SUTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SUTextView.m; path = source/frontend/status/SUTextView.m; sourceTree = "<group>"; };
+		5397C878106737B000DAD78C /* NSEvent+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSEvent+.h"; path = "source/additions/NSEvent+.h"; sourceTree = "<group>"; };
+		5397C879106737B000DAD78C /* NSEvent+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSEvent+.m"; path = "source/additions/NSEvent+.m"; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+.h"; path = "source/additions/NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+.m"; path = "source/additions/NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -481,6 +487,8 @@
 				5306F90B103B80D40061C722 /* StatusUpdateWindow.m */,
 				530605C1103FB5340061C722 /* StatusKeyShortcut.h */,
 				530605C2103FB5340061C722 /* StatusKeyShortcut.m */,
+				5397C84210672FBA00DAD78C /* SUTextView.h */,
+				5397C84310672FBA00DAD78C /* SUTextView.m */,
 			);
 			name = Status;
 			sourceTree = "<group>";
@@ -521,6 +529,8 @@
 				5397C49D1064416500DAD78C /* HashArray.m */,
 				5397C7031066D11000DAD78C /* NSImage+.h */,
 				5397C7041066D11000DAD78C /* NSImage+.m */,
+				5397C878106737B000DAD78C /* NSEvent+.h */,
+				5397C879106737B000DAD78C /* NSEvent+.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -721,6 +731,8 @@
 				53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */,
 				5397C49E1064416500DAD78C /* HashArray.m in Sources */,
 				5397C7051066D11000DAD78C /* NSImage+.m in Sources */,
+				5397C84410672FBA00DAD78C /* SUTextView.m in Sources */,
+				5397C87A106737B000DAD78C /* NSEvent+.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

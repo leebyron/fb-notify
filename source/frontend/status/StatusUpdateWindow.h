@@ -7,20 +7,23 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SUTextView.h"
 
 
 @interface StatusUpdateWindow : NSWindowController {
-  IBOutlet NSTextField *statusField;
+  IBOutlet SUTextView *statusField;
   IBOutlet NSPanel *panel;
 
   id target;
   SEL selector;
   BOOL isClosed;
   BOOL disappearing;
-  NSString *lastApp;
 }
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel;
+
+- (IBAction)cancel:(id)sender;
+- (IBAction)share:(id)sender;
 
 - (BOOL)isClosed;
 - (NSString *)statusMessage;
