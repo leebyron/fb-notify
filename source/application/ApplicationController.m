@@ -156,8 +156,8 @@ FBConnect* connectSession;
 {
   int unseen = [notifications unseenCount] + [messages unseenCount];
   [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
-  [menu constructWithNotifications:[notifications all]
-                          messages:[messages all]];
+  [menu constructWithNotifications:notifications
+                          messages:messages];
 }
 
 #pragma mark IBActions

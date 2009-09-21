@@ -25,6 +25,7 @@
 -(void)verifyMessagesWithArray:(NSArray*)array;
 
 -(NSArray*)unread;
+-(int)count;
 -(int)unreadCount;
 -(int)unseenCount;
 -(int)mostRecentUpdateTime;

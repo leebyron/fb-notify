@@ -150,6 +150,10 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
   return [unread allObjects];
 }
 
+-(int)count {
+  return [all count];
+}
+
 -(int)unreadCount {
   return [unread count];
 }

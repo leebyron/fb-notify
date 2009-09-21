@@ -8,7 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ImageDictionary.h"
-#import "HashArray.h"
+#import "NotificationManager.h"
+#import "MessageManager.h"
 
 
 @class MenuIcon;
@@ -42,8 +43,8 @@
 @property(retain) ImageDictionary* appIcons;
 
 - (void)setIconIlluminated:(BOOL)illuminated;
-- (void)constructWithNotifications:(HashArray*)notifications
-                          messages:(HashArray*)messages;
+- (void)constructWithNotifications:(NotificationManager*)notifications
+                          messages:(MessageManager*)messages;
 - (void)openMenu;
 
 @end

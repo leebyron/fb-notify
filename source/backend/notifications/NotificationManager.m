@@ -109,6 +109,10 @@
   return [unread allObjects];
 }
 
+-(int)count {
+  return [all count];
+}
+
 -(int)unreadCount {
   return [unread count];
 }

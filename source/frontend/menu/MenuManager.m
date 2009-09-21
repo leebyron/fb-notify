@@ -118,8 +118,8 @@ enum {
   [fbMenuIcon setIconIlluminated:illuminated];
 }
 
-- (void)constructWithNotifications:(HashArray*)notifications
-                          messages:(HashArray*)messages
+- (void)constructWithNotifications:(NotificationManager*)notifications
+                          messages:(MessageManager*)messages
 {
   // remove old
   while ([statusItemMenu numberOfItems] > 0) {
@@ -198,23 +198,18 @@ enum {
       [notifTitleItem release];
 
       // display the latest few notifications in the menu
-      int addedNotifications  = 0;
-      int extraNotifications  = 0;
-      int unreadNotifications = 0;
-      for (int i = [notifications count] - 1; i >= 0; i--) {
-        FBNotification* notification = [notifications objectAtIndex:i];
+      int remainingUnreadNotifs = [messages unreadCount];
+      for (int i = 0; i < [messages count]; i++) {
+        FBNotification* notification = [[notifications all] objectAtIndex:[notifications count] - (1 + i)];
 
-        if ([notification boolForKey:@"is_unread"]) {
-          unreadNotifications++;
+        // filled the minimum and no unread left
+        if (i >= kMinNotifications && remainingUnreadNotifs == 0) {
+          break;
         }
 
-        // maintain between kMinNotifications and kMaxNotifications
-        if (addedNotifications >= kMinNotifications &&
-            (![notification boolForKey:@"is_unread"] || addedNotifications >= kMaxNotifications)) {
-          if ([notification boolForKey:@"is_unread"]) {
-            extraNotifications++;
-          }
-          continue;
+        // one slot left, and there must be more unread (and the next isn't the last unread)
+        if (i >= (kMaxNotifications - 1) && !(remainingUnreadNotifs == 1 && [notification boolForKey:@"is_unread"])) {
+          break;
         }
 
         // add item to menu
@@ -229,6 +224,7 @@ enum {
                                                       action:@selector(menuShowNotification:)
                                                keyEquivalent:@""];
         if ([notification boolForKey:@"is_unread"]) {
+          remainingUnreadNotifs--;
           [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
           [item setState:NSOnState];
         }
@@ -236,20 +232,19 @@ enum {
         [item setImage:[appIcons imageForKey:[notification uidForKey:@"app_id"]]];
         [statusItemMenu addItem:item];
         [item release];
-        addedNotifications++;
       }
 
       // are there any more unreads that we can't see?
-      if (extraNotifications > 0) {
+      if (remainingUnreadNotifs > 0) {
         NSString* moreText;
-        if (extraNotifications == 1) {
+        if (remainingUnreadNotifs == 1) {
           moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_1", @"1 More Notification");
-        } else if (extraNotifications == 2) {
+        } else if (remainingUnreadNotifs == 2) {
           moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_2", @"2 More Notifications");
         } else {
           moreText = NSLocalizedString(@"MORE_NOTIFICATIONS_MANY", @"5 More Notifications");
         }
-        NSMenuItem* moreItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", extraNotifications, moreText]
+        NSMenuItem* moreItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", remainingUnreadNotifs, moreText]
                                                           action:@selector(menuShowAllNotifications:)
                                                    keyEquivalent:@""];
         [moreItem setTag:MORE_LINK_TAG];
@@ -271,17 +266,18 @@ enum {
       [inboxTitleItem release];
 
       // display the latest few notifications in the menu
-      int addedMessages = 0;
-      int extraMessages = 0;
-      for (int i = [messages count] - 1; i >= 0; i--) {
-        FBMessage* message = [messages objectAtIndex:i];
-        // maintain between kMinMessages and kMaxMessages
-        if (addedMessages >= kMinMessages &&
-            (![message boolForKey:@"unread"] || addedMessages >= kMaxMessages)) {
-          if ([message boolForKey:@"unread"]) {
-            extraMessages++;
-          }
-          continue;
+      int remainingUnreadMessages = [messages unreadCount];
+      for (int i = 0; i < [messages count]; i++) {
+        FBMessage* message = [[messages all] objectAtIndex:[messages count] - (1 + i)];
+
+        // filled the minimum and no unread left
+        if (i >= kMinMessages && remainingUnreadMessages == 0) {
+          break;
+        }
+
+        // one slot left, and there must be more unread (and the next isn't the last unread)
+        if (i >= (kMaxMessages - 1) && !(remainingUnreadMessages == 1 && [message boolForKey:@"unread"])) {
+          break;
         }
 
         // add item to menu
@@ -299,6 +295,7 @@ enum {
                                                       action:@selector(menuShowMessage:)
                                                keyEquivalent:@""];
         if ([message boolForKey:@"unread"]) {
+          remainingUnreadMessages--;
           [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
           [item setState:NSOnState];
         }
@@ -309,19 +306,18 @@ enum {
         [item setImage:senderIcon];
         [statusItemMenu addItem:item];
         [item release];
-        addedMessages++;
       }
 
-      if (extraMessages > 0) {
+      if (remainingUnreadMessages > 0) {
         NSString* moreText;
-        if (extraMessages == 1) {
+        if (remainingUnreadMessages == 1) {
           moreText = NSLocalizedString(@"MORE_MESSAGES_1", @"1 More Message");
-        } else if (extraMessages == 2) {
+        } else if (remainingUnreadMessages == 2) {
           moreText = NSLocalizedString(@"MORE_MESSAGES_2", @"2 More Messages");
         } else {
           moreText = NSLocalizedString(@"MORE_MESSAGES_MANY", @"5 More Messages");
         }
-        NSMenuItem* moreMessagesItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", extraMessages, moreText]
+        NSMenuItem* moreMessagesItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%i %@", remainingUnreadMessages, moreText]
                                                                   action:@selector(menuShowInbox:)
                                                            keyEquivalent:@""];
         [moreMessagesItem setTag:SHOW_INBOX_TAG];
