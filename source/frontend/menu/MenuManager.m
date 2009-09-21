@@ -198,8 +198,8 @@ enum {
       [notifTitleItem release];
 
       // display the latest few notifications in the menu
-      int remainingUnreadNotifs = [messages unreadCount];
-      for (int i = 0; i < [messages count]; i++) {
+      int remainingUnreadNotifs = [notifications unreadCount];
+      for (int i = 0; i < [notifications count]; i++) {
         FBNotification* notification = [[notifications all] objectAtIndex:[notifications count] - (1 + i)];
 
         // filled the minimum and no unread left
