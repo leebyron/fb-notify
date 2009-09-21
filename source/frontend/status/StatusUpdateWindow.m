@@ -26,7 +26,10 @@
     isClosed     = NO;
     disappearing = NO;
 
-    // Force the window to be loaded
+    // Force the window to be loaded and displayed
+    if ([[self window] respondsToSelector:@selector(setCollectionBehavior:)]) {
+      [[self window] setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+    }
     [[self window] setLevel:NSFloatingWindowLevel];
     [[self window] display];
   }
