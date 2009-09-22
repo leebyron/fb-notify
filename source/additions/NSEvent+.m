@@ -13,10 +13,7 @@
 
 - (BOOL)isKey:(NSString*)k modifiers:(NSUInteger)m
 {
-  if (m & NSShiftKeyMask) {
-    k = [k uppercaseString];
-  }
-  return [[self charactersIgnoringModifiers] isEqualToString:k] &&
+  return [[[self charactersIgnoringModifiers] lowercaseString] isEqualToString:k] &&
          ([self modifierFlags] & NSDeviceIndependentModifierFlagsMask) == m;
 }
 
