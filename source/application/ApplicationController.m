@@ -286,8 +286,7 @@ FBConnect* connectSession;
   [bubbleManager addBubbleWithText:lastStatusUpdate
                            subText:nil
                              image:[profilePics imageForKey:[connectSession uid]]
-                      notification:nil
-                           message:nil];
+                            action:[NSURL URLWithString:[menu profileURL]]];
 }
 
 // Sent when a valid update is found by the update driver.

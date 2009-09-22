@@ -13,6 +13,7 @@
 #import "PreferencesWindow.h"
 #import "NSString+.h"
 
+#define kGrowlTypeEmpty @"0"
 #define kGrowlTypeNotif @"Facebook Notification"
 #define kGrowlTypeMsg @"Facebook Message"
 #define kGrowlTypeConfirm @"Status Update Confirmation"
@@ -56,18 +57,18 @@
 - (void)addBubbleWithText:(NSString*)text
                   subText:(NSString*)subText
                     image:(NSImage*)image
-             notification:(FBNotification*)notif
-                  message:(FBMessage*)msg
+                   action:(id)action
 {
   text = [text condenseString];
   subText = [subText condenseString];
 
   if ([self useGrowl]) {
-    NSString* notifName = (notif ? kGrowlTypeNotif : (msg ? kGrowlTypeMsg : kGrowlTypeConfirm));
-    NSString* notifContext = kGrowlTypeConfirm;
-    if (notif || msg) {
+    NSString* notifName = ([action isKindOfClass:[FBNotification class]] ? kGrowlTypeNotif :
+                           ([action isKindOfClass:[FBMessage class]] ? kGrowlTypeMsg : kGrowlTypeConfirm));
+    NSString* notifContext = kGrowlTypeEmpty;
+    if (action) {
       notifContext = [[NSNumber numberWithLong:time(NULL)] stringValue];
-      [pendingGrowls setObject:(notif != nil ? (id)notif : (id)msg) forKey:notifContext];
+      [pendingGrowls setObject:action forKey:notifContext];
     }
     [GrowlApplicationBridge notifyWithTitle:text
                                 description:subText
@@ -93,11 +94,21 @@
                                                            image:image
                                                             text:text
                                                          subText:subText
-                                                    notification:notif
-                                                         message:msg];
+                                                          action:action];
     [window appear];
     [windows addObject:window];
     [window release];
+  }
+}
+
+- (void)executeAction:(id)aAction
+{
+  if ([aAction isKindOfClass:[FBNotification class]]) {
+    [[NSApp delegate] menuShowNotification:aAction];
+  } else if ([aAction isKindOfClass:[FBMessage class]]) {
+    [[NSApp delegate] menuShowMessage:aAction];
+  } else if ([aAction isKindOfClass:[NSURL class]]) {
+    [[NSWorkspace sharedWorkspace] openURL:aAction];
   }
 }
 
@@ -108,20 +119,15 @@
 
 - (void) growlNotificationWasClicked:(id)clickContext
 {
-  if (![clickContext isEqual:kGrowlTypeConfirm]) {
-    id obj = [pendingGrowls objectForKey:clickContext];
-    if ([obj isKindOfClass:[FBNotification class]]) {
-      [[NSApp delegate] menuShowNotification:obj];
-    } else {
-      [[NSApp delegate] menuShowMessage:obj];
-    }
+  if (![clickContext isEqual:kGrowlTypeEmpty]) {
+    [self executeAction:[pendingGrowls objectForKey:clickContext]];
     [pendingGrowls removeObjectForKey:clickContext];
   }
 }
 
 - (void) growlNotificationTimedOut:(id)clickContext
 {
-  if (![clickContext isEqual:kGrowlTypeConfirm]) {
+  if (![clickContext isEqual:kGrowlTypeEmpty]) {
     [pendingGrowls removeObjectForKey:clickContext];
   }
 }

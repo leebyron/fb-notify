@@ -15,8 +15,7 @@
 @interface BubbleWindow : NSWindow {
   BubbleManager* manager;
   BubbleView* view;
-  FBNotification* notification;
-  FBMessage* message;
+  id windowAction;
   BOOL disappearing;
 }
 
@@ -25,8 +24,7 @@
                 image:(NSImage*)image
                  text:(NSString*)text
               subText:(NSString*)subText
-         notification:(FBNotification*)notif
-              message:(FBMessage*)msg;
+               action:(id)action;
 - (void)appear;
 - (void)disappear;
 

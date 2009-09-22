@@ -31,7 +31,8 @@ enum {
 - (void)addBubbleWithText:(NSString *)text
                   subText:(NSString *)subText
                     image:(NSImage *)image
-             notification:(FBNotification *)notif
-                  message:(FBMessage *)msg;
+                   action:(id)action;
+
+- (void)executeAction:(id)action;
 
 @end

@@ -255,8 +255,7 @@
         [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
                                           subText:[notification stringForKey:@"body_text"]
                                             image:pic
-                                     notification:notification
-                                          message:nil];
+                                           action:notification];
       }
     }
   }
@@ -293,8 +292,7 @@
         [[parent bubbleManager] addBubbleWithText:bubText
                                           subText:bubSubText
                                             image:pic
-                                     notification:nil
-                                          message:message];
+                                           action:message];
       }
     }
   }

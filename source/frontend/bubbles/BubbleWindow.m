@@ -18,8 +18,7 @@
                 image:(NSImage*)image
                  text:(NSString*)text
               subText:(NSString*)subText
-         notification:(FBNotification*)notif
-              message:(FBMessage*)msg
+               action:(id)action
 {
   // need to make space for a shadow, add a 10px border
   NSRect wideFrame = NSMakeRect(frame.origin.x - kBubbleShadowSpacing,
@@ -33,8 +32,7 @@
                               defer:YES];
   if (self) {
     manager      = mngr;
-    notification = [notif retain];
-    message      = [msg retain];
+    windowAction = [action retain];
     disappearing = NO;
 
     // Set up the BubbleView, which draws the black rounded-rect background
@@ -85,8 +83,7 @@
 
 - (void)dealloc
 {
-  [notification release];
-  [message release];
+  [windowAction release];
   [super dealloc];
 }
 
@@ -115,11 +112,11 @@
   if (disappearing) {
     return;
   }
-  if (notification != nil) {
-    [notification markAsSeen];
-  }
-  if (message != nil) {
-    [message markAsSeen];
+  
+  if ([windowAction isKindOfClass:[FBNotification class]]) {
+    [windowAction markAsSeen];
+  } else if ([windowAction isKindOfClass:[FBMessage class]]) {
+    [windowAction markAsSeen];
   }
   [[NSApp delegate] invalidate];
   [self setAlphaValue:1.0];
@@ -134,8 +131,8 @@
     return;
   }
   // if there is a notification, mark it as read since they're usually short
-  if (notification != nil) {
-    [notification markAsReadWithSimilar:NO];
+  if ([windowAction isKindOfClass:[FBNotification class]]) {
+    [windowAction markAsReadWithSimilar:NO];
   }
   // we could mark messages as read if dismissed, but I don't think we should
   [self disappear];
@@ -143,12 +140,7 @@
 
 - (void)mouseUp:(NSEvent*)event
 {
-  if (notification != nil) {
-    [[NSApp delegate] menuShowNotification:notification];
-  }
-  if (message != nil) {
-    [[NSApp delegate] menuShowMessage:message];
-  }
+  [manager executeAction:windowAction];
   [self disappear];
 }
 
