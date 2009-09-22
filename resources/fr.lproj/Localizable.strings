@@ -2,7 +2,7 @@
 "News Feed" = "Actualités";
 
 /* Link for Status HUD */
-"Update Status" = "Etat d'avancement";
+"Update Status" = "Mettre à jour son statut";
 
 /* Link to Compose Message */
 "Compose New Message" = "Composer un message";
@@ -28,10 +28,10 @@
 "MORE_MESSAGES_MANY" = "Messages Plus"; /* 5 More Messages */
 
 /* If you have an empty Inbox */
-"No Inbox Messages" = "No Messages";
+"No Inbox Messages" = "Aucun Message";
 
 /* Link to Preferences Window */
 "Preferences" = "Paramètres";
 
 /* Link to Quit */
-"Quit Facebook Notifications" = "Quit Facebook Notifications";
+"Quit Facebook Notifications" = "Quitter Facebook Notifications";
