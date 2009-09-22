@@ -157,6 +157,16 @@ enum {
   [self unlockFocus];
 }
 
+- (void)otherMouseDown:(NSEvent *)event
+{
+  [self mouseDown:event];
+}
+
+- (void)rightMouseDown:(NSEvent *)event
+{
+  [self mouseDown:event];
+}
+
 - (void)mouseDown:(NSEvent *)event
 {
   // draw the open menu icon
