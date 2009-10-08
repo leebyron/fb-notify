@@ -35,7 +35,7 @@
     windowAction = [action retain];
     disappearing = NO;
 
-    // Set up the BubbleView, which draws the black rounded-rect background
+    // Set up the BubbleView, which draws the rounded-rect background
     view = [[BubbleView alloc] initWithFrame:frame
                                        image:image
                                         text:text

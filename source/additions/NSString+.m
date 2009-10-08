@@ -3,9 +3,9 @@
 
 @implementation NSString (XML)
 
-+ (BOOL)exists:(NSString *)string
++ (BOOL)exists:(id)string
 {
-  return string != nil && [string isKindOfClass:[NSString class]] && [string length] > 0;
+  return string != nil && [string isKindOfClass:[NSString class]] && [string respondsToSelector:@selector(length)] && [string length] > 0;
 }
 
 - (NSString *) stringByDecodingXMLEntities {

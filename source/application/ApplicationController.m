@@ -64,6 +64,7 @@ FBConnect* connectSession;
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"events"     ofType:@"png"] forKey:@"2344061033"];
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"addfriend"  ofType:@"png"] forKey:@"2356318349"];
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"discussion" ofType:@"png"] forKey:@"2373072738"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"note"       ofType:@"png"] forKey:@"2347471856"];
 
     // setup the menu manager
     menu = [[MenuManager alloc] init];

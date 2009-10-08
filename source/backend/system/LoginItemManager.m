@@ -86,10 +86,12 @@ static LoginItemManager* instance;
 	if (loginItems) {
 		if (status) {
       CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
-      NSLog(@"adding to login items: %@", url);
-			[self enableLoginItemWithLoginItemsReference:loginItems forPath:url];
-      [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
-      [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
+      if (url) {
+        NSLog(@"adding to login items: %@", url);
+        [self enableLoginItemWithLoginItemsReference:loginItems forPath:url];
+        [[NSUserDefaults standardUserDefaults] setInteger:START_AT_LOGIN_YES forKey:kStartAtLoginOption];
+        [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] bundlePath] forKey:kStartAtLoginOptionPath];
+      }
 		} else {
       NSString *existingPath = [[NSUserDefaults standardUserDefaults] stringForKey:kStartAtLoginOptionPath];
       if ([NSString exists:existingPath]) {
