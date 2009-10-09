@@ -96,6 +96,10 @@
 #pragma mark Private Methods
 - (void)queryAfterDelay:(NSTimeInterval)delay
 {
+  if (status == QUERY_OFF) {
+    return;
+  }
+
   if (queryTimer) {
     [queryTimer invalidate];
     [queryTimer release];

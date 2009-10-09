@@ -9,7 +9,8 @@
 
 /* Online Status */
 "Connecting" = "Connexion";
-"Not Online" = "Pas en ligne";
+"Not Online" = "Pas en lligne";
+"Login to Facebook" = "Connexion à Facebook";
 
 /* Header for Notifications */
 "Notifications" = "Notifications";
@@ -20,7 +21,7 @@
 "MORE_NOTIFICATIONS_MANY" = "Notifications Plus"; /* 5 More Notifications */
 
 /* Header for Inbox */
-"Inbox" = "Boîte de réception";
+"Messages" = "Boîte de réception";
 
 /* Link to view more messages */
 "MORE_MESSAGES_1" = "Message Plus"; /* 1 More Message */

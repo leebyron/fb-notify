@@ -9,6 +9,8 @@
 #import "MenuIcon.h"
 #import "ApplicationController.h"
 #import "NSImage+.h"
+#import "GlobalSession.h"
+
 
 enum {
   MENU_ICON_NORMAL     = 29, //21
@@ -29,14 +31,14 @@ enum {
   self = [super init];
   if (self) {
     manager = [mngr retain];
-    fbActiveIcon = [[NSImage bundlePNG:@"fb_active"] retain];
-    fbEmptyIcon  = [[NSImage bundlePNG:@"fb_empty"] retain];
-    fbFullIcon   = [[NSImage bundlePNG:@"fb_full"] retain];
-
-    fbShareIcon1 = [[NSImage bundlePNG:@"fb_share_1"] retain];
-    fbShareIcon2 = [[NSImage bundlePNG:@"fb_share_2"] retain];
-    fbShareIcon3 = [[NSImage bundlePNG:@"fb_share_3"] retain];
-    fbShareIcon4 = [[NSImage bundlePNG:@"fb_share_4"] retain];
+    fbActiveIcon  = [[NSImage bundlePNG:@"fb_active"] retain];
+    fbEmptyIcon   = [[NSImage bundlePNG:@"fb_empty"] retain];
+    fbFullIcon    = [[NSImage bundlePNG:@"fb_full"] retain];
+    fbOfflineIcon = [[NSImage bundlePNG:@"fb_offline"] retain];
+    fbShareIcon1  = [[NSImage bundlePNG:@"fb_share_1"] retain];
+    fbShareIcon2  = [[NSImage bundlePNG:@"fb_share_2"] retain];
+    fbShareIcon3  = [[NSImage bundlePNG:@"fb_share_3"] retain];
+    fbShareIcon4  = [[NSImage bundlePNG:@"fb_share_4"] retain];
 /*
     NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSStringPboardType,
                                                           NSFilenamesPboardType,
@@ -66,7 +68,6 @@ enum {
 {
   iconStatus = status;
   [self display];
-//  [self setNeedsDisplay:YES];
 }
 
 -(void)setIconIlluminated:(BOOL)illuminated
@@ -118,7 +119,9 @@ enum {
 {
   // which to draw?
   NSImage* pic = fbEmptyIcon;
-  if (iconIlluminated) {
+  if (![connectSession isLoggedIn]) {
+    pic = fbOfflineIcon;
+  } else if (iconIlluminated) {
     pic = fbFullIcon;
   }
   if (menuOpen) {

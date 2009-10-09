@@ -15,6 +15,8 @@
 #import "BubbleDimensions.h"
 #import "GlobalSession.h"
 #import "NetConnection.h"
+#import "NSImage+.h"
+
 
 @implementation PreferencesWindow
 

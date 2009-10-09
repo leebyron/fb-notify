@@ -168,16 +168,23 @@ enum {
     [composeMessageItem setImage:messageIcon];
     [statusItemMenu addItem:composeMessageItem];
     [composeMessageItem release];
-  } else if ([[NetConnection netConnection] isOnline]) {
-    // Connecting title
-    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Connecting", nil), kEllipsis]
+  } else if (![[NetConnection netConnection] isOnline]) {
+    // Offline title
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Not Online", nil)
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
     [offlineItem release];
+  } else if (!isLoggedIn) {
+    // provide action to log back in
+    NSMenuItem* loginItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Login to Facebook", nil)
+                                                       action:@selector(promptLogin:)
+                                                keyEquivalent:@""];
+    [statusItemMenu addItem:loginItem];
+    [loginItem release];
   } else {
-    // Offline title
-    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Not Online", nil)
+    // Connecting title
+    NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Connecting", nil), kEllipsis]
                                                          action:nil
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
@@ -258,7 +265,7 @@ enum {
 
     if (messages && [messages count] > 0) {
       // Inbox title
-      NSMenuItem* inboxTitleItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Inbox", @"Header for Inbox")
+      NSMenuItem* inboxTitleItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Messages", @"Header for Messages")
                                                               action:nil
                                                        keyEquivalent:@""];
       [inboxTitleItem setImage:inboxGhostIcon];

@@ -244,14 +244,21 @@ FBConnect* connectSession;
   [notifications markAllRead];
 }
 
--(IBAction) showPreferences:(id)sender
+- (IBAction)showPreferences:(id)sender
 {
   [PreferencesWindow show];
 }
 
+- (IBAction)promptLogin:(id)sender
+{
+  [self loginToFacebook];
+}
+
 - (IBAction)logout:(id)sender
 {
+  [queryManager stop];
   [connectSession logout];
+  [PreferencesWindow refresh];
 }
 
 
@@ -317,6 +324,10 @@ FBConnect* connectSession;
 {
   NSLog(@"fb connect success");
 
+  // refresh ui
+  [self updateMenu];
+  [PreferencesWindow refresh];
+
   // setup login manager
   [[LoginItemManager manager] loginItemAsDefault:YES];
 
@@ -325,20 +336,26 @@ FBConnect* connectSession;
 
 - (void)FBConnectLoggedOut:(FBConnect *)fbc
 {
-  NSLog(@"loggin' out, gunna quit");
-  [NSApp terminate:self];
+  NSLog(@"logged out");
+
+  // show a default menu
+  [self updateMenu];
 }
 
 - (void)FBConnectErrorLoggingIn:(FBConnect *)fbc
 {
-  NSLog(@"couldn't fb connect, not much else to do, quitting.");
-  [NSApp terminate:self];
+  NSLog(@"couldn't login to facebook");
+
+  // show a default menu
+  [self updateMenu];
 }
 
 - (void)FBConnectErrorLoggingOut:(FBConnect *)fbc
 {
-  NSLog(@"couldn't log out, quitting anyway");
-  [NSApp terminate:self];
+  NSLog(@"couldn't log out, locally logged out");
+
+  // show a default menu
+  [self updateMenu];
 }
 
 @end

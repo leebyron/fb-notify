@@ -112,7 +112,7 @@
   if (disappearing) {
     return;
   }
-  
+
   if ([windowAction isKindOfClass:[FBNotification class]]) {
     [windowAction markAsSeen];
   } else if ([windowAction isKindOfClass:[FBMessage class]]) {

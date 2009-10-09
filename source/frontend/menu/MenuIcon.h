@@ -15,6 +15,7 @@
   NSImage* fbActiveIcon;
   NSImage* fbEmptyIcon;
   NSImage* fbFullIcon;
+  NSImage* fbOfflineIcon;
   NSImage* fbShareIcon1;
   NSImage* fbShareIcon2;
   NSImage* fbShareIcon3;
