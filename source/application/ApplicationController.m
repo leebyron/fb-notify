@@ -319,8 +319,9 @@ FBConnect* connectSession;
 
 - (void)loginToFacebook
 {
+  // highly recommended to request offline access, since we live on the desktop.
   [connectSession loginWithRequiredPermissions:[NSSet setWithObjects:@"manage_mailbox", nil]
-                           optionalPermissions:[NSSet setWithObjects:@"publish_stream", nil]];
+                           optionalPermissions:[NSSet setWithObjects:@"publish_stream", @"offline_access", nil]];
 }
 
 - (void)statusUpdateWasPublished:(id)reply
