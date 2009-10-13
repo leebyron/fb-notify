@@ -10,6 +10,7 @@
 #import "FBNotification.h"
 #import "GlobalSession.h"
 #import "NSDictionary+.h"
+#import "NSURL+.h"
 
 
 @interface NotificationManager (Private)
@@ -129,9 +130,11 @@
 {
   NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
 
+  NSString* urlBase = [url withoutFragment];
+
   for (NSString* notificationID in unread) {
     FBNotification* notif = [all objectForKey:notificationID];
-    if ([url isEqual:[notif href]]) {
+    if ([urlBase isEqual:[[notif href] withoutFragment]]) {
       [hasTarget addObject:notif];
     }
   }

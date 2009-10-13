@@ -7,6 +7,7 @@
 //
 
 #import "MenuManager.h"
+#import "MenuIcon.h"
 #import "FBNotification.h"
 #import "FBMessage.h"
 #import "GlobalSession.h"
@@ -15,7 +16,6 @@
 #import "StatusKeyShortcut.h"
 #import "NSString+.h"
 #import "NSImage+.h"
-#import "MenuIcon.h"
 
 
 #define kMaxNotifications 12
