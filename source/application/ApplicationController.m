@@ -9,7 +9,6 @@
 
 #import "ApplicationController.h"
 #import <QuartzCore/QuartzCore.h>
-#import <FBCocoa/FBCocoa.h>
 #import "BubbleWindow.h"
 #import "FBNotification.h"
 #import "FBMessage.h"
@@ -41,8 +40,8 @@ FBConnect* connectSession;
 {
   self = [super init];
   if (self) {
-    connectSession = [FBConnect sessionWithAPIKey:kAppKey // you need to define kAppKey
-                                         delegate:self];
+    connectSession = [[FBConnect sessionWithAPIKey:kAppKey // you need to define kAppKey
+                                          delegate:self] retain];
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
     bubbleManager = [[BubbleManager alloc] init];
@@ -83,15 +82,21 @@ FBConnect* connectSession;
 - (void)dealloc
 {
   [connectSession     release];
+
+  [menu               release];
   [notifications      release];
   [messages           release];
   [bubbleManager      release];
-  [menu               release];
+  [queryManager       release];
+
   [names              release];
   [profilePics        release];
   [appIcons           release];
+
+  [lastUpdateRequest  release];
+  [lastStatusUpdate   release];
   [statusUpdateWindow release];
-  [queryManager       release];
+
   [super dealloc];
 }
 
@@ -201,12 +206,43 @@ FBConnect* connectSession;
 
 - (IBAction)didStatusUpdate:(id)sender
 {
+  // get status message.
   lastStatusUpdate = [sender statusMessage];
+
+  // was there a previous retained request? release it.
+  if (lastUpdateRequest) {
+    [lastUpdateRequest release];
+    lastUpdateRequest = nil;
+  }
+
+  // get a new update request
+  lastUpdateRequest =
   [connectSession callMethod:@"stream.publish"
                withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
                       target:self
                     selector:@selector(statusUpdateWasPublished:)
                        error:nil];
+
+  // if we don't have permission to do this, get the permission!
+  if (![connectSession hasPermission:@"publish_stream"]) {
+    [connectSession requestPermissions:[NSSet setWithObject:@"publish_stream"]
+                                target:self
+                              selector:@selector(statusPermissionResponse:)];
+    [lastUpdateRequest cancel];
+    [lastUpdateRequest retain];
+  } else {
+    lastUpdateRequest = nil;
+  }
+}
+
+- (void)statusPermissionResponse:(NSSet*)acceptedPermissions
+{
+  // if the permission went through, try that publish again.
+  if ([connectSession hasPermission:@"publish_stream"]) {
+    [lastUpdateRequest retry];
+    [lastUpdateRequest release];
+    lastUpdateRequest = nil;
+  }
 }
 
 - (IBAction)menuShowNotification:(id)sender
@@ -283,10 +319,8 @@ FBConnect* connectSession;
 
 - (void)loginToFacebook
 {
-  // for desktop applications, it's highly recommended you request the
-  // "offline_access" permission. This returns a session which never expires.
-  [connectSession loginWithPermissions:
-   [NSArray arrayWithObjects:@"offline_access", @"publish_stream", @"manage_mailbox", nil]];
+  [connectSession loginWithRequiredPermissions:[NSSet setWithObjects:@"manage_mailbox", nil]
+                           optionalPermissions:[NSSet setWithObjects:@"publish_stream", nil]];
 }
 
 - (void)statusUpdateWasPublished:(id)reply

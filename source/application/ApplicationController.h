@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Sparkle/Sparkle.h>
+#import <FBCocoa/FBCocoa.h>
 #import "BubbleManager.h"
 #import "MenuManager.h"
 #import "NotificationManager.h"
@@ -32,6 +33,7 @@
   ImageDictionary*     profilePics;
   ImageDictionary*     appIcons;
 
+  id<FBRequest>        lastUpdateRequest;
   NSString*            lastStatusUpdate;
   StatusUpdateWindow*  statusUpdateWindow;
 }

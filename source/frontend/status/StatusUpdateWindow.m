@@ -67,13 +67,14 @@
 
 - (IBAction)cancel:(id)sender
 {
+  doShare = NO;
   [[self window] performClose:self];
 }
 
 - (IBAction)share:(id)sender
 {
   if ([[statusField string] length] > 0) {
-    [target performSelector:selector withObject:self];
+    doShare = YES;
     [[self window] performClose:self];
   }
 }
@@ -101,6 +102,10 @@
 - (void)windowWillClose:(NSNotification *)notification
 {
   isClosed = YES;
+  [NSApp deactivate];
+  if (doShare) {
+    [target performSelector:selector withObject:self afterDelay:0.1];
+  }
 }
 
 - (BOOL)isClosed

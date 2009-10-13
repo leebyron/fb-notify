@@ -18,6 +18,7 @@
   SEL selector;
   BOOL isClosed;
   BOOL disappearing;
+  BOOL doShare;
 }
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel;
