@@ -91,4 +91,13 @@ finish:
                  stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
 }
 
+- (NSString *) stringByRemovingStrings:(NSArray *)list
+{
+  NSString* trimmed = self;
+  for (NSString* item in list) {
+    trimmed = [trimmed stringByReplacingOccurrencesOfString:item withString:@""];
+  }
+  return trimmed;
+}
+
 @end

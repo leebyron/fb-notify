@@ -85,9 +85,8 @@
 
   if (hrefString) {
     // make sure href string is healthy, and get rid of that pesky &comments barf.
-    hrefString = [[[hrefString stringByDecodingXMLEntities]
-                   stringByReplacingOccurrencesOfString:@"&comments" withString:@""]
-                  stringByReplacingOccurrencesOfString:@"&alert" withString:@""];
+    hrefString = [[hrefString stringByDecodingXMLEntities] stringByRemovingStrings:
+                  [NSArray arrayWithObjects:@"&comments=1", @"&comments", @"&alert", nil]];
   }
 
   return [NSURL URLWithString:hrefString];

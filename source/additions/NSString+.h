@@ -4,4 +4,5 @@
 + (BOOL)exists:(id)string;
 - (NSString *) stringByDecodingXMLEntities;
 - (NSString *) condenseString;
+- (NSString *) stringByRemovingStrings:(NSArray *)list;
 @end
