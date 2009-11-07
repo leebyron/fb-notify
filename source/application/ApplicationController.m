@@ -5,8 +5,6 @@
 //  Copyright 2009 Facebook Inc. All rights reserved.
 //
 
-#import "secret.h" // defines kAppKey and kAppSecret. Fill in for your own app!
-
 #import "ApplicationController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "BubbleWindow.h"
@@ -40,7 +38,7 @@ FBConnect* connectSession;
 {
   self = [super init];
   if (self) {
-    connectSession = [[FBConnect sessionWithAPIKey:kAppKey // you need to define kAppKey
+    connectSession = [[FBConnect sessionWithAPIKey:@"4a280b1a1f1e4dae116484d677d7ed25"
                                           delegate:self] retain];
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
@@ -190,24 +188,32 @@ FBConnect* connectSession;
 
 - (IBAction)beginUpdateStatus:(id)sender
 {
-  if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
-    if (statusUpdateWindow) {
-      if ([statusUpdateWindow isClosed]) {
-        [statusUpdateWindow release];
-        statusUpdateWindow = nil;
-      } else {
-        return;
-      }
+  // if a window already exists, get rid of it!
+  if (statusUpdateWindow) {
+    if (statusUpdateWindow.isClosed) {
+      [statusUpdateWindow release];
+      statusUpdateWindow = nil;
+    } else {
+      [statusUpdateWindow cancel:self];
+      [statusUpdateWindow release];
+      statusUpdateWindow = nil;
+      return;
     }
-    statusUpdateWindow = [[StatusUpdateWindow alloc] initWithTarget:self
-                                                           selector:@selector(didStatusUpdate:)];
+  }
+
+  // if we're online and connected, then show a new status update window
+  if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
+    statusUpdateWindow =
+      [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
   }
 }
 
 - (IBAction)didStatusUpdate:(id)sender
 {
   // get status message.
-  lastStatusUpdate = [sender statusMessage];
+  lastStatusUpdate = [statusUpdateWindow statusMessage];
+  [statusUpdateWindow release];
+  statusUpdateWindow = nil;
 
   // was there a previous retained request? release it.
   if (lastUpdateRequest) {

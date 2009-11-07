@@ -1,24 +1,21 @@
 //
 //  StatusUpdateWindow.h
-//  Facebook
+//  FBDesktopNotifications
 //
-//  Created by Lee Byron on 8/13/09.
+//  Created by Lee Byron on 11/4/09.
 //  Copyright 2009 Facebook. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "SUTextView.h"
+#import "FBDialogWindowController.h"
+#import "FBExpandingTextView.h"
 
 
-@interface StatusUpdateWindow : NSWindowController {
-  IBOutlet SUTextView *statusField;
-  IBOutlet NSPanel *panel;
-
+@interface StatusUpdateWindow : FBDialogWindowController {
   id target;
   SEL selector;
-  BOOL isClosed;
-  BOOL disappearing;
-  BOOL doShare;
+
+  FBExpandingTextView* messageBox;
 }
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel;
@@ -26,7 +23,7 @@
 - (IBAction)cancel:(id)sender;
 - (IBAction)share:(id)sender;
 
-- (BOOL)isClosed;
-- (NSString *)statusMessage;
+- (NSDictionary*)streamPost;
+- (NSString *)statusMessage; // oldskool
 
 @end

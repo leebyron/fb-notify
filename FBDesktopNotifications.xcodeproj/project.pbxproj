@@ -67,7 +67,6 @@
 		5306F904103B80520061C722 /* BubbleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8FD103B80520061C722 /* BubbleManager.m */; };
 		5306F905103B80520061C722 /* BubbleWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8FE103B80520061C722 /* BubbleWindow.m */; };
 		5306F906103B80520061C722 /* BubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8FF103B80520061C722 /* BubbleView.m */; };
-		5306F90C103B80D40061C722 /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F90B103B80D40061C722 /* StatusUpdateWindow.m */; };
 		5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F91C103B81870061C722 /* IXSCNotificationManager.m */; };
 		5306F927103B8A780061C722 /* NSString+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F926103B8A780061C722 /* NSString+.m */; };
 		5306FBE8103B94560061C722 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
@@ -76,6 +75,9 @@
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
+		537BD69E10A175AC00CDB44C /* FBDialogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */; };
+		537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */; };
+		537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
 		5381A6F310843C7B005441A3 /* NSURL+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5381A6F210843C7B005441A3 /* NSURL+.m */; };
 		5382171410577ECA00DB967F /* Growl Registration Ticket.growlRegDict in Resources */ = {isa = PBXBuildFile; fileRef = 5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */; };
@@ -88,7 +90,6 @@
 		5397C3E51064166E00DAD78C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5397C3E31064166E00DAD78C /* Localizable.strings */; };
 		5397C49E1064416500DAD78C /* HashArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C49D1064416500DAD78C /* HashArray.m */; };
 		5397C7051066D11000DAD78C /* NSImage+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C7041066D11000DAD78C /* NSImage+.m */; };
-		5397C84410672FBA00DAD78C /* SUTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C84310672FBA00DAD78C /* SUTextView.m */; };
 		5397C87A106737B000DAD78C /* NSEvent+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C879106737B000DAD78C /* NSEvent+.m */; };
 		5397CA72106832D300DAD78C /* discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 5397CA71106832D300DAD78C /* discussion.png */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
@@ -146,32 +147,32 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		53060000103CFAF70061C722 /* ImageDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageDictionary.h; path = source/backend/net/ImageDictionary.h; sourceTree = "<group>"; };
-		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageDictionary.m; path = source/backend/net/ImageDictionary.m; sourceTree = "<group>"; };
-		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBObject.h; path = source/backend/fbconnect/FBObject.h; sourceTree = "<group>"; };
-		53060105103D16D10061C722 /* FBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBObject.m; path = source/backend/fbconnect/FBObject.m; sourceTree = "<group>"; };
-		53060169103D1C940061C722 /* QueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueryManager.h; path = source/backend/net/QueryManager.h; sourceTree = "<group>"; };
-		5306016A103D1C940061C722 /* QueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueryManager.m; path = source/backend/net/QueryManager.m; sourceTree = "<group>"; };
-		53060332103D37100061C722 /* LoginItemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginItemManager.h; path = source/backend/system/LoginItemManager.h; sourceTree = "<group>"; };
-		53060333103D37100061C722 /* LoginItemManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginItemManager.m; path = source/backend/system/LoginItemManager.m; sourceTree = "<group>"; };
+		53060000103CFAF70061C722 /* ImageDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDictionary.h; sourceTree = "<group>"; };
+		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDictionary.m; sourceTree = "<group>"; };
+		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBObject.h; sourceTree = "<group>"; };
+		53060105103D16D10061C722 /* FBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBObject.m; sourceTree = "<group>"; };
+		53060169103D1C940061C722 /* QueryManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
+		5306016A103D1C940061C722 /* QueryManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
+		53060332103D37100061C722 /* LoginItemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginItemManager.h; sourceTree = "<group>"; };
+		53060333103D37100061C722 /* LoginItemManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginItemManager.m; sourceTree = "<group>"; };
 		5306051C103E5EC40061C722 /* preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = preferences.xib; path = resources/preferences.xib; sourceTree = "<group>"; };
-		53060523103E76BA0061C722 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PreferencesWindow.h; path = source/frontend/preferences/PreferencesWindow.h; sourceTree = "<group>"; };
-		53060524103E76BA0061C722 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PreferencesWindow.m; path = source/frontend/preferences/PreferencesWindow.m; sourceTree = "<group>"; };
-		5306057C103F9EB40061C722 /* CTGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTGradient.m; path = "source/frontend/keyboard shortcuts/CTGradient.m"; sourceTree = "<group>"; };
-		5306057D103F9EB40061C722 /* SRRecorderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRRecorderCell.h; path = "source/frontend/keyboard shortcuts/SRRecorderCell.h"; sourceTree = "<group>"; };
-		5306057E103F9EB40061C722 /* SRValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRValidator.m; path = "source/frontend/keyboard shortcuts/SRValidator.m"; sourceTree = "<group>"; };
-		5306057F103F9EB40061C722 /* SRValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRValidator.h; path = "source/frontend/keyboard shortcuts/SRValidator.h"; sourceTree = "<group>"; };
-		53060580103F9EB40061C722 /* SRRecorderControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRRecorderControl.h; path = "source/frontend/keyboard shortcuts/SRRecorderControl.h"; sourceTree = "<group>"; };
-		53060581103F9EB40061C722 /* SRRecorderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRRecorderCell.m; path = "source/frontend/keyboard shortcuts/SRRecorderCell.m"; sourceTree = "<group>"; };
-		53060582103F9EB40061C722 /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRCommon.m; path = "source/frontend/keyboard shortcuts/SRCommon.m"; sourceTree = "<group>"; };
-		53060583103F9EB40061C722 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRKeyCodeTransformer.m; path = "source/frontend/keyboard shortcuts/SRKeyCodeTransformer.m"; sourceTree = "<group>"; };
-		53060584103F9EB40061C722 /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRCommon.h; path = "source/frontend/keyboard shortcuts/SRCommon.h"; sourceTree = "<group>"; };
-		53060585103F9EB40061C722 /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGradient.h; path = "source/frontend/keyboard shortcuts/CTGradient.h"; sourceTree = "<group>"; };
-		53060586103F9EB40061C722 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRKeyCodeTransformer.h; path = "source/frontend/keyboard shortcuts/SRKeyCodeTransformer.h"; sourceTree = "<group>"; };
-		53060587103F9EB40061C722 /* SRRecorderControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRRecorderControl.m; path = "source/frontend/keyboard shortcuts/SRRecorderControl.m"; sourceTree = "<group>"; };
+		53060523103E76BA0061C722 /* PreferencesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
+		53060524103E76BA0061C722 /* PreferencesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
+		5306057C103F9EB40061C722 /* CTGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTGradient.m; sourceTree = "<group>"; };
+		5306057D103F9EB40061C722 /* SRRecorderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRecorderCell.h; sourceTree = "<group>"; };
+		5306057E103F9EB40061C722 /* SRValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRValidator.m; sourceTree = "<group>"; };
+		5306057F103F9EB40061C722 /* SRValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRValidator.h; sourceTree = "<group>"; };
+		53060580103F9EB40061C722 /* SRRecorderControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRecorderControl.h; sourceTree = "<group>"; };
+		53060581103F9EB40061C722 /* SRRecorderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRecorderCell.m; sourceTree = "<group>"; };
+		53060582103F9EB40061C722 /* SRCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRCommon.m; sourceTree = "<group>"; };
+		53060583103F9EB40061C722 /* SRKeyCodeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyCodeTransformer.m; sourceTree = "<group>"; };
+		53060584103F9EB40061C722 /* SRCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRCommon.h; sourceTree = "<group>"; };
+		53060585103F9EB40061C722 /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTGradient.h; sourceTree = "<group>"; };
+		53060586103F9EB40061C722 /* SRKeyCodeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyCodeTransformer.h; sourceTree = "<group>"; };
+		53060587103F9EB40061C722 /* SRRecorderControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRecorderControl.m; sourceTree = "<group>"; };
 		53060597103FA0580061C722 /* ShortcutRecorder.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ShortcutRecorder.strings; path = resources/ShortcutRecorder.strings; sourceTree = "<group>"; };
-		530605C1103FB5340061C722 /* StatusKeyShortcut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatusKeyShortcut.h; path = source/frontend/status/StatusKeyShortcut.h; sourceTree = "<group>"; };
-		530605C2103FB5340061C722 /* StatusKeyShortcut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatusKeyShortcut.m; path = source/frontend/status/StatusKeyShortcut.m; sourceTree = "<group>"; };
+		530605C1103FB5340061C722 /* StatusKeyShortcut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusKeyShortcut.h; sourceTree = "<group>"; };
+		530605C2103FB5340061C722 /* StatusKeyShortcut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusKeyShortcut.m; sourceTree = "<group>"; };
 		5306F85C103B7A0B0061C722 /* silhouette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = silhouette.png; path = resources/images/silhouette.png; sourceTree = "<group>"; };
 		5306F85D103B7A0B0061C722 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = resources/images/video.png; sourceTree = "<group>"; };
 		5306F85E103B7A0B0061C722 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profile.png; path = resources/images/profile.png; sourceTree = "<group>"; };
@@ -194,45 +195,49 @@
 		5306F882103B7A190061C722 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "fb-notify-icon.icns"; path = "resources/icons/fb-notify-icon.icns"; sourceTree = "<group>"; };
 		5306F884103B7A350061C722 /* status.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = status.xib; path = resources/status.xib; sourceTree = "<group>"; };
 		5306F88E103B7A9D0061C722 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/Info.plist; sourceTree = "<group>"; };
-		5306F8C0103B7D390061C722 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = source/other/main.m; sourceTree = "<group>"; };
-		5306F8C6103B7D710061C722 /* Facebook_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook_Prefix.pch; path = source/other/Facebook_Prefix.pch; sourceTree = "<group>"; };
-		5306F8D5103B7E660061C722 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationController.h; path = source/application/ApplicationController.h; sourceTree = "<group>"; };
-		5306F8D6103B7E660061C722 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationController.m; path = source/application/ApplicationController.m; sourceTree = "<group>"; };
-		5306F8DE103B7EF40061C722 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationManager.m; path = source/backend/notifications/NotificationManager.m; sourceTree = "<group>"; };
-		5306F8DF103B7EF40061C722 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBNotification.h; path = source/backend/notifications/FBNotification.h; sourceTree = "<group>"; };
-		5306F8E1103B7EF40061C722 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationManager.h; path = source/backend/notifications/NotificationManager.h; sourceTree = "<group>"; };
-		5306F8E2103B7EF40061C722 /* FBNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBNotification.m; path = source/backend/notifications/FBNotification.m; sourceTree = "<group>"; };
-		5306F8E9103B7F600061C722 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FBMessage.m; path = source/backend/messages/FBMessage.m; sourceTree = "<group>"; };
-		5306F8EA103B7F600061C722 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = source/backend/messages/MessageManager.h; sourceTree = "<group>"; };
-		5306F8EB103B7F600061C722 /* FBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FBMessage.h; path = source/backend/messages/FBMessage.h; sourceTree = "<group>"; };
-		5306F8EC103B7F600061C722 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageManager.m; path = source/backend/messages/MessageManager.m; sourceTree = "<group>"; };
-		5306F8F8103B800B0061C722 /* MenuManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuManager.m; path = source/frontend/menu/MenuManager.m; sourceTree = "<group>"; };
-		5306F8F9103B800B0061C722 /* MenuManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuManager.h; path = source/frontend/menu/MenuManager.h; sourceTree = "<group>"; };
-		5306F8FD103B80520061C722 /* BubbleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BubbleManager.m; path = source/frontend/bubbles/BubbleManager.m; sourceTree = "<group>"; };
-		5306F8FE103B80520061C722 /* BubbleWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BubbleWindow.m; path = source/frontend/bubbles/BubbleWindow.m; sourceTree = "<group>"; };
-		5306F8FF103B80520061C722 /* BubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BubbleView.m; path = source/frontend/bubbles/BubbleView.m; sourceTree = "<group>"; };
-		5306F900103B80520061C722 /* BubbleDimensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BubbleDimensions.h; path = source/frontend/bubbles/BubbleDimensions.h; sourceTree = "<group>"; };
-		5306F901103B80520061C722 /* BubbleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BubbleWindow.h; path = source/frontend/bubbles/BubbleWindow.h; sourceTree = "<group>"; };
-		5306F902103B80520061C722 /* BubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BubbleView.h; path = source/frontend/bubbles/BubbleView.h; sourceTree = "<group>"; };
-		5306F903103B80520061C722 /* BubbleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BubbleManager.h; path = source/frontend/bubbles/BubbleManager.h; sourceTree = "<group>"; };
-		5306F90A103B80D40061C722 /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatusUpdateWindow.h; path = source/frontend/status/StatusUpdateWindow.h; sourceTree = "<group>"; };
-		5306F90B103B80D40061C722 /* StatusUpdateWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatusUpdateWindow.m; path = source/frontend/status/StatusUpdateWindow.m; sourceTree = "<group>"; };
-		5306F91B103B81870061C722 /* IXSCNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IXSCNotificationManager.h; path = source/backend/net/IXSCNotificationManager.h; sourceTree = "<group>"; };
-		5306F91C103B81870061C722 /* IXSCNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IXSCNotificationManager.m; path = source/backend/net/IXSCNotificationManager.m; sourceTree = "<group>"; };
-		5306F923103B87530061C722 /* GlobalSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalSession.h; path = source/backend/fbconnect/GlobalSession.h; sourceTree = "<group>"; };
+		5306F8C0103B7D390061C722 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5306F8C6103B7D710061C722 /* Facebook_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook_Prefix.pch; sourceTree = "<group>"; };
+		5306F8D6103B7E660061C722 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
+		5306F8DE103B7EF40061C722 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
+		5306F8DF103B7EF40061C722 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBNotification.h; sourceTree = "<group>"; };
+		5306F8E1103B7EF40061C722 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
+		5306F8E2103B7EF40061C722 /* FBNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBNotification.m; sourceTree = "<group>"; };
+		5306F8E9103B7F600061C722 /* FBMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBMessage.m; sourceTree = "<group>"; };
+		5306F8EA103B7F600061C722 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageManager.h; sourceTree = "<group>"; };
+		5306F8EB103B7F600061C722 /* FBMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBMessage.h; sourceTree = "<group>"; };
+		5306F8EC103B7F600061C722 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageManager.m; sourceTree = "<group>"; };
+		5306F8F8103B800B0061C722 /* MenuManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuManager.m; sourceTree = "<group>"; };
+		5306F8F9103B800B0061C722 /* MenuManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuManager.h; sourceTree = "<group>"; };
+		5306F8FD103B80520061C722 /* BubbleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleManager.m; sourceTree = "<group>"; };
+		5306F8FE103B80520061C722 /* BubbleWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleWindow.m; sourceTree = "<group>"; };
+		5306F8FF103B80520061C722 /* BubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleView.m; sourceTree = "<group>"; };
+		5306F900103B80520061C722 /* BubbleDimensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleDimensions.h; sourceTree = "<group>"; };
+		5306F901103B80520061C722 /* BubbleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleWindow.h; sourceTree = "<group>"; };
+		5306F902103B80520061C722 /* BubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleView.h; sourceTree = "<group>"; };
+		5306F903103B80520061C722 /* BubbleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleManager.h; sourceTree = "<group>"; };
+		5306F91B103B81870061C722 /* IXSCNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IXSCNotificationManager.h; sourceTree = "<group>"; };
+		5306F91C103B81870061C722 /* IXSCNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IXSCNotificationManager.m; sourceTree = "<group>"; };
+		5306F923103B87530061C722 /* GlobalSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalSession.h; sourceTree = "<group>"; };
 		5306F925103B8A780061C722 /* NSString+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+.h"; sourceTree = "<group>"; };
 		5306F926103B8A780061C722 /* NSString+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+.m"; sourceTree = "<group>"; };
 		5306FCC2103BC6E40061C722 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = resources/Sparkle.framework; sourceTree = "<group>"; };
 		5306FCFD103BCA860061C722 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dsa_pub.pem; path = resources/dsa_pub.pem; sourceTree = "<group>"; };
-		5306FDEC103CDF370061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetConnection.m; path = source/backend/net/NetConnection.m; sourceTree = "<group>"; };
-		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetConnection.h; path = source/backend/net/NetConnection.h; sourceTree = "<group>"; };
+		5306FDEC103CDF370061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetConnection.m; sourceTree = "<group>"; };
+		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetConnection.h; sourceTree = "<group>"; };
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialogWindowController.h; sourceTree = "<group>"; };
+		537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDialogWindowController.m; sourceTree = "<group>"; };
+		537BD6A210A176E000CDB44C /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateWindow.h; sourceTree = "<group>"; };
+		537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusUpdateWindow.m; sourceTree = "<group>"; };
+		537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBExpandingTextView.h; sourceTree = "<group>"; };
+		537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBExpandingTextView.m; sourceTree = "<group>"; };
 		537DEB10103A179F00EE3530 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		5381A6F110843C7B005441A3 /* NSURL+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+.h"; sourceTree = "<group>"; };
 		5381A6F210843C7B005441A3 /* NSURL+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+.m"; sourceTree = "<group>"; };
-		5397C05A106333BB00DAD78C /* MenuIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuIcon.h; path = source/frontend/menu/MenuIcon.h; sourceTree = "<group>"; };
-		5397C05B106333BB00DAD78C /* MenuIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuIcon.m; path = source/frontend/menu/MenuIcon.m; sourceTree = "<group>"; };
+		5397C05A106333BB00DAD78C /* MenuIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuIcon.h; sourceTree = "<group>"; };
+		5397C05B106333BB00DAD78C /* MenuIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuIcon.m; sourceTree = "<group>"; };
 		5397C2911063616D00DAD78C /* fb_share_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb_share_4.png; path = resources/images/fb_share_4.png; sourceTree = "<group>"; };
 		5397C2921063616D00DAD78C /* fb_share_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb_share_2.png; path = resources/images/fb_share_2.png; sourceTree = "<group>"; };
 		5397C2931063616D00DAD78C /* fb_share_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb_share_1.png; path = resources/images/fb_share_1.png; sourceTree = "<group>"; };
@@ -244,15 +249,12 @@
 		5397C49D1064416500DAD78C /* HashArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HashArray.m; sourceTree = "<group>"; };
 		5397C7031066D11000DAD78C /* NSImage+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+.h"; sourceTree = "<group>"; };
 		5397C7041066D11000DAD78C /* NSImage+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+.m"; sourceTree = "<group>"; };
-		5397C84210672FBA00DAD78C /* SUTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SUTextView.h; path = source/frontend/status/SUTextView.h; sourceTree = "<group>"; };
-		5397C84310672FBA00DAD78C /* SUTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SUTextView.m; path = source/frontend/status/SUTextView.m; sourceTree = "<group>"; };
 		5397C878106737B000DAD78C /* NSEvent+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEvent+.h"; sourceTree = "<group>"; };
 		5397C879106737B000DAD78C /* NSEvent+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSEvent+.m"; sourceTree = "<group>"; };
 		5397CA71106832D300DAD78C /* discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discussion.png; path = resources/images/discussion.png; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
-		53F6FB031020EFFD00CAE806 /* secret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secret.h; sourceTree = "<group>"; };
 		53FC73DB107E82B500EFAABE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = note.png; path = resources/images/note.png; sourceTree = "<group>"; };
 		53FC73DE107E836300EFAABE /* fb_offline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb_offline.png; path = resources/images/fb_offline.png; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Facebook Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Facebook Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,17 +282,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Source */ = {
+		080E96DDFE201D6D7F000001 /* source */ = {
 			isa = PBXGroup;
 			children = (
 				5306F924103B87670061C722 /* additions */,
-				5306F8D2103B7E360061C722 /* Application */,
-				5306F8D8103B7EA10061C722 /* Backend */,
-				5306F8F3103B7FA40061C722 /* Frontend */,
-				5306F8BF103B7D300061C722 /* Other */,
-				53F6FB031020EFFD00CAE806 /* secret.h */,
+				5306F8D2103B7E360061C722 /* application */,
+				5306F8D8103B7EA10061C722 /* backend */,
+				5306F8F3103B7FA40061C722 /* frontend */,
+				5306F8BF103B7D300061C722 /* other */,
 			);
-			name = Source;
+			path = source;
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
@@ -329,7 +330,7 @@
 		29B97314FDCFA39411CA2CEA /* Facebook */ = {
 			isa = PBXGroup;
 			children = (
-				080E96DDFE201D6D7F000001 /* Source */,
+				080E96DDFE201D6D7F000001 /* source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -363,27 +364,29 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5306032E103D36AC0061C722 /* System */ = {
+		5306032E103D36AC0061C722 /* system */ = {
 			isa = PBXGroup;
 			children = (
 				53060332103D37100061C722 /* LoginItemManager.h */,
 				53060333103D37100061C722 /* LoginItemManager.m */,
 			);
-			name = System;
+			path = system;
 			sourceTree = "<group>";
 		};
-		53060522103E76910061C722 /* Preferences */ = {
+		53060522103E76910061C722 /* preferences */ = {
 			isa = PBXGroup;
 			children = (
 				53060523103E76BA0061C722 /* PreferencesWindow.h */,
 				53060524103E76BA0061C722 /* PreferencesWindow.m */,
 			);
-			name = Preferences;
+			path = preferences;
 			sourceTree = "<group>";
 		};
-		5306057A103F9E460061C722 /* Keyboard Shortcuts */ = {
+		5306057A103F9E460061C722 /* keyboard shortcuts */ = {
 			isa = PBXGroup;
 			children = (
+				530605C1103FB5340061C722 /* StatusKeyShortcut.h */,
+				530605C2103FB5340061C722 /* StatusKeyShortcut.m */,
 				53060584103F9EB40061C722 /* SRCommon.h */,
 				53060582103F9EB40061C722 /* SRCommon.m */,
 				53060585103F9EB40061C722 /* CTGradient.h */,
@@ -397,40 +400,40 @@
 				53060583103F9EB40061C722 /* SRKeyCodeTransformer.m */,
 				53060586103F9EB40061C722 /* SRKeyCodeTransformer.h */,
 			);
-			name = "Keyboard Shortcuts";
+			path = "keyboard shortcuts";
 			sourceTree = "<group>";
 		};
-		5306F8BF103B7D300061C722 /* Other */ = {
+		5306F8BF103B7D300061C722 /* other */ = {
 			isa = PBXGroup;
 			children = (
 				5306F8C6103B7D710061C722 /* Facebook_Prefix.pch */,
 				5306F8C0103B7D390061C722 /* main.m */,
 			);
-			name = Other;
+			path = other;
 			sourceTree = "<group>";
 		};
-		5306F8D2103B7E360061C722 /* Application */ = {
+		5306F8D2103B7E360061C722 /* application */ = {
 			isa = PBXGroup;
 			children = (
-				5306F8D5103B7E660061C722 /* ApplicationController.h */,
+				537BD6A210A176E000CDB44C /* ApplicationController.h */,
 				5306F8D6103B7E660061C722 /* ApplicationController.m */,
 			);
-			name = Application;
+			path = application;
 			sourceTree = "<group>";
 		};
-		5306F8D8103B7EA10061C722 /* Backend */ = {
+		5306F8D8103B7EA10061C722 /* backend */ = {
 			isa = PBXGroup;
 			children = (
-				5306F91E103B871D0061C722 /* FBConnect */,
-				5306F8E6103B7F240061C722 /* Messages */,
-				5306F8DC103B7EC10061C722 /* Notifications */,
-				5306F911103B813B0061C722 /* Net */,
-				5306032E103D36AC0061C722 /* System */,
+				5306F91E103B871D0061C722 /* fbconnect */,
+				5306F8E6103B7F240061C722 /* messages */,
+				5306F8DC103B7EC10061C722 /* notifications */,
+				5306F911103B813B0061C722 /* net */,
+				5306032E103D36AC0061C722 /* system */,
 			);
-			name = Backend;
+			path = backend;
 			sourceTree = "<group>";
 		};
-		5306F8DC103B7EC10061C722 /* Notifications */ = {
+		5306F8DC103B7EC10061C722 /* notifications */ = {
 			isa = PBXGroup;
 			children = (
 				5306F8DF103B7EF40061C722 /* FBNotification.h */,
@@ -438,10 +441,10 @@
 				5306F8E1103B7EF40061C722 /* NotificationManager.h */,
 				5306F8DE103B7EF40061C722 /* NotificationManager.m */,
 			);
-			name = Notifications;
+			path = notifications;
 			sourceTree = "<group>";
 		};
-		5306F8E6103B7F240061C722 /* Messages */ = {
+		5306F8E6103B7F240061C722 /* messages */ = {
 			isa = PBXGroup;
 			children = (
 				5306F8EB103B7F600061C722 /* FBMessage.h */,
@@ -449,22 +452,23 @@
 				5306F8EA103B7F600061C722 /* MessageManager.h */,
 				5306F8EC103B7F600061C722 /* MessageManager.m */,
 			);
-			name = Messages;
+			path = messages;
 			sourceTree = "<group>";
 		};
-		5306F8F3103B7FA40061C722 /* Frontend */ = {
+		5306F8F3103B7FA40061C722 /* frontend */ = {
 			isa = PBXGroup;
 			children = (
-				5306057A103F9E460061C722 /* Keyboard Shortcuts */,
-				53060522103E76910061C722 /* Preferences */,
-				5306F8FB103B80290061C722 /* Bubbles */,
-				5306F8F5103B7FCD0061C722 /* Menu */,
-				5306F908103B80A80061C722 /* Status */,
+				5306057A103F9E460061C722 /* keyboard shortcuts */,
+				53060522103E76910061C722 /* preferences */,
+				5306F8FB103B80290061C722 /* bubbles */,
+				5306F8F5103B7FCD0061C722 /* menu */,
+				53A2A28110A50594008079FB /* dialog */,
+				5306F908103B80A80061C722 /* status */,
 			);
-			name = Frontend;
+			path = frontend;
 			sourceTree = "<group>";
 		};
-		5306F8F5103B7FCD0061C722 /* Menu */ = {
+		5306F8F5103B7FCD0061C722 /* menu */ = {
 			isa = PBXGroup;
 			children = (
 				5306F8F9103B800B0061C722 /* MenuManager.h */,
@@ -472,10 +476,10 @@
 				5397C05A106333BB00DAD78C /* MenuIcon.h */,
 				5397C05B106333BB00DAD78C /* MenuIcon.m */,
 			);
-			name = Menu;
+			path = menu;
 			sourceTree = "<group>";
 		};
-		5306F8FB103B80290061C722 /* Bubbles */ = {
+		5306F8FB103B80290061C722 /* bubbles */ = {
 			isa = PBXGroup;
 			children = (
 				5306F900103B80520061C722 /* BubbleDimensions.h */,
@@ -486,23 +490,21 @@
 				5306F902103B80520061C722 /* BubbleView.h */,
 				5306F8FF103B80520061C722 /* BubbleView.m */,
 			);
-			name = Bubbles;
+			path = bubbles;
 			sourceTree = "<group>";
 		};
-		5306F908103B80A80061C722 /* Status */ = {
+		5306F908103B80A80061C722 /* status */ = {
 			isa = PBXGroup;
 			children = (
-				5306F90A103B80D40061C722 /* StatusUpdateWindow.h */,
-				5306F90B103B80D40061C722 /* StatusUpdateWindow.m */,
-				530605C1103FB5340061C722 /* StatusKeyShortcut.h */,
-				530605C2103FB5340061C722 /* StatusKeyShortcut.m */,
-				5397C84210672FBA00DAD78C /* SUTextView.h */,
-				5397C84310672FBA00DAD78C /* SUTextView.m */,
+				537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */,
+				537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */,
+				537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */,
+				537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */,
 			);
-			name = Status;
+			path = status;
 			sourceTree = "<group>";
 		};
-		5306F911103B813B0061C722 /* Net */ = {
+		5306F911103B813B0061C722 /* net */ = {
 			isa = PBXGroup;
 			children = (
 				5306FDED103CDF370061C722 /* NetConnection.h */,
@@ -514,17 +516,17 @@
 				53060169103D1C940061C722 /* QueryManager.h */,
 				5306016A103D1C940061C722 /* QueryManager.m */,
 			);
-			name = Net;
+			path = net;
 			sourceTree = "<group>";
 		};
-		5306F91E103B871D0061C722 /* FBConnect */ = {
+		5306F91E103B871D0061C722 /* fbconnect */ = {
 			isa = PBXGroup;
 			children = (
 				5306F923103B87530061C722 /* GlobalSession.h */,
 				53060104103D16D10061C722 /* FBObject.h */,
 				53060105103D16D10061C722 /* FBObject.m */,
 			);
-			name = FBConnect;
+			path = fbconnect;
 			sourceTree = "<group>";
 		};
 		5306F924103B87670061C722 /* additions */ = {
@@ -543,8 +545,16 @@
 				5381A6F110843C7B005441A3 /* NSURL+.h */,
 				5381A6F210843C7B005441A3 /* NSURL+.m */,
 			);
-			name = additions;
-			path = source/additions;
+			path = additions;
+			sourceTree = "<group>";
+		};
+		53A2A28110A50594008079FB /* dialog */ = {
+			isa = PBXGroup;
+			children = (
+				537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */,
+				537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */,
+			);
+			path = dialog;
 			sourceTree = "<group>";
 		};
 		53F6FCA1102133FA00CAE806 /* Images */ = {
@@ -729,7 +739,6 @@
 				5306F8FA103B800B0061C722 /* MenuManager.m in Sources */,
 				5397C1001063378500DAD78C /* MenuIcon.m in Sources */,
 				5306F8E3103B7EF40061C722 /* NotificationManager.m in Sources */,
-				5306F90C103B80D40061C722 /* StatusUpdateWindow.m in Sources */,
 				5306F8ED103B7F600061C722 /* FBMessage.m in Sources */,
 				5306F8EE103B7F600061C722 /* MessageManager.m in Sources */,
 				5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */,
@@ -749,9 +758,11 @@
 				53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */,
 				5397C49E1064416500DAD78C /* HashArray.m in Sources */,
 				5397C7051066D11000DAD78C /* NSImage+.m in Sources */,
-				5397C84410672FBA00DAD78C /* SUTextView.m in Sources */,
 				5397C87A106737B000DAD78C /* NSEvent+.m in Sources */,
 				5381A6F310843C7B005441A3 /* NSURL+.m in Sources */,
+				537BD69E10A175AC00CDB44C /* FBDialogWindowController.m in Sources */,
+				537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */,
+				537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

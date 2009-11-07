@@ -1,121 +1,89 @@
 //
 //  StatusUpdateWindow.m
-//  Facebook
+//  FBDesktopNotifications
 //
-//  Created by Lee Byron on 8/13/09.
+//  Created by Lee Byron on 11/4/09.
 //  Copyright 2009 Facebook. All rights reserved.
 //
 
 #import "StatusUpdateWindow.h"
-#import <QuartzCore/QuartzCore.h>
-#import "NSString+.h"
 
-#define kAnimationDuration 0.1
-#define kAnimationDurationOut 0.2
-#define kSlideDistance 10
+#define kStatusUpdateWindowX @"statusUpdateWindowX"
+#define kStatusUpdateWindowY @"statusUpdateWindowY"
+#define kStatusUpdateWindowScreen @"statusUpdateWindowScreen"
 
 
 @implementation StatusUpdateWindow
 
 - (id)initWithTarget:(id)obj selector:(SEL)sel
 {
-  self = [super initWithWindowNibName:@"status"];
-  if (self) {
-    target       = obj;
-    selector     = sel;
-    isClosed     = NO;
-    disappearing = NO;
-
-    // Force the window to be loaded and displayed
-    if ([[self window] respondsToSelector:@selector(setCollectionBehavior:)]) {
-      [[self window] setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
-    }
-    [[self window] setLevel:NSFloatingWindowLevel];
-    [[self window] display];
+  // get prefered window position if set
+  NSPoint loc;
+  loc.x = [[NSUserDefaults standardUserDefaults] floatForKey:kStatusUpdateWindowX];
+  loc.y = [[NSUserDefaults standardUserDefaults] floatForKey:kStatusUpdateWindowY];
+  NSUInteger screen = [[NSUserDefaults standardUserDefaults] integerForKey:kStatusUpdateWindowScreen];
+  if (loc.x == 0 && loc.y == 0) {
+    loc.x = 0.5;
+    loc.y = 0.75;
   }
 
+  if (self = [super initWithLocation:loc screenNum:screen]) {
+    target   = obj;
+    selector = sel;
+
+    messageBox = [[FBExpandingTextView alloc] initWithFrame:NSMakeRect(0, 0, 400, 46)];
+    messageBox.delegate = self;
+    [self addSubview:messageBox];
+
+    NSButton* button = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 60, 18)];
+    button.bezelStyle = NSRoundRectBezelStyle;//NSShadowlessSquareBezelStyle;//NSSmallSquareBezelStyle;
+    button.title = @"Share";
+    button.target = self;
+    button.action = @selector(share:);
+    [self addSubview:button];
+    [button release];
+  }
   return self;
 }
 
-- (void)windowDidLoad
+- (void)dealloc
 {
-  // set up fade in/out animation
-  CAAnimation *fadeAni = [CABasicAnimation animation];
-  [fadeAni setDelegate:self];
-  [fadeAni setDuration:kAnimationDuration];
+  [messageBox release];
+  [super dealloc];
+}
 
-  // set up drop-in animation
-  CAKeyframeAnimation *moveAni = [CAKeyframeAnimation animation];
-  [moveAni setDuration:kAnimationDuration];
-  CGMutablePathRef path = CGPathCreateMutable();
-  CGPathMoveToPoint(path, NULL, [[self window] frame].origin.x, [[self window] frame].origin.y - kSlideDistance);
-  CGPathAddLineToPoint(path, NULL, [[self window] frame].origin.x, [[self window] frame].origin.y);
-  [moveAni setPath:path];
-  CGPathRelease(path);
+- (void)windowDidMove:(NSNotification*)notif
+{
+  [super windowDidMove:notif];
 
-  // assign animations
-  [[self window] setAnimations:[NSDictionary dictionaryWithObjectsAndKeys:fadeAni, @"alphaValue",
-                                moveAni, @"frameOrigin", nil]];
-
-  // open er up.
-  [NSApp activateIgnoringOtherApps:YES];
-  [[self window] setAlphaValue:0.0];
-  [[self window] makeKeyAndOrderFront:self];
-  [[[self window] animator] setAlphaValue:1.0];
-  [[[self window] animator] setFrameOrigin:[[self window] frame].origin];
+  // record to prefs
+  [[NSUserDefaults standardUserDefaults] setFloat:self.location.x forKey:kStatusUpdateWindowX];
+  [[NSUserDefaults standardUserDefaults] setFloat:self.location.y forKey:kStatusUpdateWindowY];
+  [[NSUserDefaults standardUserDefaults] setInteger:self.screenNum forKey:kStatusUpdateWindowScreen];
+  [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (IBAction)cancel:(id)sender
 {
-  doShare = NO;
-  [[self window] performClose:self];
+  [self close];
 }
 
 - (IBAction)share:(id)sender
 {
-  if ([[statusField string] length] > 0) {
-    doShare = YES;
-    [[self window] performClose:self];
+  if ([[self statusMessage] length] > 0) {
+    [target performSelector:selector withObject:self];
+    [self close];
   }
 }
 
-- (BOOL)windowShouldClose:(id)window
+- (NSDictionary*)streamPost
 {
-  if (!disappearing) {
-    disappearing = YES;
-    [[[self window] animationForKey:@"alphaValue"] setDuration:kAnimationDurationOut];
-    [[[self window] animator] setAlphaValue:0.0];
-    [self performSelector:@selector(close)
-               withObject:nil
-               afterDelay:kAnimationDurationOut];
-    return NO;
-  }
-  return YES;
-}
-
-- (void)close
-{
-  [[self window] close];
-  [NSApp deactivate];
-}
-
-- (void)windowWillClose:(NSNotification *)notification
-{
-  isClosed = YES;
-  [NSApp deactivate];
-  if (doShare) {
-    [target performSelector:selector withObject:self afterDelay:0.1];
-  }
-}
-
-- (BOOL)isClosed
-{
-  return isClosed;
+  return [NSDictionary dictionaryWithObjectsAndKeys:nil];
 }
 
 - (NSString *)statusMessage
 {
-  return [statusField string];
+  return [[messageBox documentView] string];
 }
 
 @end
