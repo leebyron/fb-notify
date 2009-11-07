@@ -56,7 +56,6 @@
 		5306F880103B7A0B0061C722 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F86D103B7A0B0061C722 /* bullet.png */; };
 		5306F881103B7A0B0061C722 /* addfriend.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F86E103B7A0B0061C722 /* addfriend.png */; };
 		5306F883103B7A190061C722 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5306F882103B7A190061C722 /* fb-notify-icon.icns */; };
-		5306F885103B7A350061C722 /* status.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5306F884103B7A350061C722 /* status.xib */; };
 		5306F8C1103B7D390061C722 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8C0103B7D390061C722 /* main.m */; };
 		5306F8D7103B7E660061C722 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8D6103B7E660061C722 /* ApplicationController.m */; };
 		5306F8E3103B7EF40061C722 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8DE103B7EF40061C722 /* NotificationManager.m */; };
@@ -193,7 +192,6 @@
 		5306F86D103B7A0B0061C722 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet.png; path = resources/images/bullet.png; sourceTree = "<group>"; };
 		5306F86E103B7A0B0061C722 /* addfriend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addfriend.png; path = resources/images/addfriend.png; sourceTree = "<group>"; };
 		5306F882103B7A190061C722 /* fb-notify-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "fb-notify-icon.icns"; path = "resources/icons/fb-notify-icon.icns"; sourceTree = "<group>"; };
-		5306F884103B7A350061C722 /* status.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = status.xib; path = resources/status.xib; sourceTree = "<group>"; };
 		5306F88E103B7A9D0061C722 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/Info.plist; sourceTree = "<group>"; };
 		5306F8C0103B7D390061C722 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5306F8C6103B7D710061C722 /* Facebook_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook_Prefix.pch; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 				53060597103FA0580061C722 /* ShortcutRecorder.strings */,
 				5306FCFD103BCA860061C722 /* dsa_pub.pem */,
 				5306F88E103B7A9D0061C722 /* Info.plist */,
-				5306F884103B7A350061C722 /* status.xib */,
 				5306F882103B7A190061C722 /* fb-notify-icon.icns */,
 				53F6FCA1102133FA00CAE806 /* Images */,
 				5306051C103E5EC40061C722 /* preferences.xib */,
@@ -692,7 +689,6 @@
 				5397C2961063616D00DAD78C /* fb_share_2.png in Resources */,
 				5397C2981063616D00DAD78C /* fb_share_3.png in Resources */,
 				5397C2951063616D00DAD78C /* fb_share_4.png in Resources */,
-				5306F885103B7A350061C722 /* status.xib in Resources */,
 				5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */,
 				5382171410577ECA00DB967F /* Growl Registration Ticket.growlRegDict in Resources */,
 				5306051D103E5EC40061C722 /* preferences.xib in Resources */,
