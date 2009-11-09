@@ -19,6 +19,9 @@
 #import "BubbleDimensions.h"
 #import "NSImage+.h"
 
+//TODO dont need
+#import "PhotoAttachmentView.h"
+
 
 @interface ApplicationController (Private)
 
@@ -31,6 +34,8 @@
 @implementation ApplicationController
 
 @synthesize menu, notifications, messages, bubbleManager, names, profilePics, appIcons;
+
+@synthesize lastStatusUpdate;
 
 FBConnect* connectSession;
 
@@ -91,9 +96,7 @@ FBConnect* connectSession;
   [profilePics        release];
   [appIcons           release];
 
-  [lastUpdateRequest  release];
   [lastStatusUpdate   release];
-  [statusUpdateWindow release];
 
   [super dealloc];
 }
@@ -188,66 +191,15 @@ FBConnect* connectSession;
 
 - (IBAction)beginUpdateStatus:(id)sender
 {
-  // if a window already exists, get rid of it!
-  if (statusUpdateWindow) {
-    if (statusUpdateWindow.isClosed) {
-      [statusUpdateWindow release];
-      statusUpdateWindow = nil;
-    } else {
-      [statusUpdateWindow cancel:self];
-      [statusUpdateWindow release];
-      statusUpdateWindow = nil;
-      return;
-    }
+  // if a window already exists, get rid of it!  
+  if ([StatusUpdateWindow currentWindow]) {
+    [[StatusUpdateWindow currentWindow] cancel:self];
+    return;
   }
 
   // if we're online and connected, then show a new status update window
   if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
-    statusUpdateWindow =
-      [[StatusUpdateWindow alloc] initWithTarget:self selector:@selector(didStatusUpdate:)];
-  }
-}
-
-- (IBAction)didStatusUpdate:(id)sender
-{
-  // get status message.
-  lastStatusUpdate = [statusUpdateWindow statusMessage];
-  [statusUpdateWindow release];
-  statusUpdateWindow = nil;
-
-  // was there a previous retained request? release it.
-  if (lastUpdateRequest) {
-    [lastUpdateRequest release];
-    lastUpdateRequest = nil;
-  }
-
-  // get a new update request
-  lastUpdateRequest =
-  [connectSession callMethod:@"stream.publish"
-               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"message", nil]
-                      target:self
-                    selector:@selector(statusUpdateWasPublished:)
-                       error:nil];
-
-  // if we don't have permission to do this, get the permission!
-  if (![connectSession hasPermission:@"publish_stream"]) {
-    [connectSession requestPermissions:[NSSet setWithObject:@"publish_stream"]
-                                target:self
-                              selector:@selector(statusPermissionResponse:)];
-    [lastUpdateRequest cancel];
-    [lastUpdateRequest retain];
-  } else {
-    lastUpdateRequest = nil;
-  }
-}
-
-- (void)statusPermissionResponse:(NSSet*)acceptedPermissions
-{
-  // if the permission went through, try that publish again.
-  if ([connectSession hasPermission:@"publish_stream"]) {
-    [lastUpdateRequest retry];
-    [lastUpdateRequest release];
-    lastUpdateRequest = nil;
+    [StatusUpdateWindow open];
   }
 }
 
@@ -328,14 +280,6 @@ FBConnect* connectSession;
   // highly recommended to request offline access, since we live on the desktop.
   [connectSession loginWithRequiredPermissions:[NSSet setWithObjects:@"manage_mailbox", nil]
                            optionalPermissions:[NSSet setWithObjects:@"publish_stream", @"offline_access", nil]];
-}
-
-- (void)statusUpdateWasPublished:(id)reply
-{
-  [bubbleManager addBubbleWithText:lastStatusUpdate
-                           subText:nil
-                             image:[profilePics imageForKey:[connectSession uid]]
-                            action:[NSURL URLWithString:[menu profileURL]]];
 }
 
 // Sent when a valid update is found by the update driver.

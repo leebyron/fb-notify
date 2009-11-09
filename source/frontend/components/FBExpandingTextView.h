@@ -23,3 +23,11 @@
 - (id)initWithFrame:(NSRect)frame;
 
 @end
+
+
+@protocol FBExpandingTextViewDelegate
+
+- (void)cancel:(FBExpandingTextView*)view;
+- (void)submit:(FBExpandingTextView*)view;
+
+@end

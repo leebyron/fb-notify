@@ -9,20 +9,30 @@
 #import <Cocoa/Cocoa.h>
 #import "FBDialogWindowController.h"
 #import "FBExpandingTextView.h"
+#import "AttachmentBox.h"
+#import "FBButton.h"
 
 
 @interface StatusUpdateWindow : FBDialogWindowController {
-  id target;
-  SEL selector;
-
   FBExpandingTextView* messageBox;
+  AttachmentBox* attachmentBox;
+  NSView* attachment;
+
+  BOOL currentlySizing;
+  
+  FBButton* removeButton;
 }
 
-- (id)initWithTarget:(id)obj selector:(SEL)sel;
+@property(retain) NSView* attachment;
 
++ (id)open;
++ (StatusUpdateWindow*)currentWindow;
+
+// delegate responses
 - (IBAction)cancel:(id)sender;
-- (IBAction)share:(id)sender;
+- (IBAction)submit:(id)sender;
 
+// results
 - (NSDictionary*)streamPost;
 - (NSString *)statusMessage; // oldskool
 

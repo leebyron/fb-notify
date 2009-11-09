@@ -8,8 +8,10 @@
 
 #import "MenuIcon.h"
 #import "ApplicationController.h"
-#import "NSImage+.h"
+#import "StatusUpdateManager.h"
 #import "GlobalSession.h"
+#import "NSImage+.h"
+#import "NSPasteboard+.h"
 
 
 enum {
@@ -20,10 +22,12 @@ enum {
   MENU_ICON_SHARE_FULL = 69  //61
 };
 
+
 @interface MenuIcon (Private)
   -(void)animateWithUpDirection:(BOOL)direction;
   -(void)animate;
 @end
+
 
 @implementation MenuIcon
 -(id)initWithManager:(MenuManager*)mngr
@@ -39,13 +43,12 @@ enum {
     fbShareIcon2  = [[NSImage bundlePNG:@"fb_share_2"] retain];
     fbShareIcon3  = [[NSImage bundlePNG:@"fb_share_3"] retain];
     fbShareIcon4  = [[NSImage bundlePNG:@"fb_share_4"] retain];
-/*
+
     NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSStringPboardType,
                                                           NSFilenamesPboardType,
-                                                          NSTIFFPboardType,
-                                                          NSURLPboardType, nil];
-    [self registerForDraggedTypes:draggedTypeArray]; // TODO: enable when share is good
- */
+                                                          NSTIFFPboardType, nil];
+                                                          //NSURLPboardType, nil]; // enable for links
+    [self registerForDraggedTypes:draggedTypeArray];
     [self setIconStatus:MENU_ICON_NORMAL];
   }
   return self;
@@ -187,34 +190,34 @@ enum {
   [self setNeedsDisplay:YES];
 }
 
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
-  NSLog(@"draggingEntered:");
-  [self animateWithUpDirection:YES];
-  return NSDragOperationLink;
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{  
+  if ([[sender draggingPasteboard] hasImage]) {
+    [self animateWithUpDirection:YES];
+    return NSDragOperationLink;
+  }
+  return NSDragOperationNone;
 }
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender
 {
-  NSLog(@"draggingExited");
   [self animateWithUpDirection:NO];
 }
 
 - (BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
-  NSLog(@"prepareForDragOperation");
   [self animateWithUpDirection:NO];
   return YES;
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-  NSLog(@"performDragOperation");
-  return YES;
-}
-
-- (void)concludeDragOperation:(id <NSDraggingInfo>)sender
-{
-  NSLog(@"concludeDragOperation");
+  NSImage* img = [[sender draggingPasteboard] getImage];
+  if (img) {
+    [[StatusUpdateManager manager] attachPhoto:img];
+    return YES;
+  }
+  return NO;
 }
 
 @end

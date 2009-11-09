@@ -7,7 +7,9 @@
 //
 
 #import "FBExpandingTextView.h"
+#import "StatusUpdateManager.h"
 #import "NSEvent+.h"
+#import "NSPasteboard+.h"
 
 #define DELEGATE(target, sel) {if (target && [target respondsToSelector:(sel)]) {\
 [target performSelector:(sel) withObject:self];}}
@@ -32,7 +34,7 @@
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
-    
+
     [self setBorderType:NSBezelBorder];
     [self setHasVerticalScroller:YES];
     [self setHasHorizontalScroller:NO];
@@ -40,7 +42,9 @@
     self.maxSize = NSMakeSize(10000000, 250);
 
     // set view
-    SUTextView* textView = [[SUTextView alloc] initWithFrame:frame];
+    NSRect textViewRect = frame;
+    textViewRect.size.width -= 17; // compensate for scrollview padding
+    SUTextView* textView = [[SUTextView alloc] initWithFrame:textViewRect];
     [textView setDelegate:self];
     [self setDocumentView:textView];
     [textView release];
@@ -51,7 +55,7 @@
   }
   return self;
 }
-                 
+
 - (void)dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -63,9 +67,9 @@
 {
   // remove old notification
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  
+
   [super setDocumentView:aView];
-  
+
   // listen for resize events
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(documentViewFrameDidChange:)
@@ -130,7 +134,7 @@
 - (void)interpretKeyEvents:(id)events
 {
   for (NSEvent* e in events) {
-    
+
     // capture key events to do standard text manipulation
     if ([e isKey:@"a" modifiers:NSCommandKeyMask]) {
       [self selectAll:self];
@@ -144,26 +148,54 @@
       [[self undoManager] undo];
     } else if ([e isKey:@"z" modifiers:NSCommandKeyMask|NSShiftKeyMask]) {
       [[self undoManager] redo];
-      
-      // capture line breaks and shortcut for share button
+
+    // capture line breaks and shortcut for share button
     } else if ([e isKeyCode:36 modifiers:0]) {
       [self insertText:@"\n"];
+
+    // delegate methods
     } else if ([e isKeyCode:36 modifiers:NSShiftKeyMask] ||
                [e isKeyCode:36 modifiers:NSCommandKeyMask]) {
-      DELEGATE([[self delegate] delegate], @selector(share:));
+      DELEGATE([[self delegate] delegate], @selector(submit:));
     } else if ([e isKey:@"w" modifiers:NSCommandKeyMask]) {
       DELEGATE([[self delegate] delegate], @selector(cancel:));
-      
-      // everything else pass on as per usual
+
+    // everything else pass on as per usual
     } else {
       [super interpretKeyEvents:[NSArray arrayWithObject:e]];
     }
   }
 }
 
-- (void)paste:(id)sender {
-  // TODO: check paste type
-  [self pasteAsPlainText:sender];
+- (void)paste:(id)sender
+{
+  if ([[NSPasteboard generalPasteboard] hasImage]) {
+    NSImage* img = [[NSPasteboard generalPasteboard] getImage];
+    [[StatusUpdateManager manager] attachPhoto:img];
+
+    // otherwise do text
+  } else {
+    [self pasteAsPlainText:sender];
+  }
+}
+
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+  return NSDragOperationCopy;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+  // attempt to paste an image
+  if ([[sender draggingPasteboard] hasImage]) {
+    [[StatusUpdateManager manager] attachPhoto:[[sender draggingPasteboard] getImage]];
+    return YES;
+  }
+
+  // paste normally
+  [super performDragOperation:sender];
+  return YES;
 }
 
 @end

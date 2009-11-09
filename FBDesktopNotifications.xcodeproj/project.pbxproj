@@ -74,7 +74,6 @@
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
-		537BD69E10A175AC00CDB44C /* FBDialogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */; };
 		537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */; };
 		537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
@@ -91,6 +90,14 @@
 		5397C7051066D11000DAD78C /* NSImage+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C7041066D11000DAD78C /* NSImage+.m */; };
 		5397C87A106737B000DAD78C /* NSEvent+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5397C879106737B000DAD78C /* NSEvent+.m */; };
 		5397CA72106832D300DAD78C /* discussion.png in Resources */ = {isa = PBXBuildFile; fileRef = 5397CA71106832D300DAD78C /* discussion.png */; };
+		53A2A54C10A659D6008079FB /* PhotoAttachmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A54B10A659D6008079FB /* PhotoAttachmentView.m */; };
+		53A2A6D610A677EC008079FB /* AttachmentBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A6D510A677EC008079FB /* AttachmentBox.m */; };
+		53A2A6E510A67A5E008079FB /* NSBezierPath+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A6E410A67A5E008079FB /* NSBezierPath+.m */; };
+		53A2A80A10A88F64008079FB /* FBImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A80910A88F64008079FB /* FBImageView.m */; };
+		53A2A8A610A8A9F3008079FB /* FBDialogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A8A510A8A9F3008079FB /* FBDialogWindowController.m */; };
+		53A2A94810A8B4B8008079FB /* NSPasteboard+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A94710A8B4B8008079FB /* NSPasteboard+.m */; };
+		53A2A96F10A8BB22008079FB /* StatusUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2A96E10A8BB22008079FB /* StatusUpdateManager.m */; };
+		53A2AAC410A8D22D008079FB /* FBButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2AAC310A8D22D008079FB /* FBButton.m */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -225,7 +232,6 @@
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialogWindowController.h; sourceTree = "<group>"; };
-		537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDialogWindowController.m; sourceTree = "<group>"; };
 		537BD6A210A176E000CDB44C /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
 		537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateWindow.h; sourceTree = "<group>"; };
 		537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusUpdateWindow.m; sourceTree = "<group>"; };
@@ -250,6 +256,21 @@
 		5397C878106737B000DAD78C /* NSEvent+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEvent+.h"; sourceTree = "<group>"; };
 		5397C879106737B000DAD78C /* NSEvent+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSEvent+.m"; sourceTree = "<group>"; };
 		5397CA71106832D300DAD78C /* discussion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = discussion.png; path = resources/images/discussion.png; sourceTree = "<group>"; };
+		53A2A54A10A659D6008079FB /* PhotoAttachmentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAttachmentView.h; sourceTree = "<group>"; };
+		53A2A54B10A659D6008079FB /* PhotoAttachmentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAttachmentView.m; sourceTree = "<group>"; };
+		53A2A6D410A677EC008079FB /* AttachmentBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentBox.h; sourceTree = "<group>"; };
+		53A2A6D510A677EC008079FB /* AttachmentBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentBox.m; sourceTree = "<group>"; };
+		53A2A6E310A67A5E008079FB /* NSBezierPath+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+.h"; sourceTree = "<group>"; };
+		53A2A6E410A67A5E008079FB /* NSBezierPath+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+.m"; sourceTree = "<group>"; };
+		53A2A80810A88F64008079FB /* FBImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBImageView.h; sourceTree = "<group>"; };
+		53A2A80910A88F64008079FB /* FBImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBImageView.m; sourceTree = "<group>"; };
+		53A2A8A510A8A9F3008079FB /* FBDialogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDialogWindowController.m; sourceTree = "<group>"; };
+		53A2A94610A8B4B8008079FB /* NSPasteboard+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPasteboard+.h"; sourceTree = "<group>"; };
+		53A2A94710A8B4B8008079FB /* NSPasteboard+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPasteboard+.m"; sourceTree = "<group>"; };
+		53A2A96D10A8BB22008079FB /* StatusUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateManager.h; sourceTree = "<group>"; };
+		53A2A96E10A8BB22008079FB /* StatusUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusUpdateManager.m; sourceTree = "<group>"; };
+		53A2AAC210A8D22D008079FB /* FBButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBButton.h; sourceTree = "<group>"; };
+		53A2AAC310A8D22D008079FB /* FBButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBButton.m; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -459,7 +480,7 @@
 				53060522103E76910061C722 /* preferences */,
 				5306F8FB103B80290061C722 /* bubbles */,
 				5306F8F5103B7FCD0061C722 /* menu */,
-				53A2A28110A50594008079FB /* dialog */,
+				53A2A28110A50594008079FB /* components */,
 				5306F908103B80A80061C722 /* status */,
 			);
 			path = frontend;
@@ -493,10 +514,14 @@
 		5306F908103B80A80061C722 /* status */ = {
 			isa = PBXGroup;
 			children = (
-				537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */,
-				537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */,
+				53A2A96D10A8BB22008079FB /* StatusUpdateManager.h */,
+				53A2A96E10A8BB22008079FB /* StatusUpdateManager.m */,
 				537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */,
 				537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */,
+				53A2A6D410A677EC008079FB /* AttachmentBox.h */,
+				53A2A6D510A677EC008079FB /* AttachmentBox.m */,
+				53A2A54A10A659D6008079FB /* PhotoAttachmentView.h */,
+				53A2A54B10A659D6008079FB /* PhotoAttachmentView.m */,
 			);
 			path = status;
 			sourceTree = "<group>";
@@ -541,17 +566,27 @@
 				5397C879106737B000DAD78C /* NSEvent+.m */,
 				5381A6F110843C7B005441A3 /* NSURL+.h */,
 				5381A6F210843C7B005441A3 /* NSURL+.m */,
+				53A2A6E310A67A5E008079FB /* NSBezierPath+.h */,
+				53A2A6E410A67A5E008079FB /* NSBezierPath+.m */,
+				53A2A94610A8B4B8008079FB /* NSPasteboard+.h */,
+				53A2A94710A8B4B8008079FB /* NSPasteboard+.m */,
 			);
 			path = additions;
 			sourceTree = "<group>";
 		};
-		53A2A28110A50594008079FB /* dialog */ = {
+		53A2A28110A50594008079FB /* components */ = {
 			isa = PBXGroup;
 			children = (
+				537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */,
+				537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */,
 				537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */,
-				537BD69D10A175AC00CDB44C /* FBDialogWindowController.m */,
+				53A2A8A510A8A9F3008079FB /* FBDialogWindowController.m */,
+				53A2A80810A88F64008079FB /* FBImageView.h */,
+				53A2A80910A88F64008079FB /* FBImageView.m */,
+				53A2AAC210A8D22D008079FB /* FBButton.h */,
+				53A2AAC310A8D22D008079FB /* FBButton.m */,
 			);
-			path = dialog;
+			path = components;
 			sourceTree = "<group>";
 		};
 		53F6FCA1102133FA00CAE806 /* Images */ = {
@@ -756,9 +791,16 @@
 				5397C7051066D11000DAD78C /* NSImage+.m in Sources */,
 				5397C87A106737B000DAD78C /* NSEvent+.m in Sources */,
 				5381A6F310843C7B005441A3 /* NSURL+.m in Sources */,
-				537BD69E10A175AC00CDB44C /* FBDialogWindowController.m in Sources */,
 				537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */,
 				537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */,
+				53A2A54C10A659D6008079FB /* PhotoAttachmentView.m in Sources */,
+				53A2A6D610A677EC008079FB /* AttachmentBox.m in Sources */,
+				53A2A6E510A67A5E008079FB /* NSBezierPath+.m in Sources */,
+				53A2A80A10A88F64008079FB /* FBImageView.m in Sources */,
+				53A2A8A610A8A9F3008079FB /* FBDialogWindowController.m in Sources */,
+				53A2A94810A8B4B8008079FB /* NSPasteboard+.m in Sources */,
+				53A2A96F10A8BB22008079FB /* StatusUpdateManager.m in Sources */,
+				53A2AAC410A8D22D008079FB /* FBButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

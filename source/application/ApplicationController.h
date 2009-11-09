@@ -33,9 +33,9 @@
   ImageDictionary*     profilePics;
   ImageDictionary*     appIcons;
 
-  id<FBRequest>        lastUpdateRequest;
   NSString*            lastStatusUpdate;
-  StatusUpdateWindow*  statusUpdateWindow;
+  
+  //StatusUpdateWindow*  statusUpdateWindow;
 }
 
 @property(retain) MenuManager*          menu;
@@ -45,6 +45,8 @@
 @property(retain) NSMutableDictionary*  names;
 @property(retain) ImageDictionary*      profilePics;
 @property(retain) ImageDictionary*      appIcons;
+
+@property(retain) NSString*             lastStatusUpdate;
 
 - (void)invalidate;
 - (void)markEverythingSeen;

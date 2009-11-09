@@ -25,6 +25,7 @@
                  text:(NSString*)text
               subText:(NSString*)subText
                action:(id)action;
+
 - (void)appear;
 - (void)disappear;
 

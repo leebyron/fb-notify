@@ -2,7 +2,10 @@
 "News Feed" = "News Feed";
 
 /* Link for Status HUD */
-"Update Status" = "Update Status";
+"Share" = "Share";
+
+/* Attachments */
+"Drag a photo here or click to browse" = "Drag a photo here or click to browse";
 
 /* Link to Compose Message */
 "Compose New Message" = "Compose New Message";

@@ -27,8 +27,8 @@
   BOOL iconIlluminated;
 }
 
--(id)initWithManager:(MenuManager*)mngr;
--(void)setIconStatus:(int)status;
--(void)setIconIlluminated:(BOOL)illuminated;
+- (id)initWithManager:(MenuManager*)mngr;
+- (void)setIconStatus:(int)status;
+- (void)setIconIlluminated:(BOOL)illuminated;
 
 @end
