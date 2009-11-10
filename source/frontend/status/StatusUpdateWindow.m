@@ -75,10 +75,12 @@ static StatusUpdateWindow* currentWindow = nil;
     removeButton = [[FBButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 18)];
     removeButton.target = self;
     removeButton.action = @selector(removeButtonPressed);
-    removeButton.title = @"Add Photo";
     removeButton.showsBorderOnlyWhileMouseInside = YES;
     removeButton.bezelStyle = NSRecessedBezelStyle;
     [buttonBar addSubview:removeButton];
+
+    // set default case
+    self.attachment = nil;
   }
   return self;
 }
@@ -142,7 +144,7 @@ static StatusUpdateWindow* currentWindow = nil;
   [view retain];
   [attachment release];
   attachment = view;
-  
+
   // set the appropriate width to fit
   [view setFrameSize:NSMakeSize(kStatusUpdateWindowWidth, view.frame.size.height)];
 
@@ -164,9 +166,10 @@ static StatusUpdateWindow* currentWindow = nil;
    selector:@selector(attachmentFrameDidChange:)
    name:NSViewFrameDidChangeNotification
    object:view];
-  
+
   // set remove button
-  removeButton.title = view ? @"Remove Photo" : @"Add Photo";
+  removeButton.title = view ? NSLocalizedString(@"Remove Photo", @"Button to remove a photo attachment")
+                            : NSLocalizedString(@"Add Photo", @"Button to add a photo attachment");
 }
 
 - (void)attachmentFrameDidChange:(NSNotification*)notif
