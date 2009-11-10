@@ -8,6 +8,7 @@
 
 #import "FBImageView.h"
 #import "NSPasteboard+.h"
+#import "NSImage+.h"
 
 
 @implementation FBImageView
@@ -89,10 +90,12 @@
     return;
   }
 
-  NSSize imageSize = [image size];
+  NSSize imageSize = image.size;
+  
+  /*
   NSSize layoutSize = imageSize;
   float rx, ry, r;
-  NSPoint pt;
+  
 
   switch (imageScaling) {
     default:
@@ -119,10 +122,13 @@
     case NSScaleNone:
       break;
   }
+   */
+  [image resizeToFit:bounds.size usingMode:imageScaling];
 
   // center image
-  pt.x = (bounds.size.width - layoutSize.width) / 2;
-  pt.y = (bounds.size.height - layoutSize.height) / 2;
+  NSPoint pt;
+  pt.x = (bounds.size.width - image.size.width) / 2;
+  pt.y = (bounds.size.height - image.size.height) / 2;
 
   // draw image
   [image compositeToPoint:pt operation:NSCompositeSourceAtop];

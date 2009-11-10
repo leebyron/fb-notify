@@ -23,30 +23,20 @@
 @interface ApplicationController : NSObject {
   IBOutlet SUUpdater*  updater;
 
-  MenuManager*         menu;
   NotificationManager* notifications;
   MessageManager*      messages;
-  BubbleManager*       bubbleManager;
   QueryManager*        queryManager;
 
   NSMutableDictionary* names;
   ImageDictionary*     profilePics;
   ImageDictionary*     appIcons;
-
-  NSString*            lastStatusUpdate;
-  
-  //StatusUpdateWindow*  statusUpdateWindow;
 }
 
-@property(retain) MenuManager*          menu;
 @property(retain) NotificationManager*  notifications;
 @property(retain) MessageManager*       messages;
-@property(retain) BubbleManager*        bubbleManager;
 @property(retain) NSMutableDictionary*  names;
 @property(retain) ImageDictionary*      profilePics;
 @property(retain) ImageDictionary*      appIcons;
-
-@property(retain) NSString*             lastStatusUpdate;
 
 - (void)invalidate;
 - (void)markEverythingSeen;

@@ -21,7 +21,17 @@
 
 @implementation BubbleManager
 
+static BubbleManager* manager = nil;
+
 @synthesize windows;
+
++ (BubbleManager*)manager
+{
+  if (manager == nil) {
+    manager = [[BubbleManager alloc] init];
+  }
+  return manager;
+}
 
 - (id)init
 {
@@ -51,7 +61,8 @@
 
 - (BOOL)useGrowl
 {
-  return [GrowlApplicationBridge isGrowlRunning] && [[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_USE;
+  return [GrowlApplicationBridge isGrowlRunning] &&
+    [[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_USE;
 }
 
 - (void)addBubbleWithText:(NSString*)text
@@ -79,7 +90,7 @@
                                clickContext:notifContext];
   } else {
     NSSize windowSize = [BubbleView totalSizeWithText:text subText:subText withImage:(image != nil) maxWidth:kBubbleMaxWidth];
-    float menuBarHeight = [[[NSApplication sharedApplication] menu] menuBarHeight];
+    float menuBarHeight = [[NSApp menu] menuBarHeight];
     NSSize screen = [[NSScreen mainScreen] frame].size;
 
     float windowX = screen.width - windowSize.width - kBubbleSpacing;
@@ -89,12 +100,11 @@
     }
     NSRect windowRect = NSMakeRect(windowX, windowY, windowSize.width, windowSize.height);
 
-    BubbleWindow* window = [[BubbleWindow alloc] initWithManager:self
-                                                           frame:windowRect
-                                                           image:image
-                                                            text:text
-                                                         subText:subText
-                                                          action:action];
+    BubbleWindow* window = [[BubbleWindow alloc] initWithFrame:windowRect
+                                                         image:image
+                                                          text:text
+                                                       subText:subText
+                                                        action:action];
     [window appear];
     [windows addObject:window];
     [window release];

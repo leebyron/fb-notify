@@ -13,12 +13,11 @@
 
 @implementation BubbleWindow
 
-- (id)initWithManager:(BubbleManager*)mngr
-                frame:(NSRect)frame
-                image:(NSImage*)image
-                 text:(NSString*)text
-              subText:(NSString*)subText
-               action:(id)action
+- (id)initWithFrame:(NSRect)frame
+              image:(NSImage*)image
+               text:(NSString*)text
+            subText:(NSString*)subText
+             action:(id)action
 {
   // need to make space for a shadow, add a 10px border
   NSRect wideFrame = NSMakeRect(frame.origin.x - kBubbleShadowSpacing,
@@ -31,7 +30,6 @@
                             backing:NSBackingStoreBuffered
                               defer:YES];
   if (self) {
-    manager      = mngr;
     windowAction = [action retain];
     disappearing = NO;
 
@@ -140,7 +138,7 @@
 
 - (void)mouseUp:(NSEvent*)event
 {
-  [manager executeAction:windowAction];
+  [[BubbleManager manager] executeAction:windowAction];
   [self disappear];
 }
 
@@ -150,7 +148,7 @@
   // as part of the window going away.
   if ([self alphaValue] < 0.01) {
     [self close];
-    [[manager windows] removeObject:self];
+    [[[BubbleManager manager] windows] removeObject:self];
   }
 }
 

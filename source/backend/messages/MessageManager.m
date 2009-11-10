@@ -185,16 +185,17 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
   [connectSession callMethod:@"message.setThreadReadStatus"
                withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[msg objectForKey:@"thread_id"], @"thread_id",
                                                                         @"-1", @"status",
-                                                                        [connectSession uid], @"uid", nil]
+                                                                        [connectSession uid], @"uid", nil] //TODO - do i need uid?!
                       target:self
-                    selector:nil
-                       error:@selector(markReadError:)];
+                    selector:@selector(markReadError:)];
   [[NSApp delegate] invalidate];
 }
 
-- (void)markReadError:(NSError*)error
+- (void)markReadError:(id<FBRequest>)req
 {
-  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  if ([req error]) {
+    NSLog(@"mark as read failed -> %@", [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
+  }
 }
 
 @end

@@ -174,8 +174,7 @@
                withArguments:[NSDictionary dictionaryWithObject:[notifs componentsJoinedByString:@","]
                                                          forKey:@"notification_ids"]
                       target:self
-                    selector:nil
-                       error:@selector(markReadError:)];
+                    selector:@selector(markReadError:)];
   [[NSApp delegate] invalidate];
 }
 
@@ -188,16 +187,17 @@
                withArguments:[NSDictionary dictionaryWithObject:[[unread allObjects] componentsJoinedByString:@","]
                                                          forKey:@"notification_ids"]
                       target:self
-                    selector:nil
-                       error:@selector(markReadError:)];
+                    selector:@selector(markReadError:)];
   [unread removeAllObjects];
   [unseen removeAllObjects];
   [[NSApp delegate] invalidate];
 }
 
-- (void)markReadError:(NSError*)error
+- (void)markReadError:(id<FBRequest>)req
 {
-  NSLog(@"mark as read failed -> %@", [[error userInfo] objectForKey:kFBErrorMessageKey]);
+  if ([req error]) {
+    NSLog(@"mark as read failed -> %@", [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
+  }
 }
 
 @end

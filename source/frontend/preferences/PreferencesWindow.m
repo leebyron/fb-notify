@@ -20,8 +20,8 @@
 
 @implementation PreferencesWindow
 
-static PreferencesWindow* currentWindow;
-static ApplicationController* parent;
+static PreferencesWindow* currentWindow = nil;
+static ApplicationController* parent = nil;
 
 +(void) setupWithParent:(ApplicationController*)p
 {

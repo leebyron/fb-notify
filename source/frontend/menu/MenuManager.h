@@ -42,6 +42,8 @@
 @property(retain) ImageDictionary* profilePics;
 @property(retain) ImageDictionary* appIcons;
 
++ (MenuManager*)manager;
+
 - (void)setIconIlluminated:(BOOL)illuminated;
 - (void)constructWithNotifications:(NotificationManager*)notifications
                           messages:(MessageManager*)messages;

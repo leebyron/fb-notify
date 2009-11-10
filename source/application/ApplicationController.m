@@ -19,9 +19,6 @@
 #import "BubbleDimensions.h"
 #import "NSImage+.h"
 
-//TODO dont need
-#import "PhotoAttachmentView.h"
-
 
 @interface ApplicationController (Private)
 
@@ -33,9 +30,7 @@
 
 @implementation ApplicationController
 
-@synthesize menu, notifications, messages, bubbleManager, names, profilePics, appIcons;
-
-@synthesize lastStatusUpdate;
+@synthesize notifications, messages, names, profilePics, appIcons;
 
 FBConnect* connectSession;
 
@@ -47,7 +42,6 @@ FBConnect* connectSession;
                                           delegate:self] retain];
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
-    bubbleManager = [[BubbleManager alloc] init];
 
     names = [[NSMutableDictionary alloc] init];
 
@@ -69,9 +63,8 @@ FBConnect* connectSession;
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"note"       ofType:@"png"] forKey:@"2347471856"];
 
     // setup the menu manager
-    menu = [[MenuManager alloc] init];
-    [menu setProfilePics:profilePics];
-    [menu setAppIcons:appIcons];
+    [[MenuManager manager] setProfilePics:profilePics];
+    [[MenuManager manager] setAppIcons:appIcons];
 
     // setup the query manager
     queryManager = [[QueryManager alloc] initWithParent:self];
@@ -86,17 +79,13 @@ FBConnect* connectSession;
 {
   [connectSession     release];
 
-  [menu               release];
   [notifications      release];
   [messages           release];
-  [bubbleManager      release];
   [queryManager       release];
 
   [names              release];
   [profilePics        release];
   [appIcons           release];
-
-  [lastStatusUpdate   release];
 
   [super dealloc];
 }
@@ -139,7 +128,7 @@ FBConnect* connectSession;
   [StatusKeyShortcut setupWithTarget:self selector:@selector(beginUpdateStatus:)];
 
   // show a default menu
-  [menu constructWithNotifications:nil messages:nil];
+  [[MenuManager manager] constructWithNotifications:nil messages:nil];
 
   // if possible, login to facebook!
   if ([[NetConnection netConnection] isOnline]) {
@@ -163,9 +152,9 @@ FBConnect* connectSession;
 - (void)updateMenu
 {
   int unseen = [notifications unseenCount] + [messages unseenCount];
-  [menu setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
-  [menu constructWithNotifications:notifications
-                          messages:messages];
+  [[MenuManager manager] setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
+  [[MenuManager manager] constructWithNotifications:notifications
+                                           messages:messages];
 }
 
 #pragma mark IBActions

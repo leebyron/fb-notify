@@ -9,14 +9,18 @@
 #import "StatusUpdateManager.h"
 #import "StatusUpdateWindow.h"
 #import "PhotoAttachmentView.h"
+#import "BubbleManager.h"
+#import "ApplicationController.h"
+#import "ImageDictionary.h"
 #import "GlobalSession.h"
+#import "NSImage+.h"
 
 
 @implementation StatusUpdateManager
 
-static StatusUpdateManager* manager;
+static StatusUpdateManager* manager = nil;
 
-@synthesize lastStatusUpdate, lastUpdateRequest;
+@synthesize lastUpdateRequest;
 
 + (StatusUpdateManager*)manager
 {
@@ -28,7 +32,6 @@ static StatusUpdateManager* manager;
 
 - (void)dealloc
 {
-  [lastStatusUpdate release];
   [lastUpdateRequest release];
   [super dealloc];
 }
@@ -38,7 +41,7 @@ static StatusUpdateManager* manager;
   if (![StatusUpdateWindow currentWindow]) {
     [StatusUpdateWindow open];
   }
-  
+
   NSView* attachment = [StatusUpdateWindow currentWindow].attachment;
 
   // if something else is attached, bail.
@@ -64,18 +67,32 @@ static StatusUpdateManager* manager;
   }
 }
 
-- (void)sendPost:(NSDictionary*)post
+- (BOOL)sendPost:(NSDictionary*)post
 {
-  // get status message.
-  self.lastStatusUpdate = [[StatusUpdateWindow currentWindow] statusMessage]; // = post.message
+  // determine type of api call
+  if ([post objectForKey:@"image"]) {
 
-  // get a new update request
-  self.lastUpdateRequest =
-  [connectSession callMethod:@"status.set"//@"stream.publish"
-               withArguments:[NSDictionary dictionaryWithObjectsAndKeys:lastStatusUpdate, @"status", nil]
-                      target:self
-                    selector:@selector(statusUpdateWasPublished:)
-                       error:nil];
+    NSLog(@"image data: %@", post);
+
+    self.lastUpdateRequest =
+      [connectSession callMethod:@"photos.upload"
+                   withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"caption", nil]
+                       withFiles:[NSArray arrayWithObject:[post objectForKey:@"image"]]
+                          target:self
+                        selector:@selector(statusUpdateWasPublished:)];
+
+  } else if ([[post objectForKey:@"message"] length] > 0) {
+    // get a new update request
+    self.lastUpdateRequest =
+      [connectSession callMethod:@"status.set"//@"stream.publish"
+                   withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"status", nil]
+                          target:self
+                        selector:@selector(statusUpdateWasPublished:)];
+  } else {
+    return NO;
+  }
+
+  [self.lastUpdateRequest setUserData:post];
 
   // if we don't have permission to do this, get the permission!
   if (![connectSession hasPermission:@"publish_stream"]) {
@@ -87,6 +104,8 @@ static StatusUpdateManager* manager;
   } else {
     lastUpdateRequest = nil;
   }
+
+  return YES;
 }
 
 - (void)statusPermissionResponse:(NSSet*)acceptedPermissions
@@ -99,15 +118,18 @@ static StatusUpdateManager* manager;
   }
 }
 
-- (void)statusUpdateWasPublished:(id)reply
+- (void)statusUpdateWasPublished:(id<FBRequest>)req
 {
-  // TODO HALP!
-  /*
-   [bubbleManager addBubbleWithText:lastStatusUpdate
-   subText:nil
-   image:[profilePics imageForKey:[connectSession uid]]
-   action:[NSURL URLWithString:[menu profileURL]]];
-   */
+  if ([req error]) {
+    NSLog(@"error: %@", [req error]);
+    return;
+  }
+
+  ImageDictionary* profilePics = [((ApplicationController*)[NSApp delegate]) profilePics];
+  [[BubbleManager manager] addBubbleWithText:[[req userData] objectForKey:@"message"]
+                                     subText:nil
+                                       image:[profilePics imageForKey:[connectSession uid]]
+                                      action:[NSURL URLWithString:[[MenuManager manager] profileURL]]];
 }
 
 @end

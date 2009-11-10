@@ -48,14 +48,21 @@
 @interface QueryManager (Private)
 
 - (void)queryAfterDelay:(NSTimeInterval)delay;
+
 - (void)query;
-- (void)completedMultiquery:(id)response;
-- (void)failedMultiquery:(NSError*)error;
+
+- (void)completedMultiquery:(id<FBRequest>)response;
+
 - (void)processUserInfo:(id)userInfo;
+
 - (void)processAppIcons:(id)fqlResultSet;
+
 - (void)processPics:(id)fqlResultSet;
+
 - (void)processNotifications:(id)fqlResultSet;
+
 - (void)processMessages:(id)fqlResultSet;
+
 - (void)processVerifyMessages:(id)fqlResultSet;
 
 @end
@@ -144,12 +151,12 @@
   NSString* appIconQuery = [NSString stringWithFormat:kChainedAppIconQueryFmt,
                             kNotifQueryName];
   NSMutableDictionary* multiQuery =
-  [NSMutableDictionary dictionaryWithObjectsAndKeys:notifQuery,   kNotifQueryName,
-                                                    messageQuery, kMessageQueryName,
+  [NSMutableDictionary dictionaryWithObjectsAndKeys:notifQuery,         kNotifQueryName,
+                                                    messageQuery,       kMessageQueryName,
                                                     verifyMessageQuery, kVerifyMessageQueryName,
-                                                    picQuery,     kChainedPicQueryName,
-                                                    appIconQuery, kChainedAppIconQueryName, nil];
-  if ([[parent menu] profileURL] == nil) {
+                                                    picQuery,           kChainedPicQueryName,
+                                                    appIconQuery,       kChainedAppIconQueryName, nil];
+  if ([[MenuManager manager] profileURL] == nil) {
     NSString* infoQuery = [NSString stringWithFormat:kInfoQueryFmt,
                                                      [connectSession uid]];
     [multiQuery setObject:infoQuery forKey:kInfoQueryName];
@@ -158,11 +165,10 @@
   status = QUERY_WAITING_FOR_RESPONSE;
   [connectSession fqlMultiquery:multiQuery
                          target:self
-                       selector:@selector(completedMultiquery:)
-                          error:@selector(failedMultiquery:)];
+                       selector:@selector(completedMultiquery:)];
 }
 
-- (void)completedMultiquery:(id)response
+- (void)completedMultiquery:(id<FBRequest>)req
 {
   // if we're not online, this must be bogus.
   if (![[NetConnection netConnection] isOnline]) {
@@ -170,7 +176,30 @@
   }
 
   // get ready to query again shortly...
-  [self queryAfterDelay:kQueryInterval];
+  if ([connectSession isLoggedIn]) {
+    [self queryAfterDelay:kRetryQueryInterval];
+  }
+
+  if ([req error]) {
+    // get error
+    NSError* error = [req error];
+
+    // let us know what happened
+    if ([error code] > 0) {
+      NSLog(@"multiquery failed (fb error:%i) -> %@",
+            [error code],
+            [[error userInfo] objectForKey:kFBErrorMessageKey]);
+    } else {
+      NSLog(@"multiquery failed (net error:%i) -> %@",
+            [error code],
+            [[[[error userInfo] objectForKey:NSUnderlyingErrorKey] userInfo] objectForKey:NSLocalizedDescriptionKey]);
+    }
+
+    NSLog(@"suspect: %@", [error userInfo]);
+  }
+
+  // get response
+  NSDictionary* response = [req response];
 
   // process query results
   [self processUserInfo:[response objectForKey:kInfoQueryName]];
@@ -186,40 +215,14 @@
   [[NSApp delegate] invalidate];
 }
 
-- (void)failedMultiquery:(NSError*)error
-{
-  // if we're not online, it's obvious that this would fail
-  if (![[NetConnection netConnection] isOnline]) {
-    return;
-  }
-
-  // get ready to query again in a reasonable amount of time, if we're logged in
-  if ([connectSession isLoggedIn]) {
-    [self queryAfterDelay:kRetryQueryInterval];
-  }
-
-  // let us know what happened
-  if ([error code] > 0) {
-    NSLog(@"multiquery failed (fb error:%i) -> %@",
-          [error code],
-          [[error userInfo] objectForKey:kFBErrorMessageKey]);
-  } else {
-    NSLog(@"multiquery failed (net error:%i) -> %@",
-          [error code],
-          [[[[error userInfo] objectForKey:NSUnderlyingErrorKey] userInfo] objectForKey:NSLocalizedDescriptionKey]);
-  }
-
-  NSLog(@"suspect: %@", [error userInfo]);
-}
-
 - (void)processUserInfo:(id)userInfo
 {
   if (userInfo == nil) {
     return;
   }
   userInfo = [userInfo objectAtIndex:0];
-  [[parent menu] setUserName:[userInfo stringForKey:@"name"]];
-  [[parent menu] setProfileURL:[userInfo stringForKey:@"profile_url"]];
+  [[MenuManager manager] setUserName:[userInfo stringForKey:@"name"]];
+  [[MenuManager manager] setProfileURL:[userInfo stringForKey:@"profile_url"]];
 }
 
 - (void)processAppIcons:(id)result

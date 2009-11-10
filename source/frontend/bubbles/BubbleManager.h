@@ -26,6 +26,8 @@ enum {
 
 @property(retain) NSMutableArray* windows;
 
++ (BubbleManager*)manager;
+
 - (BOOL)useGrowl;
 
 - (void)addBubbleWithText:(NSString *)text

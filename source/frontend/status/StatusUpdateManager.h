@@ -11,11 +11,9 @@
 
 
 @interface StatusUpdateManager : NSObject {
-  NSString* lastStatusUpdate;
   id<FBRequest> lastUpdateRequest;
 }
 
-@property(retain) NSString* lastStatusUpdate;
 @property(assign) id<FBRequest> lastUpdateRequest;
 
 + (StatusUpdateManager*)manager;
@@ -23,6 +21,6 @@
 - (BOOL)attachPhoto:(NSImage*)image;
 - (void)removeAttachment;
 
-- (void)sendPost:(NSDictionary*)post;
+- (BOOL)sendPost:(NSDictionary*)post;
 
 @end

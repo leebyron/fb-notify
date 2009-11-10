@@ -13,4 +13,7 @@
 
 + (NSImage*)bundlePNG:(NSString*)imageName;
 
+- (void)resizeToFit:(NSSize)size
+          usingMode:(NSImageScaling)scale;
+
 @end

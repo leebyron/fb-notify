@@ -34,7 +34,7 @@ enum {
 
 @implementation LoginItemManager
 
-static LoginItemManager* instance;
+static LoginItemManager* instance = nil;
 
 + (LoginItemManager*)manager
 {

@@ -18,7 +18,7 @@
 
 @implementation StatusUpdateWindow
 
-static StatusUpdateWindow* currentWindow;
+static StatusUpdateWindow* currentWindow = nil;
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Static Methods
@@ -113,8 +113,7 @@ static StatusUpdateWindow* currentWindow;
 
 - (IBAction)submit:(id)sender
 {
-  if ([[self statusMessage] length] > 0) {
-    [[StatusUpdateManager manager] sendPost:[self streamPost]];
+  if ([[StatusUpdateManager manager] sendPost:[self streamPost]]) {
     [self close];
   }
 }
@@ -123,6 +122,12 @@ static StatusUpdateWindow* currentWindow;
 {
   NSMutableDictionary* post = [NSMutableDictionary dictionary];
   [post setObject:[[[messageBox documentView] string] copy] forKey:@"message"];
+
+  if ([attachment isKindOfClass:[PhotoAttachmentView class]] &&
+      ((PhotoAttachmentView*)attachment).image) {
+    [post setObject:((PhotoAttachmentView*)attachment).image forKey:@"image"];
+  }
+
   return post;
 }
 

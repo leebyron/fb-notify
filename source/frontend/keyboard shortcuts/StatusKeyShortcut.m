@@ -27,7 +27,7 @@ OSStatus globalHotKeyHandler(EventHandlerCallRef nextHandler, EventRef theEvent,
 
 @implementation StatusKeyShortcut
 
-static StatusKeyShortcut* instance;
+static StatusKeyShortcut* instance = nil;
 
 + (StatusKeyShortcut*)instance
 {

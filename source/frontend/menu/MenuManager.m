@@ -59,7 +59,17 @@ enum {
 
 @implementation MenuManager
 
+static MenuManager* manager = nil;
+
 @synthesize statusItem, userName, profileURL, profilePics, appIcons;
+
++ (MenuManager*)manager
+{
+  if (manager == nil) {
+    manager = [[MenuManager alloc] init];
+  }
+  return manager;
+}
 
 - (id)init
 {
