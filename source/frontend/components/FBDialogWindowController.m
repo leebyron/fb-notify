@@ -143,10 +143,7 @@
   if (!editor) {
     editor = [[NSTextView alloc] initWithFrame:NSZeroRect];
   }
-  
-  NSLog(@"will return editor");
   return editor;
-  //  return nil;
 }
 
 - (void)sizeToFit
