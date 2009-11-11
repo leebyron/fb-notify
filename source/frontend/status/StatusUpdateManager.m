@@ -8,9 +8,10 @@
 
 #import "StatusUpdateManager.h"
 #import "StatusUpdateWindow.h"
-#import "PhotoAttachmentView.h"
-#import "BubbleManager.h"
 #import "ApplicationController.h"
+#import "PhotoAttachmentView.h"
+#import "LinkAttachmentView.h"
+#import "BubbleManager.h"
 #import "ImageDictionary.h"
 #import "GlobalSession.h"
 #import "NSImage+.h"
@@ -36,6 +37,15 @@ static StatusUpdateManager* manager = nil;
   [super dealloc];
 }
 
+- (BOOL)appendString:(NSString*)string
+{
+  if (![StatusUpdateWindow currentWindow]) {
+    [StatusUpdateWindow open];
+  }
+
+  [[StatusUpdateWindow currentWindow] appendString:string];
+}
+
 - (BOOL)attachPhoto:(NSImage*)image
 {
   if (![StatusUpdateWindow currentWindow]) {
@@ -46,17 +56,40 @@ static StatusUpdateManager* manager = nil;
 
   // if something else is attached, bail.
   if (attachment && ![attachment isKindOfClass:[PhotoAttachmentView class]]) {
-    NSLog(@"somethign else is attached");
+    NSLog(@"something else is already attached");
     return NO;
   }
 
   // if nothing is attached, attach an image attachment
-  if (attachment == nil) {
-    [StatusUpdateWindow currentWindow].attachment = [[[PhotoAttachmentView alloc] initWithFrame:NSZeroRect] autorelease];
+  PhotoAttachmentView* photoAttachment = (PhotoAttachmentView*)attachment;
+  if (photoAttachment == nil) {
+    photoAttachment = [[[PhotoAttachmentView alloc] init] autorelease];
+    [StatusUpdateWindow currentWindow].attachment = photoAttachment;
   }
 
   // set the image here
-  ((PhotoAttachmentView*)[StatusUpdateWindow currentWindow].attachment).image = image;
+  photoAttachment.image = image;
+  return YES;
+}
+
+- (BOOL)attachLink:(NSURL*)link
+{
+  if (![StatusUpdateWindow currentWindow]) {
+    [StatusUpdateWindow open];
+  }
+
+  NSView* attachment = [StatusUpdateWindow currentWindow].attachment;
+
+  // if something else is attached, bail.
+  if (attachment) {
+    NSLog(@"something else is already attached");
+    return NO;
+  }
+
+  // attach an link attachment
+  LinkAttachmentView* linkAttachment = [[[LinkAttachmentView alloc] init] autorelease];
+  [StatusUpdateWindow currentWindow].attachment = linkAttachment;
+  linkAttachment.link = link;
   return YES;
 }
 
@@ -72,7 +105,7 @@ static StatusUpdateManager* manager = nil;
   // determine type of api call
   if ([post objectForKey:@"image"]) {
 
-    NSLog(@"image data: %@", post);
+    NSLog(@"post data: %@", post);
 
     self.lastUpdateRequest =
       [connectSession callMethod:@"photos.upload"
@@ -81,16 +114,30 @@ static StatusUpdateManager* manager = nil;
                           target:self
                         selector:@selector(statusUpdateWasPublished:)];
 
+  } else if ([post objectForKey:@"link"]) {
+    // get a new update request
+    self.lastUpdateRequest =
+    [connectSession callMethod:@"links.post"
+                 withArguments:[NSDictionary dictionaryWithObjectsAndKeys:
+                                [post objectForKey:@"message"], @"comment",
+                                [post objectForKey:@"link"], @"url", nil]
+//                                @"http://labs.ideo.com/wp-content/uploads/2009/11/dscn4403.jpg", @"image", nil]
+                        target:self
+                      selector:@selector(statusUpdateWasPublished:)];
+
   } else if ([[post objectForKey:@"message"] length] > 0) {
     // get a new update request
     self.lastUpdateRequest =
-      [connectSession callMethod:@"status.set"//@"stream.publish"
-                   withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"status", nil]
-                          target:self
-                        selector:@selector(statusUpdateWasPublished:)];
+    [connectSession callMethod:@"status.set"//@"stream.publish"
+                 withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"status", nil]
+                        target:self
+                      selector:@selector(statusUpdateWasPublished:)];
+
   } else {
     return NO;
   }
+
+  NSLog(@"%@", self.lastUpdateRequest);
 
   [self.lastUpdateRequest setUserData:post];
 
@@ -121,7 +168,7 @@ static StatusUpdateManager* manager = nil;
 - (void)statusUpdateWasPublished:(id<FBRequest>)req
 {
   if ([req error]) {
-    NSLog(@"error: %@", [req error]);
+    NSLog(@"error: %@ %@", [req error], [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
     return;
   }
 

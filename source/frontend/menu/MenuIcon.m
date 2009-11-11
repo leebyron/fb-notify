@@ -44,10 +44,10 @@ enum {
     fbShareIcon3  = [[NSImage bundlePNG:@"fb_share_3"] retain];
     fbShareIcon4  = [[NSImage bundlePNG:@"fb_share_4"] retain];
 
-    NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSStringPboardType,
-                                                          NSFilenamesPboardType,
-                                                          NSTIFFPboardType, nil];
-                                                          //NSURLPboardType, nil]; // enable for links
+    NSArray *draggedTypeArray = [NSArray arrayWithObjects:NSFilenamesPboardType,
+                                                          NSTIFFPboardType,
+                                                          NSURLPboardType,
+                                                          NSStringPboardType, nil];
     [self registerForDraggedTypes:draggedTypeArray];
     [self setIconStatus:MENU_ICON_NORMAL];
   }
@@ -191,11 +191,14 @@ enum {
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
-{  
-  if ([[sender draggingPasteboard] hasImage]) {
+{
+  if ([[sender draggingPasteboard] hasImage] ||
+      [[sender draggingPasteboard] hasLink] ||
+      [[sender draggingPasteboard] hasString]) {
     [self animateWithUpDirection:YES];
     return NSDragOperationLink;
   }
+
   return NSDragOperationNone;
 }
 
@@ -217,7 +220,22 @@ enum {
     [[StatusUpdateManager manager] attachPhoto:img];
     return YES;
   }
-  return NO;
+
+  NSURL* link = [[sender draggingPasteboard] getLink];
+  if (link) {
+    BOOL success = [[StatusUpdateManager manager] attachLink:link];
+
+    if (!success || [[sender draggingPasteboard] hasMoreThanLink]) {
+      [[StatusUpdateManager manager] appendString:[[sender draggingPasteboard] getString]];
+    }
+    return YES;
+  }
+
+  NSString* string = [[sender draggingPasteboard] getString];
+  if (string) {
+    [[StatusUpdateManager manager] appendString:string];
+  }
+  return YES;
 }
 
 @end

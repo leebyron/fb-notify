@@ -9,6 +9,7 @@
 #import "StatusUpdateWindow.h"
 #import "StatusUpdateManager.h"
 #import "PhotoAttachmentView.h"
+#import "LinkAttachmentView.h"
 
 #define kStatusUpdateWindowX @"statusUpdateWindowX"
 #define kStatusUpdateWindowY @"statusUpdateWindowY"
@@ -68,7 +69,7 @@ static StatusUpdateWindow* currentWindow = nil;
     button.title = NSLocalizedString(@"Share", @"Button title for sending a status update");
     button.toolTip = @"⌘Enter";
     button.target = self;
-    button.action = @selector(share:);
+    button.action = @selector(submit:);
     [buttonBar addSubview:button];
     [button release];
 
@@ -91,6 +92,22 @@ static StatusUpdateWindow* currentWindow = nil;
   [attachmentBox release];
   [attachment release];
   [super dealloc];
+}
+
+- (void)appendString:(NSString*)string
+{
+  NSTextView* view = ((NSTextView*)[messageBox documentView]);
+
+  if ([[view string] length] > 0) {
+    string = [NSString stringWithFormat:@" %@", string];
+  }
+
+  NSAttributedString *stringToAppend =
+    [[NSAttributedString alloc] initWithString:string];
+
+  [[view textStorage] appendAttributedString:stringToAppend];
+
+  [stringToAppend release];
 }
 
 - (void)removeButtonPressed
@@ -130,12 +147,12 @@ static StatusUpdateWindow* currentWindow = nil;
     [post setObject:((PhotoAttachmentView*)attachment).image forKey:@"image"];
   }
 
-  return post;
-}
+  if ([attachment isKindOfClass:[LinkAttachmentView class]] &&
+      ((LinkAttachmentView*)attachment).link) {
+    [post setObject:[((LinkAttachmentView*)attachment).link absoluteString] forKey:@"link"];
+  }
 
-- (NSString *)statusMessage
-{
-  return [NSString stringWithString:[[messageBox documentView] string]];
+  return post;
 }
 
 - (void)setAttachment:(NSView*)view
@@ -168,8 +185,15 @@ static StatusUpdateWindow* currentWindow = nil;
    object:view];
 
   // set remove button
-  removeButton.title = view ? NSLocalizedString(@"Remove Photo", @"Button to remove a photo attachment")
-                            : NSLocalizedString(@"Add Photo", @"Button to add a photo attachment");
+  if (!view) {
+    removeButton.title = NSLocalizedString(@"Add Photo", @"Button to add a photo attachment");
+  } else if ([view isKindOfClass:[PhotoAttachmentView class]]) {
+    removeButton.title = NSLocalizedString(@"Remove Photo", @"Button to remove a photo attachment");
+  } else if ([view isKindOfClass:[LinkAttachmentView class]]) {
+    removeButton.title = NSLocalizedString(@"Remove Link", @"Button to remove a link attachment");
+  } else {
+    removeButton.title = NSLocalizedString(@"Remove Attachment", @"Button to remove a generic attachment");
+  }
 }
 
 - (void)attachmentFrameDidChange:(NSNotification*)notif

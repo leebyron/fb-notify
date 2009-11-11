@@ -33,7 +33,8 @@
 
 @synthesize image;
 
-- (id)initWithFrame:(NSRect)frame {
+- (id)initWithFrame:(NSRect)frame
+{
   frame.size.height = kEmptyImageHeight;
   self = [super initWithFrame:frame];
   if (self) {
@@ -52,6 +53,8 @@
 
 - (void)dealloc
 {
+  [image release];
+  [imageView release];
   [super dealloc];
 }
 

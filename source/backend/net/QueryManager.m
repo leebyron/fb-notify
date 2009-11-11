@@ -259,10 +259,10 @@
     for (FBNotification* notification in newNotifications) {
       if ([notification boolForKey:@"is_unread"]) {
         NSImage* pic = [[parent profilePics] imageForKey:[notification uidForKey:@"sender_id"]];
-        [[parent bubbleManager] addBubbleWithText:[notification stringForKey:@"title_text"]
-                                          subText:[notification stringForKey:@"body_text"]
-                                            image:pic
-                                           action:notification];
+        [[BubbleManager manager] addBubbleWithText:[notification stringForKey:@"title_text"]
+                                           subText:[notification stringForKey:@"body_text"]
+                                             image:pic
+                                            action:notification];
       }
     }
   }
@@ -296,10 +296,10 @@
           bubText = bubSubText;
           bubSubText = nil;
         }
-        [[parent bubbleManager] addBubbleWithText:bubText
-                                          subText:bubSubText
-                                            image:pic
-                                           action:message];
+        [[BubbleManager manager] addBubbleWithText:bubText
+                                           subText:bubSubText
+                                             image:pic
+                                            action:message];
       }
     }
   }

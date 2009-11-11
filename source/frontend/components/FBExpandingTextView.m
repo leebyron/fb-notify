@@ -169,11 +169,22 @@
 
 - (void)paste:(id)sender
 {
+  // pasting an image?
   if ([[NSPasteboard generalPasteboard] hasImage]) {
     NSImage* img = [[NSPasteboard generalPasteboard] getImage];
     [[StatusUpdateManager manager] attachPhoto:img];
 
-    // otherwise do text
+  // pasting a link
+  } else if ([[NSPasteboard generalPasteboard] hasLink]) {
+    NSURL* link = [[NSPasteboard generalPasteboard] getLink];
+    BOOL success = [[StatusUpdateManager manager] attachLink:link];
+
+    // if the link wasn't attached, or contains more than just a link, paste it
+    if (!success || [[NSPasteboard generalPasteboard] hasMoreThanLink]) {
+      [self pasteAsPlainText:sender];
+    }
+
+  // otherwise do text
   } else {
     [self pasteAsPlainText:sender];
   }
@@ -190,6 +201,15 @@
   // attempt to paste an image
   if ([[sender draggingPasteboard] hasImage]) {
     [[StatusUpdateManager manager] attachPhoto:[[sender draggingPasteboard] getImage]];
+    return YES;
+  }
+
+  if ([[sender draggingPasteboard] hasLink]) {
+    BOOL success = [[StatusUpdateManager manager] attachLink:[[sender draggingPasteboard] getLink]];
+
+    if (!success || [[sender draggingPasteboard] hasMoreThanLink]) {
+      [super performDragOperation:sender];
+    }
     return YES;
   }
 

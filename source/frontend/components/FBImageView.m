@@ -91,38 +91,6 @@
   }
 
   NSSize imageSize = image.size;
-  
-  /*
-  NSSize layoutSize = imageSize;
-  float rx, ry, r;
-  
-
-  switch (imageScaling) {
-    default:
-    case NSImageScaleProportionallyDown:
-      rx = bounds.size.width / layoutSize.width;
-      ry = bounds.size.height / layoutSize.height;
-      r = MIN(1, (rx < ry ? rx : ry));
-      layoutSize.width *= r;
-      layoutSize.height *= r;
-      [image setSize:layoutSize];
-      break;
-    case NSImageScaleProportionallyUpOrDown:
-      rx = bounds.size.width / layoutSize.width;
-      ry = bounds.size.height / layoutSize.height;
-      r = rx < ry ? rx : ry;
-      layoutSize.width *= r;
-      layoutSize.height *= r;
-      [image setSize:layoutSize];
-      break;
-    case NSImageScaleAxesIndependently:
-      layoutSize = bounds.size;
-      [image setSize:layoutSize];
-      break;
-    case NSScaleNone:
-      break;
-  }
-   */
   [image resizeToFit:bounds.size usingMode:imageScaling];
 
   // center image

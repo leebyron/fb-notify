@@ -28,12 +28,13 @@
 + (id)open;
 + (StatusUpdateWindow*)currentWindow;
 
+- (void)appendString:(NSString*)string;
+
 // delegate responses
 - (IBAction)cancel:(id)sender;
 - (IBAction)submit:(id)sender;
 
 // results
 - (NSDictionary*)streamPost;
-- (NSString *)statusMessage; // oldskool
 
 @end

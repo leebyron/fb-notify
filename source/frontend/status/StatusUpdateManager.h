@@ -18,7 +18,10 @@
 
 + (StatusUpdateManager*)manager;
 
+- (BOOL)appendString:(NSString*)string;
+
 - (BOOL)attachPhoto:(NSImage*)image;
+- (BOOL)attachLink:(NSURL*)link;
 - (void)removeAttachment;
 
 - (BOOL)sendPost:(NSDictionary*)post;
