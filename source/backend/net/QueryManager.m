@@ -196,6 +196,7 @@
     }
 
     NSLog(@"suspect: %@", [error userInfo]);
+    return; // if we get an error, skip the rest!
   }
 
   // get response
