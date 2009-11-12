@@ -131,7 +131,7 @@ static StatusUpdateManager* manager = nil;
   } else if ([[post objectForKey:@"message"] length] > 0) {
     // get a new update request
     self.lastUpdateRequest =
-    [connectSession callMethod:@"status.set"//@"stream.publish"
+    [connectSession callMethod:@"status.set"
                  withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"status", nil]
                         target:self
                       selector:@selector(statusUpdateWasPublished:)];
@@ -139,8 +139,6 @@ static StatusUpdateManager* manager = nil;
   } else {
     return NO;
   }
-
-  NSLog(@"%@", self.lastUpdateRequest);
 
   [self.lastUpdateRequest setUserData:post];
 

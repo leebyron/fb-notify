@@ -5,10 +5,17 @@
 
 + (BOOL)exists:(id)string
 {
-  return string != nil && [string isKindOfClass:[NSString class]] && [string respondsToSelector:@selector(length)] && [string length] > 0;
+  return string != nil &&
+         [string isKindOfClass:[NSString class]] &&
+         [string respondsToSelector:@selector(length)] &&
+         [string length] > 0;
 }
 
-- (NSString *) stringByDecodingXMLEntities {
+- (NSString*)trim {
+  return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (NSString*)stringByDecodingXMLEntities {
   if (![NSString exists:self]) {
     return [NSString stringWithString:@""];
   }
@@ -84,14 +91,14 @@ finish:
   return result;
 }
 
-- (NSString *) condenseString
+- (NSString*)condenseString
 {
   return [[[self stringByReplacingOccurrencesOfString:@" ..." withString:kEllipsis]
                  stringByReplacingOccurrencesOfString:@"..." withString:kEllipsis]
                  stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
 }
 
-- (NSString *) stringByRemovingStrings:(NSArray *)list
+- (NSString*)stringByRemovingStrings:(NSArray*)list
 {
   NSString* trimmed = self;
   for (NSString* item in list) {

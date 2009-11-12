@@ -2,7 +2,8 @@
 
 @interface NSString (XML)
 + (BOOL)exists:(id)string;
-- (NSString *) stringByDecodingXMLEntities;
-- (NSString *) condenseString;
-- (NSString *) stringByRemovingStrings:(NSArray *)list;
+- (NSString*)trim;
+- (NSString*)stringByDecodingXMLEntities;
+- (NSString*)condenseString;
+- (NSString*)stringByRemovingStrings:(NSArray*)list;
 @end

@@ -16,10 +16,13 @@
 #define kEmptyLinkHeight 80
 #define kMaxLinkImageHeight 130
 #define kMaxLinkImageWidth 130
+#define kMinLinkImageSize 50
 #define kLoaderSize 30
 #define kLoadingImageSize 50
 #define kHorizontalMargin 10
 #define kVerticalMargin 3
+#define kPagerButtonWidth 30
+#define kPagerButtonHeight 21
 #define kTextDrawingOptions NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesFontLeading
 
 
@@ -43,10 +46,29 @@
     attachment = nil;
     currentImageIndex = -1;
     images = [[NSMutableArray alloc] init];
+
     loader = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0, 0, kLoaderSize, kLoaderSize)];
     loader.style = NSProgressIndicatorSpinningStyle;
     [loader setDisplayedWhenStopped:NO];
     [self addSubview:loader];
+
+    leftArrow = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, kPagerButtonWidth, kPagerButtonHeight)];
+    leftArrow.bezelStyle = NSSmallSquareBezelStyle;
+    leftArrow.imagePosition = NSImageOnly;
+    leftArrow.image = [NSImage imageNamed:NSImageNameGoLeftTemplate];
+    leftArrow.target = self;
+    leftArrow.action = @selector(leftArrowPressed);
+    [leftArrow setHidden:YES];
+    [self addSubview:leftArrow];
+
+    rightArrow = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, kPagerButtonWidth, kPagerButtonHeight)];
+    rightArrow.bezelStyle = NSSmallSquareBezelStyle;
+    rightArrow.imagePosition = NSImageOnly;
+    rightArrow.image = [NSImage imageNamed:NSImageNameGoRightTemplate];
+    rightArrow.target = self;
+    rightArrow.action = @selector(rightArrowPressed);
+    [rightArrow setHidden:YES];
+    [self addSubview:rightArrow];
   }
   return self;
 }
@@ -56,6 +78,15 @@
   [link release];
   [attachment release];
   [images release];
+
+  [loader release];
+  [leftArrow release];
+  [rightArrow release];
+
+  [nameStyle release];
+  [captionStyle release];
+  [descriptionStyle release];
+
   [super dealloc];
 }
 
@@ -110,23 +141,27 @@
   if ([req error]) {
     // detach link
     link = nil;
-    NSLog(@"error getting preview %@", [req error], [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
+    NSLog(@"error getting link preview %@", [req error], [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
     return;
   }
 
   // set attachment
   self.attachment = [req response];
-  NSLog(@"got preview %@", self.attachment);
 
   // purge array
   [images removeAllObjects];
 
   // load any images?
+  isVideo = NO;
   for (NSDictionary* imageDict in [self.attachment objectForKey:@"media"]) {
-    NSURL* url = [NSURL URLWithString:[imageDict objectForKey:@"src"]];
-    AsyncImage* image = [AsyncImage imageByLoadingURL:url];
-    image.delegate = self;
-    [images addObject:image];
+    if ([[imageDict stringForKey:@"type"] isEqualToString:@"image"]) {
+      NSURL* url = [NSURL URLWithString:[imageDict stringForKey:@"src"]];
+      AsyncImage* image = [AsyncImage imageByLoadingURL:url];
+      image.delegate = self;
+      [images addObject:image];
+    } else if ([[imageDict stringForKey:@"type"] isEqualToString:@"video"]) {
+      isVideo = YES;
+    }
   }
 
   // focus on the first image by default
@@ -137,12 +172,43 @@
 }
 
 
+// adjust links
+
+- (void)leftArrowPressed
+{
+  currentImageIndex = MAX(0, currentImageIndex - 1);
+  [self setNeedsDisplay:YES];
+  [self calculateBounds];
+}
+
+- (void)rightArrowPressed
+{
+  currentImageIndex = MIN([images count] - 1, currentImageIndex + 1);
+  [self setNeedsDisplay:YES];
+  [self calculateBounds];
+}
+
+
 // asyncimagedelegate methods
+
 - (void)imageHasData:(AsyncImage*)image
 {
+  // if this image sucks, toss it out.
+  if (image.image.size.width < kMinLinkImageSize ||
+      image.image.size.height < kMinLinkImageSize) {
+    [images removeObject:image];
+    if (currentImageIndex >= [images count]) {
+      currentImageIndex--;
+    }
+    [self calculateBounds];
+    [self setNeedsDisplay:YES];
+    return;
+  }
+
+  // otherwise size it and draw it
+  [image.image resizeToFit:NSMakeSize(kMaxLinkImageWidth, kMaxLinkImageHeight)
+                 usingMode:NSScaleProportionally];
   if (image == [images objectAtIndex:currentImageIndex]) {
-    [image.image resizeToFit:NSMakeSize(kMaxLinkImageWidth, kMaxLinkImageHeight)
-                   usingMode:NSScaleProportionally];
     [self calculateBounds];
     [self setNeedsDisplay:YES];
   }
@@ -150,17 +216,13 @@
 
 - (void)imageFailed:(AsyncImage*)image
 {
-  if (image == [images objectAtIndex:currentImageIndex]) {
-    // try to move to the next one, without creating an infinite loop of awfulness
-    if (currentImageIndex < [images count] - 1) {
-      currentImageIndex++;
-    } else if (currentImageIndex = [images count] - 1 &&
-               [[images objectAtIndex:0] isLoaded]) {
-      currentImageIndex = 0;
-    }
-    [self calculateBounds];
-    [self setNeedsDisplay:YES];
+  // toss it out
+  [images removeObject:image];
+  if (currentImageIndex >= [images count]) {
+    currentImageIndex--;
   }
+  [self calculateBounds];
+  [self setNeedsDisplay:YES];
 }
 
 
@@ -196,9 +258,6 @@
   captionSize = NSMakeSize(0,0);
   NSString* caption = [self.attachment stringForKey:@"caption"];
   if (caption) {
-    caption = [NSString stringWithFormat:@"%@: %@",
-               NSLocalizedString(@"Source", @"Source domain for an attached link"),
-               caption];
     captionSize = [caption boundingRectWithSize:contentMaxSize
                                         options:kTextDrawingOptions
                                      attributes:self.captionStyle].size;
@@ -223,6 +282,14 @@
     contentSize.height += kVerticalMargin;
   }
   contentSize.height += descriptionSize.height;
+
+  // size of image pager
+  if ([images count] > 1) {
+    if (descriptionSize.height > 0 && contentSize.height > 0) {
+      contentSize.height += kVerticalMargin * 2;
+    }
+    contentSize.height += kPagerButtonHeight;
+  }
 
   // get total size
   NSRect finalFrame = NSMakeRect(self.frame.origin.x,
@@ -283,6 +350,14 @@
         // draw the image!
         NSRect imageRect = NSMakeRect(0, ceil(fullHeight - imageSize.height), imageSize.width, imageSize.height);
         [currentImage.image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeSourceAtop fraction:1.0];
+
+        // draw a playhead if its a video
+        if (isVideo) {
+          NSImage* videoPlayButton = [NSImage imageNamed:@"playbutton.png"];
+          NSRect videoRect = NSMakeRect(0, ceil(fullHeight - imageSize.height),
+                                        videoPlayButton.size.width, videoPlayButton.size.height);
+          [videoPlayButton drawInRect:videoRect fromRect:NSZeroRect operation:NSCompositeSourceAtop fraction:1.0];
+        }
       }
     }
   }
@@ -305,9 +380,6 @@
 
   NSString* caption = [self.attachment stringForKey:@"caption"];
   if (caption) {
-    caption = [NSString stringWithFormat:@"%@: %@",
-               NSLocalizedString(@"Source", @"Source domain for an attached link"),
-               caption];
     NSRect captionBounds = NSMakeRect(textOffset.x, textOffset.y, captionSize.width, captionSize.height);
     captionBounds.origin.y = fullHeight - captionBounds.origin.y - captionBounds.size.height;
     [caption drawWithRect:captionBounds
@@ -324,6 +396,29 @@
                       options:kTextDrawingOptions
                    attributes:self.descriptionStyle];
     textOffset.y += descriptionSize.height + kVerticalMargin;
+  }
+
+  // image pager
+  if ([images count] > 1) {
+    if (textOffset.y > 0) {
+      textOffset.y += kVerticalMargin;
+    }
+    [leftArrow setHidden:NO];
+    [rightArrow setHidden:NO];
+    NSRect leftArrowFrame = NSMakeRect(textOffset.x, textOffset.y,
+                                       kPagerButtonWidth, kPagerButtonHeight);
+    leftArrowFrame.origin.y = fullHeight - leftArrowFrame.origin.y - leftArrowFrame.size.height;
+    leftArrow.frame = leftArrowFrame;
+    [leftArrow setEnabled:(currentImageIndex > 0)];
+
+    NSRect rightArrowFrame = NSMakeRect(textOffset.x + kPagerButtonWidth - 1, textOffset.y,
+                                        kPagerButtonWidth, kPagerButtonHeight);
+    rightArrowFrame.origin.y = fullHeight - rightArrowFrame.origin.y - rightArrowFrame.size.height;
+    rightArrow.frame = rightArrowFrame;
+    [rightArrow setEnabled:(currentImageIndex < [images count] - 1)];
+  } else {
+    [leftArrow setHidden:YES];
+    [rightArrow setHidden:YES];
   }
 }
 

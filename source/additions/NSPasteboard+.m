@@ -8,6 +8,7 @@
 
 #import "NSPasteboard+.h"
 #import "RegexKitLite.h"
+#import "NSString+.h"
 
 // optional http
 // optional www
@@ -101,9 +102,9 @@
   }
 
   // is there more than just the url in this pasted text?
-  NSString* raw = [self stringForType:type];
-  NSRange linkRange = [raw rangeOfRegex:kLinkRegex];
-  return (linkRange.length < [raw length]);
+  NSString* trimmedText = [[self stringForType:type] trim];
+  NSRange linkRange = [trimmedText rangeOfRegex:kLinkRegex];
+  return (linkRange.length < [trimmedText length]);
 }
 
 - (NSURL*)getLink

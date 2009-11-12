@@ -13,7 +13,11 @@
   NSURL* link;
   NSDictionary* attachment;
   NSMutableArray* images;
+  BOOL isVideo;
+
   NSProgressIndicator* loader;
+  NSButton* leftArrow;
+  NSButton* rightArrow;
 
   NSInteger currentImageIndex;
 

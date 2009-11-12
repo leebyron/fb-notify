@@ -74,6 +74,7 @@
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
+		5342A9F710AC2F4D00500903 /* playbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5342A9F610AC2F4D00500903 /* playbutton.png */; };
 		537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */; };
 		537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
@@ -235,6 +236,7 @@
 		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetConnection.h; sourceTree = "<group>"; };
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		5342A9F610AC2F4D00500903 /* playbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playbutton.png; path = resources/images/playbutton.png; sourceTree = "<group>"; };
 		537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialogWindowController.h; sourceTree = "<group>"; };
 		537BD6A210A176E000CDB44C /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
 		537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateWindow.h; sourceTree = "<group>"; };
@@ -619,6 +621,7 @@
 		53F6FCA1102133FA00CAE806 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5342A9F610AC2F4D00500903 /* playbutton.png */,
 				53FC73DB107E82B500EFAABE /* note.png */,
 				5397CA71106832D300DAD78C /* discussion.png */,
 				5397C2931063616D00DAD78C /* fb_share_1.png */,
@@ -760,6 +763,7 @@
 				5397CA72106832D300DAD78C /* discussion.png in Resources */,
 				53FC73DC107E82B500EFAABE /* note.png in Resources */,
 				53FC73DF107E836300EFAABE /* fb_offline.png in Resources */,
+				5342A9F710AC2F4D00500903 /* playbutton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
