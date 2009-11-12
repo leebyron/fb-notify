@@ -144,12 +144,13 @@ static StatusUpdateWindow* currentWindow = nil;
 
   if ([attachment isKindOfClass:[PhotoAttachmentView class]] &&
       ((PhotoAttachmentView*)attachment).image) {
-    [post setObject:((PhotoAttachmentView*)attachment).image forKey:@"image"];
+    [post setObject:((PhotoAttachmentView*)attachment).image forKey:@"image_data"];
   }
 
   if ([attachment isKindOfClass:[LinkAttachmentView class]] &&
       ((LinkAttachmentView*)attachment).link) {
     [post setObject:[((LinkAttachmentView*)attachment).link absoluteString] forKey:@"link"];
+    [post setObject:((LinkAttachmentView*)attachment).image forKey:@"image_url"];
   }
 
   return post;
@@ -162,8 +163,9 @@ static StatusUpdateWindow* currentWindow = nil;
   [attachment release];
   attachment = view;
 
-  // set the appropriate width to fit
-  [view setFrameSize:NSMakeSize(kStatusUpdateWindowWidth, view.frame.size.height)];
+  // set appropriate margins
+  [attachmentBox setContentViewMargins:(view == nil ? NSZeroSize :
+                                        NSMakeSize(kAttachmentEdgeMargin, kAttachmentEdgeMargin))];
 
   // remove all existing views
   NSView* contentView = [attachmentBox contentView];
@@ -171,8 +173,10 @@ static StatusUpdateWindow* currentWindow = nil;
     [v removeFromSuperview];
   }
 
-  // attach new view
+  // attach new view & set the appropriate width to fit
   if (view) {
+    [view setFrameSize:NSMakeSize(kStatusUpdateWindowWidth - attachmentBox.contentViewMargins.width * 2,
+                                  view.frame.size.height)];
     [contentView addSubview:view];
   }
   [attachmentBox sizeToFit];

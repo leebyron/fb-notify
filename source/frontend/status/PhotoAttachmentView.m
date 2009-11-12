@@ -40,7 +40,7 @@
   if (self) {
     self.boxType = NSBoxCustom;
     self.borderWidth = 0;
-    self.contentViewMargins = NSMakeSize(6, 6);
+    self.contentViewMargins = NSZeroSize;
 
     imageView = [[ImageAttachmentImageView alloc] initWithFrame:
                  NSMakeRect(0, 0, frame.size.width - self.contentViewMargins.width * 2, frame.size.height)];

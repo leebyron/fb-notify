@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define kAttachmentEdgeMargin 8
 
 @interface AttachmentBox : NSBox
 

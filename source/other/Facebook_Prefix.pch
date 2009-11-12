@@ -8,3 +8,6 @@
 
 // useful macros
 #define CLAMP(x, min, max) MAX((min), MIN((max), (x)))
+
+#define DELEGATE(target, sel) {if (target && [target respondsToSelector:(sel)]) {\
+[target performSelector:(sel) withObject:self];}}

@@ -101,6 +101,7 @@
 		53A2AE7010AA1A99008079FB /* LinkAttachmentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2AE6F10AA1A99008079FB /* LinkAttachmentView.m */; };
 		53A2AF9410AAC5D3008079FB /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2AF9310AAC5D3008079FB /* RegexKitLite.m */; };
 		53A2AFBC10AAD41B008079FB /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A2AFBB10AAD41B008079FB /* libicucore.dylib */; };
+		53A2B01210AB9AE1008079FB /* AsyncImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A2B01110AB9AE1008079FB /* AsyncImage.m */; };
 		53DAD12C1056F67E00E664D2 /* NSDictionary+.m in Sources */ = {isa = PBXBuildFile; fileRef = 53DAD12B1056F67E00E664D2 /* NSDictionary+.m */; };
 		53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
 		53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53DAD1C910574F1100E664D2 /* Growl.framework */; };
@@ -279,6 +280,8 @@
 		53A2AF9210AAC5D3008079FB /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		53A2AF9310AAC5D3008079FB /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		53A2AFBB10AAD41B008079FB /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		53A2B01010AB9AE1008079FB /* AsyncImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImage.h; sourceTree = "<group>"; };
+		53A2B01110AB9AE1008079FB /* AsyncImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImage.m; sourceTree = "<group>"; };
 		53DAD12A1056F67E00E664D2 /* NSDictionary+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+.h"; sourceTree = "<group>"; };
 		53DAD12B1056F67E00E664D2 /* NSDictionary+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+.m"; sourceTree = "<group>"; };
 		53DAD1C910574F1100E664D2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = resources/Growl.framework; sourceTree = "<group>"; };
@@ -583,6 +586,8 @@
 				53A2A6E410A67A5E008079FB /* NSBezierPath+.m */,
 				53A2A94610A8B4B8008079FB /* NSPasteboard+.h */,
 				53A2A94710A8B4B8008079FB /* NSPasteboard+.m */,
+				53A2B01010AB9AE1008079FB /* AsyncImage.h */,
+				53A2B01110AB9AE1008079FB /* AsyncImage.m */,
 			);
 			path = additions;
 			sourceTree = "<group>";
@@ -825,6 +830,7 @@
 				53A2AAC410A8D22D008079FB /* FBButton.m in Sources */,
 				53A2AE7010AA1A99008079FB /* LinkAttachmentView.m in Sources */,
 				53A2AF9410AAC5D3008079FB /* RegexKitLite.m in Sources */,
+				53A2B01210AB9AE1008079FB /* AsyncImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

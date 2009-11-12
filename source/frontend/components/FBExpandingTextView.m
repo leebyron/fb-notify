@@ -11,9 +11,6 @@
 #import "NSEvent+.h"
 #import "NSPasteboard+.h"
 
-#define DELEGATE(target, sel) {if (target && [target respondsToSelector:(sel)]) {\
-[target performSelector:(sel) withObject:self];}}
-
 
 //=====================================================================
 // Subview private interfaces

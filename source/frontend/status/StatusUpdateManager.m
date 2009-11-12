@@ -44,6 +44,7 @@ static StatusUpdateManager* manager = nil;
   }
 
   [[StatusUpdateWindow currentWindow] appendString:string];
+  return YES;
 }
 
 - (BOOL)attachPhoto:(NSImage*)image
@@ -81,7 +82,9 @@ static StatusUpdateManager* manager = nil;
   NSView* attachment = [StatusUpdateWindow currentWindow].attachment;
 
   // if something else is attached, bail.
-  if (attachment) {
+  if (attachment &&
+      (![[attachment class] isKindOfClass:[LinkAttachmentView class]] ||
+       ((LinkAttachmentView*)attachment).link != nil)) {
     NSLog(@"something else is already attached");
     return NO;
   }
@@ -103,14 +106,14 @@ static StatusUpdateManager* manager = nil;
 - (BOOL)sendPost:(NSDictionary*)post
 {
   // determine type of api call
-  if ([post objectForKey:@"image"]) {
+  if ([post objectForKey:@"image_data"]) {
 
     NSLog(@"post data: %@", post);
 
     self.lastUpdateRequest =
       [connectSession callMethod:@"photos.upload"
                    withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"caption", nil]
-                       withFiles:[NSArray arrayWithObject:[post objectForKey:@"image"]]
+                       withFiles:[NSArray arrayWithObject:[post objectForKey:@"image_data"]]
                           target:self
                         selector:@selector(statusUpdateWasPublished:)];
 
@@ -120,8 +123,8 @@ static StatusUpdateManager* manager = nil;
     [connectSession callMethod:@"links.post"
                  withArguments:[NSDictionary dictionaryWithObjectsAndKeys:
                                 [post objectForKey:@"message"], @"comment",
-                                [post objectForKey:@"link"], @"url", nil]
-//                                @"http://labs.ideo.com/wp-content/uploads/2009/11/dscn4403.jpg", @"image", nil]
+                                [post objectForKey:@"link"], @"url",
+                                [post objectForKey:@"image_url"], @"image", nil]
                         target:self
                       selector:@selector(statusUpdateWasPublished:)];
 

@@ -34,7 +34,8 @@
 
   NSShadow* innerShadow = [[NSShadow alloc] init];
   innerShadow.shadowOffset = NSMakeSize(0.0, -1.0);
-  innerShadow.shadowBlurRadius = 2.0;
+  innerShadow.shadowBlurRadius = 3.0;
+  innerShadow.shadowColor = [NSColor colorWithCalibratedWhite:0.0 alpha:0.2];
   [edge fillWithInnerShadow:innerShadow];
   [innerShadow release];
 }

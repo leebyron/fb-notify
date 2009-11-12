@@ -70,7 +70,7 @@
     NSString* prompt = NSLocalizedString(@"Drag a photo here or click to browse", @"Prompt for attaching a photo");
 
     NSRect promptBounds = [self bounds];
-    promptBounds.size.height *= 0.5;
+    promptBounds.size.height = (promptBounds.size.height - 12) * 0.5 + 12;
     NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [style setAlignment:NSCenterTextAlignment];
 

@@ -9,7 +9,14 @@
 #import "NSPasteboard+.h"
 #import "RegexKitLite.h"
 
-#define kLinkRegex @"(https?:\\/\\/)?(www\\.)?[+\\-\\.0-9A-Za-z]+(\\.[A-Za-z]{2,7})(\\/\\S*)?"
+// optional http
+// optional www
+// alpha.num-domain.tld
+// relative url not ending in punctuation
+#define kLinkRegex @"(https?:\\/\\/)?" \
+                   @"(www\\.)?" \
+                   @"[+\\-\\.0-9A-Za-z]+(\\.[A-Za-z]{2,4})" \
+                   @"(\\/[^\\s\\]\\)]*[^\\s\\.\\,\\]\\)])?"
 
 
 @implementation NSPasteboard (Additions)
