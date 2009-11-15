@@ -8,7 +8,7 @@
 
 #import "PreferencesWindow.h"
 #import <Growl/Growl.h>
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import "StatusKeyShortcut.h"
 #import "LoginItemManager.h"
 #import "BubbleManager.h"
@@ -21,9 +21,9 @@
 @implementation PreferencesWindow
 
 static PreferencesWindow* currentWindow = nil;
-static ApplicationController* parent = nil;
+static FacebookNotifierController* parent = nil;
 
-+(void) setupWithParent:(ApplicationController*)p
++(void) setupWithParent:(FacebookNotifierController*)p
 {
   parent = p;
 }

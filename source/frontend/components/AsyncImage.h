@@ -20,6 +20,7 @@
 
 @interface AsyncImage : NSObject {
   id delegate;
+  NSURL* url;
   NSURLConnection* connection;
   NSMutableData* responseBuffer;
   NSError* error;
@@ -30,8 +31,9 @@
 @property(assign) id delegate;
 @property(retain) NSError* error;
 @property(retain) NSImage* image;
+@property(readonly) NSURL* url;
 
-+ (AsyncImage*)imageByLoadingURL:(NSURL*)url;
++ (AsyncImage*)imageByLoadingURL:(NSURL*)aUrl;
 
 - (id)initByLoadingURL:(NSURL*)url;
 - (BOOL)isLoaded;

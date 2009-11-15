@@ -57,7 +57,7 @@
 		5306F881103B7A0B0061C722 /* addfriend.png in Resources */ = {isa = PBXBuildFile; fileRef = 5306F86E103B7A0B0061C722 /* addfriend.png */; };
 		5306F883103B7A190061C722 /* fb-notify-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5306F882103B7A190061C722 /* fb-notify-icon.icns */; };
 		5306F8C1103B7D390061C722 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8C0103B7D390061C722 /* main.m */; };
-		5306F8D7103B7E660061C722 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8D6103B7E660061C722 /* ApplicationController.m */; };
+		5306F8D7103B7E660061C722 /* FacebookNotifierController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8D6103B7E660061C722 /* FacebookNotifierController.m */; };
 		5306F8E3103B7EF40061C722 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8DE103B7EF40061C722 /* NotificationManager.m */; };
 		5306F8E4103B7EF40061C722 /* FBNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8E2103B7EF40061C722 /* FBNotification.m */; };
 		5306F8ED103B7F600061C722 /* FBMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8E9103B7F600061C722 /* FBMessage.m */; };
@@ -75,6 +75,7 @@
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		5342A9F710AC2F4D00500903 /* playbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5342A9F610AC2F4D00500903 /* playbutton.png */; };
+		5342AA6810AFC9B100500903 /* mobile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5342AA6710AFC9B100500903 /* mobile.png */; };
 		537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */; };
 		537BDC5F10A3905000CDB44C /* FBExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */; };
 		537DEB11103A179F00EE3530 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537DEB10103A179F00EE3530 /* SystemConfiguration.framework */; };
@@ -207,7 +208,7 @@
 		5306F88E103B7A9D0061C722 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = resources/Info.plist; sourceTree = "<group>"; };
 		5306F8C0103B7D390061C722 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5306F8C6103B7D710061C722 /* Facebook_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook_Prefix.pch; sourceTree = "<group>"; };
-		5306F8D6103B7E660061C722 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
+		5306F8D6103B7E660061C722 /* FacebookNotifierController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookNotifierController.m; sourceTree = "<group>"; };
 		5306F8DE103B7EF40061C722 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
 		5306F8DF103B7EF40061C722 /* FBNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBNotification.h; sourceTree = "<group>"; };
 		5306F8E1103B7EF40061C722 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
@@ -237,8 +238,9 @@
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		5342A9F610AC2F4D00500903 /* playbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playbutton.png; path = resources/images/playbutton.png; sourceTree = "<group>"; };
+		5342AA6710AFC9B100500903 /* mobile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mobile.png; path = resources/images/mobile.png; sourceTree = "<group>"; };
 		537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialogWindowController.h; sourceTree = "<group>"; };
-		537BD6A210A176E000CDB44C /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		537BD6A210A176E000CDB44C /* FacebookNotifierController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookNotifierController.h; sourceTree = "<group>"; };
 		537BD73110A1895D00CDB44C /* StatusUpdateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusUpdateWindow.h; sourceTree = "<group>"; };
 		537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusUpdateWindow.m; sourceTree = "<group>"; };
 		537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBExpandingTextView.h; sourceTree = "<group>"; };
@@ -318,8 +320,8 @@
 		080E96DDFE201D6D7F000001 /* source */ = {
 			isa = PBXGroup;
 			children = (
-				5306F924103B87670061C722 /* additions */,
 				5306F8D2103B7E360061C722 /* application */,
+				5306F924103B87670061C722 /* additions */,
 				5306F8D8103B7EA10061C722 /* backend */,
 				5306F8F3103B7FA40061C722 /* frontend */,
 				5306F8BF103B7D300061C722 /* other */,
@@ -448,8 +450,8 @@
 		5306F8D2103B7E360061C722 /* application */ = {
 			isa = PBXGroup;
 			children = (
-				537BD6A210A176E000CDB44C /* ApplicationController.h */,
-				5306F8D6103B7E660061C722 /* ApplicationController.m */,
+				537BD6A210A176E000CDB44C /* FacebookNotifierController.h */,
+				5306F8D6103B7E660061C722 /* FacebookNotifierController.m */,
 			);
 			path = application;
 			sourceTree = "<group>";
@@ -588,8 +590,6 @@
 				53A2A6E410A67A5E008079FB /* NSBezierPath+.m */,
 				53A2A94610A8B4B8008079FB /* NSPasteboard+.h */,
 				53A2A94710A8B4B8008079FB /* NSPasteboard+.m */,
-				53A2B01010AB9AE1008079FB /* AsyncImage.h */,
-				53A2B01110AB9AE1008079FB /* AsyncImage.m */,
 			);
 			path = additions;
 			sourceTree = "<group>";
@@ -597,6 +597,8 @@
 		53A2A28110A50594008079FB /* components */ = {
 			isa = PBXGroup;
 			children = (
+				53A2B01010AB9AE1008079FB /* AsyncImage.h */,
+				53A2B01110AB9AE1008079FB /* AsyncImage.m */,
 				537BDC5D10A3905000CDB44C /* FBExpandingTextView.h */,
 				537BDC5E10A3905000CDB44C /* FBExpandingTextView.m */,
 				537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */,
@@ -621,6 +623,7 @@
 		53F6FCA1102133FA00CAE806 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5342AA6710AFC9B100500903 /* mobile.png */,
 				5342A9F610AC2F4D00500903 /* playbutton.png */,
 				53FC73DB107E82B500EFAABE /* note.png */,
 				5397CA71106832D300DAD78C /* discussion.png */,
@@ -764,6 +767,7 @@
 				53FC73DC107E82B500EFAABE /* note.png in Resources */,
 				53FC73DF107E836300EFAABE /* fb_offline.png in Resources */,
 				5342A9F710AC2F4D00500903 /* playbutton.png in Resources */,
+				5342AA6810AFC9B100500903 /* mobile.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,7 +796,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5306F8C1103B7D390061C722 /* main.m in Sources */,
-				5306F8D7103B7E660061C722 /* ApplicationController.m in Sources */,
+				5306F8D7103B7E660061C722 /* FacebookNotifierController.m in Sources */,
 				5306F904103B80520061C722 /* BubbleManager.m in Sources */,
 				5306F905103B80520061C722 /* BubbleWindow.m in Sources */,
 				5306F906103B80520061C722 /* BubbleView.m in Sources */,

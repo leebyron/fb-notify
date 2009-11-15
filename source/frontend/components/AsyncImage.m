@@ -12,16 +12,17 @@
 
 @implementation AsyncImage
 
-@synthesize delegate, image, error;
+@synthesize delegate, image, error, url;
 
 + (AsyncImage*)imageByLoadingURL:(NSURL*)url
 {
   return [[[AsyncImage alloc] initByLoadingURL:url] autorelease];
 }
 
-- (id)initByLoadingURL:(NSURL*)url
+- (id)initByLoadingURL:(NSURL*)aUrl
 {
   if (self = [super init]) {
+    url = [aUrl retain];
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:url
                                                        cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                                    timeoutInterval:kAsyncImageTimeout];
@@ -42,6 +43,7 @@
   [responseBuffer release];
   [error release];
   [image release];
+  [url release];
   [super dealloc];
 }
 

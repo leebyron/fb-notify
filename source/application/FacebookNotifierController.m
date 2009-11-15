@@ -5,7 +5,7 @@
 //  Copyright 2009 Facebook Inc. All rights reserved.
 //
 
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "BubbleWindow.h"
 #import "FBNotification.h"
@@ -20,7 +20,7 @@
 #import "NSImage+.h"
 
 
-@interface ApplicationController (Private)
+@interface FacebookNotifierController (Private)
 
 - (void)loginToFacebook;
 - (void)updateMenu;
@@ -28,7 +28,7 @@
 @end
 
 
-@implementation ApplicationController
+@implementation FacebookNotifierController
 
 @synthesize notifications, messages, names, profilePics, appIcons;
 
@@ -61,6 +61,7 @@ FBConnect* connectSession;
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"addfriend"  ofType:@"png"] forKey:@"2356318349"];
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"discussion" ofType:@"png"] forKey:@"2373072738"];
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"note"       ofType:@"png"] forKey:@"2347471856"];
+    [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"mobile"     ofType:@"png"] forKey:@"6628568379"];
 
     // setup the menu manager
     [[MenuManager manager] setProfilePics:profilePics];

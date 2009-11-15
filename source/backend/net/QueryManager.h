@@ -15,16 +15,16 @@ enum {
   QUERY_WAITING_FOR_RESPONSE
 };
 
-@class ApplicationController;
+@class FacebookNotifierController;
 
 @interface QueryManager : NSObject {
   int                     status;
-  ApplicationController*  parent;
+  FacebookNotifierController*  parent;
   NSTimer*                queryTimer;
   NSTimeInterval          lastQuery;
 }
 
--(id) initWithParent:(ApplicationController*)app;
+-(id) initWithParent:(FacebookNotifierController*)app;
 
 -(void) start;
 -(void) stop;

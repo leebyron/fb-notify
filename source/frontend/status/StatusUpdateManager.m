@@ -8,7 +8,7 @@
 
 #import "StatusUpdateManager.h"
 #import "StatusUpdateWindow.h"
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import "PhotoAttachmentView.h"
 #import "LinkAttachmentView.h"
 #import "BubbleManager.h"
@@ -173,7 +173,7 @@ static StatusUpdateManager* manager = nil;
     return;
   }
 
-  ImageDictionary* profilePics = [((ApplicationController*)[NSApp delegate]) profilePics];
+  ImageDictionary* profilePics = [((FacebookNotifierController*)[NSApp delegate]) profilePics];
   [[BubbleManager manager] addBubbleWithText:[[req userData] objectForKey:@"message"]
                                      subText:nil
                                        image:[profilePics imageForKey:[connectSession uid]]

@@ -20,7 +20,7 @@
 
 @class StatusUpdateWindow;
 
-@interface ApplicationController : NSObject {
+@interface FacebookNotifierController : NSObject {
   IBOutlet SUUpdater*  updater;
 
   NotificationManager* notifications;

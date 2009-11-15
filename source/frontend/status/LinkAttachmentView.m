@@ -95,10 +95,7 @@
   if (currentImageIndex == -1) {
     return nil;
   }
-
-  NSArray* media = [self.attachment objectForKey:@"media"];
-  NSDictionary* imageItem = [media objectAtIndex:currentImageIndex];
-  return [imageItem objectForKey:@"src"];
+  return [[[images objectAtIndex:currentImageIndex] url] absoluteString];
 }
 
 - (void)setLink:(NSURL*)aLink

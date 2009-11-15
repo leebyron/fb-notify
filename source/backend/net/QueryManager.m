@@ -8,7 +8,7 @@
 
 #import "QueryManager.h"
 #import <FBCocoa/FBCocoa.h>
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import "NetConnection.h"
 #import "GlobalSession.h"
 #import "PreferencesWindow.h"
@@ -70,7 +70,7 @@
 
 @implementation QueryManager
 
--(id) initWithParent:(ApplicationController*)app
+-(id) initWithParent:(FacebookNotifierController*)app
 {
   self = [super init];
   if (self) {

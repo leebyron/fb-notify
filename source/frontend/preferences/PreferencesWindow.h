@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SRRecorderControl.h"
 
-@class ApplicationController;
+@class FacebookNotifierController;
 
 @interface PreferencesWindow : NSWindowController {
   IBOutlet NSTextField*       version;
@@ -25,7 +25,7 @@
   IBOutlet NSSlider*          notificationDuration;
 }
 
-+ (void) setupWithParent:(ApplicationController*)p;
++ (void) setupWithParent:(FacebookNotifierController*)p;
 + (void) show;
 + (void) refresh;
 - (void) refresh;

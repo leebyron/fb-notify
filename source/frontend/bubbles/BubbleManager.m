@@ -6,7 +6,7 @@
 //
 
 #import "BubbleManager.h"
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import "BubbleWindow.h"
 #import "BubbleView.h"
 #import "BubbleDimensions.h"

@@ -7,7 +7,7 @@
 //
 
 #import "MenuIcon.h"
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 #import "StatusUpdateManager.h"
 #import "GlobalSession.h"
 #import "NSImage+.h"

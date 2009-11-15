@@ -9,7 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import "BubbleDimensions.h"
-#import "ApplicationController.h"
+#import "FacebookNotifierController.h"
 
 @implementation BubbleWindow
 
