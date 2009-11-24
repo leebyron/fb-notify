@@ -24,9 +24,12 @@ enum {
   NSTimeInterval          lastQuery;
 }
 
--(id) initWithParent:(FacebookNotifierController*)app;
+- (id)initWithParent:(FacebookNotifierController*)app;
 
--(void) start;
--(void) stop;
+- (void)start;
+- (void)stop;
+- (void)reset;
+
+- (BOOL)hasResponse;
 
 @end

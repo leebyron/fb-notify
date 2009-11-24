@@ -21,21 +21,23 @@
 
 @property(retain) HashArray* all;
 
--(NSArray*)addMessagesWithArray:(NSArray*)array;
--(void)verifyMessagesWithArray:(NSArray*)array;
+- (NSArray*)addMessagesWithArray:(NSArray*)array;
+- (void)verifyMessagesWithArray:(NSArray*)array;
 
--(NSArray*)unread;
--(int)count;
--(int)unreadCount;
--(int)unseenCount;
--(int)mostRecentUpdateTime;
+- (NSArray*)unread;
+- (int)count;
+- (int)unreadCount;
+- (int)unseenCount;
+- (int)mostRecentUpdateTime;
 
--(void)markAsSeen:(FBMessage*)msg;
--(void)markAllSeen;
+- (void)markAsSeen:(FBMessage*)msg;
+- (void)markAllSeen;
 
 /*!
  * Marking as Read will also mark as Seen.
  */
--(void)markAsRead:(FBMessage*)msg;
+- (void)markAsRead:(FBMessage*)msg;
+
+- (void)clear;
 
 @end

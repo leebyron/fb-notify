@@ -48,21 +48,14 @@
 @interface QueryManager (Private)
 
 - (void)queryAfterDelay:(NSTimeInterval)delay;
-
 - (void)query;
-
 - (void)completedMultiquery:(id<FBRequest>)response;
 
 - (void)processUserInfo:(id)userInfo;
-
 - (void)processAppIcons:(id)fqlResultSet;
-
 - (void)processPics:(id)fqlResultSet;
-
 - (void)processNotifications:(id)fqlResultSet;
-
 - (void)processMessages:(id)fqlResultSet;
-
 - (void)processVerifyMessages:(id)fqlResultSet;
 
 @end
@@ -70,7 +63,7 @@
 
 @implementation QueryManager
 
--(id) initWithParent:(FacebookNotifierController*)app
+- (id)initWithParent:(FacebookNotifierController*)app
 {
   self = [super init];
   if (self) {
@@ -81,22 +74,33 @@
   return self;
 }
 
--(void) dealloc
+- (void)dealloc
 {
   [queryTimer release];
   [super dealloc];
 }
 
--(void) start
+- (void)start
 {
   [self query];
 }
 
--(void) stop
+- (void)stop
 {
   [queryTimer invalidate];
   queryTimer = nil;
   status = QUERY_OFF;
+}
+
+- (void)reset
+{
+  [self stop];
+  lastQuery = 0;
+}
+
+- (BOOL)hasResponse
+{
+  return lastQuery > 0;
 }
 
 

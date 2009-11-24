@@ -21,21 +21,23 @@
 
 @property(retain) HashArray* all;
 
--(NSArray*)addNotificationsWithArray:(NSArray*)array;
+- (NSArray*)addNotificationsWithArray:(NSArray*)array;
 
--(NSArray*)unread;
--(int)count;
--(int)unreadCount;
--(int)unseenCount;
--(int)mostRecentUpdateTime;
+- (NSArray*)unread;
+- (int)count;
+- (int)unreadCount;
+- (int)unseenCount;
+- (int)mostRecentUpdateTime;
 
--(void)markAsSeen:(FBNotification*)notif;
--(void)markAllSeen;
+- (void)markAsSeen:(FBNotification*)notif;
+- (void)markAllSeen;
 
 /*!
  * Marking as Read will also mark as Seen.
  */
--(void)markAsRead:(FBNotification*)notif withSimilar:(BOOL)similar;
--(void)markAllRead;
+- (void)markAsRead:(FBNotification*)notif withSimilar:(BOOL)similar;
+- (void)markAllRead;
+
+- (void)clear;
 
 @end

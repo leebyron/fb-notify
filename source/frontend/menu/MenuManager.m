@@ -61,7 +61,7 @@ enum {
 
 static MenuManager* manager = nil;
 
-@synthesize statusItem, userName, profileURL, profilePics, appIcons;
+@synthesize status, icon, statusItem, userName, profileURL, profilePics, appIcons;
 
 + (MenuManager*)manager
 {
@@ -75,7 +75,7 @@ static MenuManager* manager = nil;
 {
   self = [super init];
   if (self) {
-    fbMenuIcon = [[MenuIcon alloc] initWithManager:self];
+    icon = [[MenuIcon alloc] initWithManager:self];
 
     newsFeedIcon    = [[NSImage bundlePNG:@"newsfeed"] retain];
     profileIcon     = [[NSImage bundlePNG:@"profile"] retain];
@@ -92,7 +92,7 @@ static MenuManager* manager = nil;
       statusItem = [[bar statusItemWithLength:29] retain];
     }
     [statusItem setLength:29];
-    [statusItem setView:fbMenuIcon];
+    [statusItem setView:self.icon];
 
     statusItemMenu = [[NSMenu alloc] init];
   }
@@ -101,7 +101,7 @@ static MenuManager* manager = nil;
 
 - (void)dealloc
 {
-  [fbMenuIcon release];
+  [icon release];
 
   [newsFeedIcon release];
   [profileIcon release];
@@ -123,9 +123,10 @@ static MenuManager* manager = nil;
   [super dealloc];
 }
 
-- (void)setIconIlluminated:(BOOL)illuminated
+- (void)setStatus:(FBJewelStatus)aStatus
 {
-  [fbMenuIcon setIconIlluminated:illuminated];
+  status = aStatus;
+  [self.icon setNeedsDisplay:YES];
 }
 
 - (void)constructWithNotifications:(NotificationManager*)notifications
@@ -185,14 +186,14 @@ static MenuManager* manager = nil;
                                                   keyEquivalent:@""];
     [statusItemMenu addItem:offlineItem];
     [offlineItem release];
-  } else if (!isLoggedIn) {
+  } else if (self.status == FBJewelStatusNotLoggedIn) {
     // provide action to log back in
     NSMenuItem* loginItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Login to Facebook", nil)
                                                        action:@selector(promptLogin:)
                                                 keyEquivalent:@""];
     [statusItemMenu addItem:loginItem];
     [loginItem release];
-  } else {
+  } else if (self.status == FBJewelStatusConnecting) {
     // Connecting title
     NSMenuItem* offlineItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Connecting", nil), kEllipsis]
                                                          action:nil

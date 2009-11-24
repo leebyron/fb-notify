@@ -14,7 +14,9 @@
 
 
 @interface NotificationManager (Private)
--(NSArray*)unreadNotificationsWithTarget:(NSURL*)url;
+
+- (NSArray*)unreadNotificationsWithTarget:(NSURL*)url;
+
 @end
 
 
@@ -22,7 +24,7 @@
 
 @synthesize all;
 
--(id)init
+- (id)init
 {
   self = [super init];
   if (self) {
@@ -42,7 +44,7 @@
   [super  dealloc];
 }
 
--(NSArray*)addNotificationsWithArray:(NSArray*)array
+- (NSArray*)addNotificationsWithArray:(NSArray*)array
 {
   // remember the new notifications
   NSMutableArray* newNotifications = [[[NSMutableArray alloc] init] autorelease];
@@ -105,28 +107,28 @@
   return newNotifications;
 }
 
--(NSArray*)unread
+- (NSArray*)unread
 {
   return [unread allObjects];
 }
 
--(int)count {
+- (int)count {
   return [all count];
 }
 
--(int)unreadCount {
+- (int)unreadCount {
   return [unread count];
 }
 
--(int)unseenCount {
+- (int)unseenCount {
   return [unseen count];
 }
 
--(int)mostRecentUpdateTime {
+- (int)mostRecentUpdateTime {
   return mostRecentUpdateTime;
 }
 
--(NSArray*)unreadNotificationsWithTarget:(NSURL*)url
+- (NSArray*)unreadNotificationsWithTarget:(NSURL*)url
 {
   NSMutableArray *hasTarget = [[[NSMutableArray alloc] init] autorelease];
 
@@ -142,17 +144,17 @@
   return hasTarget;
 }
 
--(void)markAsSeen:(FBNotification*)notif
+- (void)markAsSeen:(FBNotification*)notif
 {
   [unseen removeObject:[notif uidForKey:@"notification_id"]];
 }
 
--(void)markAllSeen
+- (void)markAllSeen
 {
   [unseen removeAllObjects];
 }
 
--(void)markAsRead:(FBNotification*)notif withSimilar:(BOOL)similar
+- (void)markAsRead:(FBNotification*)notif withSimilar:(BOOL)similar
 {
   NSArray* notifs;
   if (similar) {
@@ -178,7 +180,7 @@
   [[NSApp delegate] invalidate];
 }
 
--(void)markAllRead
+- (void)markAllRead
 {
   for (NSString* notificationID in unread) {
     [[all objectForKey:notificationID] setObject:@"0" forKey:@"is_unread"];
@@ -198,6 +200,14 @@
   if ([req error]) {
     NSLog(@"mark as read failed -> %@", [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
   }
+}
+
+- (void)clear
+{
+  [all removeAllObjects];
+  [unread removeAllObjects];
+  [unseen removeAllObjects];
+  mostRecentUpdateTime = 0;
 }
 
 @end

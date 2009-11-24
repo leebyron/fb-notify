@@ -24,12 +24,16 @@ enum {
 
 
 @interface MenuIcon (Private)
-  -(void)animateWithUpDirection:(BOOL)direction;
-  -(void)animate;
+
+  - (void)setIconSize:(int)status;
+  - (void)animateWithUpDirection:(BOOL)direction;
+  - (void)animate;
+
 @end
 
 
 @implementation MenuIcon
+
 -(id)initWithManager:(MenuManager*)mngr
 {
   self = [super init];
@@ -49,7 +53,7 @@ enum {
                                                           NSURLPboardType,
                                                           NSStringPboardType, nil];
     [self registerForDraggedTypes:draggedTypeArray];
-    [self setIconStatus:MENU_ICON_NORMAL];
+    [self setIconSize:MENU_ICON_NORMAL];
   }
   return self;
 }
@@ -67,16 +71,10 @@ enum {
   [super dealloc];
 }
 
--(void)setIconStatus:(int)status
+-(void)setIconSize:(int)status
 {
   iconStatus = status;
   [self display];
-}
-
--(void)setIconIlluminated:(BOOL)illuminated
-{
-  iconIlluminated = illuminated;
-  [self setNeedsDisplay:YES];
 }
 
 -(void)animateWithUpDirection:(BOOL)direction
@@ -106,7 +104,7 @@ enum {
       break;
   }
   if (newStatus != iconStatus) {
-    [self setIconStatus:newStatus];
+    [self setIconSize:newStatus];
     [self performSelector:@selector(animate) withObject:nil afterDelay:0.03];
   }
 }
@@ -121,16 +119,11 @@ enum {
 - (void)drawRect:(NSRect)rect
 {
   // which to draw?
-  NSImage* pic = fbEmptyIcon;
-  if (![connectSession isLoggedIn]) {
-    pic = fbOfflineIcon;
-  } else if (iconIlluminated) {
-    pic = fbFullIcon;
-  }
+  NSImage* pic;
+
   if (menuOpen) {
     pic = fbActiveIcon;
-  }
-  if (iconStatus != MENU_ICON_NORMAL) {
+  } else if (iconStatus != MENU_ICON_NORMAL) {
     switch (iconStatus) {
       case MENU_ICON_SHARE_1:
         pic = fbShareIcon1;
@@ -145,10 +138,19 @@ enum {
         pic = fbShareIcon4;
         break;
     }
+  } else if (manager.status == FBJewelStatusOffline ||
+             manager.status == FBJewelStatusNotLoggedIn ||
+             manager.status == FBJewelStatusConnecting) {
+    pic = fbOfflineIcon;
+  } else if (manager.status == FBJewelStatusUnseen) {
+    pic = fbFullIcon;
+  } else { // FBJewelStatusUnread FBJewelStatusEmpty
+    pic = fbEmptyIcon;
   }
 
   // draw statusbar background
-  [[manager statusItem] drawStatusBarBackgroundInRect:rect withHighlight:menuOpen];
+  [[manager statusItem] drawStatusBarBackgroundInRect:rect
+                                        withHighlight:menuOpen];
 
   // draw pic
   [self lockFocus];

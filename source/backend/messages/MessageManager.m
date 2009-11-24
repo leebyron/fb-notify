@@ -18,7 +18,7 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
 
 @synthesize all;
 
--(id)init
+- (id)init
 {
   self = [super init];
   if (self) {
@@ -38,7 +38,7 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
   [super  dealloc];
 }
 
--(NSArray*)addMessagesWithArray:(NSArray*)array
+- (NSArray*)addMessagesWithArray:(NSArray*)array
 {
   // remember the new messages
   NSMutableArray* newMessages = [[[NSMutableArray alloc] init] autorelease];
@@ -90,7 +90,7 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context);
   return newMessages;
 }
 
--(void)verifyMessagesWithArray:(NSArray*)array
+- (void)verifyMessagesWithArray:(NSArray*)array
 {
   // make a set with incoming array
   NSMutableSet* verifiedSet = [[[NSMutableSet alloc] init] autorelease];
@@ -145,38 +145,38 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
   return NSOrderedSame;
 }
 
--(NSArray*)unread
+- (NSArray*)unread
 {
   return [unread allObjects];
 }
 
--(int)count {
+- (int)count {
   return [all count];
 }
 
--(int)unreadCount {
+- (int)unreadCount {
   return [unread count];
 }
 
--(int)unseenCount {
+- (int)unseenCount {
   return [unseen count];
 }
 
--(int)mostRecentUpdateTime {
+- (int)mostRecentUpdateTime {
   return mostRecentUpdateTime;
 }
 
--(void)markAsSeen:(FBMessage*)msg
+- (void)markAsSeen:(FBMessage*)msg
 {
   [unseen removeObject:[msg uidForKey:@"thread_id"]];
 }
 
--(void)markAllSeen
+- (void)markAllSeen
 {
   [unseen removeAllObjects];
 }
 
--(void)markAsRead:(FBMessage*)msg
+- (void)markAsRead:(FBMessage*)msg
 {
   [msg setObject:@"0" forKey:@"unread"];
   [unread removeObject:[msg uidForKey:@"thread_id"]];
@@ -196,6 +196,14 @@ NSComparisonResult sortMessages(id firstItem, id secondItem, void *context) {
   if ([req error]) {
     NSLog(@"mark as read failed -> %@", [[[req error] userInfo] objectForKey:kFBErrorMessageKey]);
   }
+}
+
+- (void)clear
+{
+  [all removeAllObjects];
+  [unread removeAllObjects];
+  [unseen removeAllObjects];
+  mostRecentUpdateTime = 0;
 }
 
 @end

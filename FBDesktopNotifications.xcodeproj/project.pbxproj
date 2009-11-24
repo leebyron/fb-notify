@@ -22,6 +22,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5300C17410BBCF2E00C42F60 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5300C17310BBCF2E00C42F60 /* FBCocoa.framework */; };
+		5300C17710BBCF3B00C42F60 /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5300C17310BBCF2E00C42F60 /* FBCocoa.framework */; };
 		53060002103CFAF70061C722 /* ImageDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060001103CFAF70061C722 /* ImageDictionary.m */; };
 		53060106103D16D10061C722 /* FBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060105103D16D10061C722 /* FBObject.m */; };
 		5306016B103D1C940061C722 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306016A103D1C940061C722 /* QueryManager.m */; };
@@ -68,7 +70,6 @@
 		5306F906103B80520061C722 /* BubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F8FF103B80520061C722 /* BubbleView.m */; };
 		5306F91D103B81870061C722 /* IXSCNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F91C103B81870061C722 /* IXSCNotificationManager.m */; };
 		5306F927103B8A780061C722 /* NSString+.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306F926103B8A780061C722 /* NSString+.m */; };
-		5306FBE8103B94560061C722 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		5306FCC3103BC6E40061C722 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306FCC2103BC6E40061C722 /* Sparkle.framework */; };
 		5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5306FCC2103BC6E40061C722 /* Sparkle.framework */; };
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
@@ -110,7 +111,6 @@
 		53FC73DC107E82B500EFAABE /* note.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FC73DB107E82B500EFAABE /* note.png */; };
 		53FC73DF107E836300EFAABE /* fb_offline.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FC73DE107E836300EFAABE /* fb_offline.png */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		93533ED61017AD35002C6CBD /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 93533ED21017AD0C002C6CBD /* FBCocoa.framework */; };
 		935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935340451017F5CB002C6CBD /* QuartzCore.framework */; };
 		935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935340E71018CCAF002C6CBD /* ApplicationServices.framework */; };
 /* End PBXBuildFile section */
@@ -123,20 +123,6 @@
 			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = FBDesktopNotifications;
 		};
-		93533ED11017AD0C002C6CBD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
-			remoteInfo = FBCocoa;
-		};
-		93533ED31017AD28002C6CBD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
-			remoteInfo = FBCocoa;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -146,8 +132,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5300C17710BBCF3B00C42F60 /* FBCocoa.framework in CopyFiles */,
 				53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */,
-				93533ED61017AD35002C6CBD /* FBCocoa.framework in CopyFiles */,
 				5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +145,7 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		5300C17310BBCF2E00C42F60 /* FBCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBCocoa.framework; path = "/Users/leebyron/Projects/fb-cocoa/build/Release/FBCocoa.framework"; sourceTree = "<absolute>"; };
 		53060000103CFAF70061C722 /* ImageDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDictionary.h; sourceTree = "<group>"; };
 		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDictionary.m; sourceTree = "<group>"; };
 		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBObject.h; sourceTree = "<group>"; };
@@ -292,7 +279,6 @@
 		53FC73DB107E82B500EFAABE /* note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = note.png; path = resources/images/note.png; sourceTree = "<group>"; };
 		53FC73DE107E836300EFAABE /* fb_offline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb_offline.png; path = resources/images/fb_offline.png; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Facebook Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Facebook Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBCocoa.xcodeproj; path = "../fb-cocoa/FBCocoa.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		935340451017F5CB002C6CBD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		935340E71018CCAF002C6CBD /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -302,7 +288,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5306FBE8103B94560061C722 /* FBCocoa.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */,
 				935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */,
@@ -311,6 +296,7 @@
 				5306FCC3103BC6E40061C722 /* Sparkle.framework in Frameworks */,
 				53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */,
 				53A2AFBC10AAD41B008079FB /* libicucore.dylib in Frameworks */,
+				5300C17410BBCF2E00C42F60 /* FBCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,7 +336,7 @@
 			children = (
 				53DAD1C910574F1100E664D2 /* Growl.framework */,
 				5306FCC2103BC6E40061C722 /* Sparkle.framework */,
-				93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */,
+				5300C17310BBCF2E00C42F60 /* FBCocoa.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -655,14 +641,6 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		93533ECE1017AD0C002C6CBD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				93533ED21017AD0C002C6CBD /* FBCocoa.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -678,7 +656,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				93533ED41017AD28002C6CBD /* PBXTargetDependency */,
 			);
 			name = "Facebook Notifications";
 			productInstallPath = "$(HOME)/Applications";
@@ -704,12 +681,6 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Facebook */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 93533ECE1017AD0C002C6CBD /* Products */;
-					ProjectRef = 93533ECD1017AD0C002C6CBD /* FBCocoa.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Facebook Notifications */,
@@ -717,16 +688,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		93533ED21017AD0C002C6CBD /* FBCocoa.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = FBCocoa.framework;
-			remoteRef = 93533ED11017AD0C002C6CBD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D1107290486CEB800E47090 /* Resources */ = {
@@ -850,11 +811,6 @@
 			target = 8D1107260486CEB800E47090 /* Facebook Notifications */;
 			targetProxy = 5306FCA4103BC3E90061C722 /* PBXContainerItemProxy */;
 		};
-		93533ED41017AD28002C6CBD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FBCocoa;
-			targetProxy = 93533ED31017AD28002C6CBD /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -901,6 +857,7 @@
 					"\"$(SRCROOT)/../fb-cocoa/build/Debug\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/resources\"",
+					"\"$(SRCROOT)/../fb-cocoa/build/Release\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -924,6 +881,7 @@
 					"\"$(SRCROOT)/../fb-cocoa/build/Debug\"",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/resources\"",
+					"\"$(SRCROOT)/../fb-cocoa/build/Release\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

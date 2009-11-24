@@ -155,11 +155,8 @@ NSComparisonResult sortHashArrayList(id firstItem, id secondItem, void* context)
 
 - (void)removeAllObjects
 {
-  for (NSUInteger i = [self count] - 1; i >= 0; i--) {
-    HashArrayNode* node = [list objectAtIndex:i];
-    [list removeObjectAtIndex:i];
-    [hash removeObjectForKey:[node key]];
-  }
+  [list removeAllObjects];
+  [hash removeAllObjects];
 }
 
 - (void)removeObjectForKey:(id)aKey

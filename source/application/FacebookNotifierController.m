@@ -78,15 +78,15 @@ FBConnect* connectSession;
 
 - (void)dealloc
 {
-  [connectSession     release];
+  [connectSession release];
 
-  [notifications      release];
-  [messages           release];
-  [queryManager       release];
+  [notifications  release];
+  [messages       release];
+  [queryManager   release];
 
-  [names              release];
-  [profilePics        release];
-  [appIcons           release];
+  [names          release];
+  [profilePics    release];
+  [appIcons       release];
 
   [super dealloc];
 }
@@ -152,8 +152,22 @@ FBConnect* connectSession;
 
 - (void)updateMenu
 {
-  int unseen = [notifications unseenCount] + [messages unseenCount];
-  [[MenuManager manager] setIconIlluminated:([[NetConnection netConnection] isOnline] && unseen > 0)];
+  if (![[NetConnection netConnection] isOnline]) {
+    [MenuManager manager].status = FBJewelStatusOffline;
+  } else if (![connectSession isLoggedIn] || ![queryManager hasResponse]) {
+    if (![connectSession isConnecting]) {
+      [MenuManager manager].status = FBJewelStatusNotLoggedIn;
+    } else {
+      [MenuManager manager].status = FBJewelStatusConnecting;
+    }
+  } else if ([notifications unseenCount] + [messages unseenCount] > 0) {
+    [MenuManager manager].status = FBJewelStatusUnseen;
+  } else if ([notifications unreadCount] + [messages unreadCount] > 0) {
+    [MenuManager manager].status = FBJewelStatusUnread;
+  } else {
+    [MenuManager manager].status = FBJewelStatusEmpty;
+  }
+
   [[MenuManager manager] constructWithNotifications:notifications
                                            messages:messages];
 }
@@ -161,22 +175,26 @@ FBConnect* connectSession;
 #pragma mark IBActions
 - (IBAction)menuShowNewsFeed:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/home.php"]];
+  [[NSWorkspace sharedWorkspace] openURL:
+   [NSURL URLWithString:@"http://www.facebook.com/home.php"]];
 }
 
 - (IBAction)menuShowProfile:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[[sender representedObject] profileURL]]];
+  [[NSWorkspace sharedWorkspace] openURL:
+   [NSURL URLWithString:[[sender representedObject] profileURL]]];
 }
 
 - (IBAction)menuShowInbox:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/inbox"]];
+  [[NSWorkspace sharedWorkspace] openURL:
+   [NSURL URLWithString:@"http://www.facebook.com/inbox"]];
 }
 
 - (IBAction)menuComposeMessage:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/inbox?compose"]];
+  [[NSWorkspace sharedWorkspace] openURL:
+   [NSURL URLWithString:@"http://www.facebook.com/inbox?compose"]];
 }
 
 - (IBAction)beginUpdateStatus:(id)sender
@@ -240,8 +258,13 @@ FBConnect* connectSession;
 
 - (IBAction)logout:(id)sender
 {
-  [queryManager stop];
+  [notifications clear];
+  [messages clear];
+
+  [queryManager reset];
   [connectSession logout];
+
+  [self updateMenu];
   [PreferencesWindow refresh];
 }
 

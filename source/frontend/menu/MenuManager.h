@@ -12,10 +12,22 @@
 #import "MessageManager.h"
 
 
+typedef enum {
+  FBJewelStatusOffline,
+  FBJewelStatusNotLoggedIn,
+  FBJewelStatusConnecting,
+  FBJewelStatusEmpty,
+  FBJewelStatusUnread,
+  FBJewelStatusUnseen,
+} FBJewelStatus;
+
+
 @class MenuIcon;
 
 @interface MenuManager : NSObject {
-  MenuIcon* fbMenuIcon;
+  MenuIcon* icon;
+
+  FBJewelStatus status;
 
   NSImage* newsFeedIcon;
   NSImage* profileIcon;
@@ -36,6 +48,8 @@
   NSString* profileURL;
 }
 
+@property(readonly) MenuIcon* icon;
+@property(assign) FBJewelStatus status;
 @property(retain) NSStatusItem* statusItem;
 @property(retain) NSString* userName;
 @property(retain) NSString* profileURL;
@@ -44,7 +58,6 @@
 
 + (MenuManager*)manager;
 
-- (void)setIconIlluminated:(BOOL)illuminated;
 - (void)constructWithNotifications:(NotificationManager*)notifications
                           messages:(MessageManager*)messages;
 - (void)openMenu;

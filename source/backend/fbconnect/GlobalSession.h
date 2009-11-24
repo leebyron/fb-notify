@@ -7,4 +7,5 @@
  */
 
 #import <FBCocoa/FBCocoa.h>
+
 extern FBConnect* connectSession;

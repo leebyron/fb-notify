@@ -12,6 +12,7 @@
 
 @interface MenuIcon : NSView {
   MenuManager* manager;
+
   NSImage* fbActiveIcon;
   NSImage* fbEmptyIcon;
   NSImage* fbFullIcon;
@@ -24,11 +25,8 @@
   BOOL menuOpen;
   int iconStatus;
   BOOL animateUp;
-  BOOL iconIlluminated;
 }
 
 - (id)initWithManager:(MenuManager*)mngr;
-- (void)setIconStatus:(int)status;
-- (void)setIconIlluminated:(BOOL)illuminated;
 
 @end
