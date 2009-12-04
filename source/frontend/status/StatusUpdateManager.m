@@ -108,8 +108,6 @@ static StatusUpdateManager* manager = nil;
   // determine type of api call
   if ([post objectForKey:@"image_data"]) {
 
-    NSLog(@"post data: %@", post);
-
     self.lastUpdateRequest =
       [connectSession callMethod:@"photos.upload"
                    withArguments:[NSDictionary dictionaryWithObjectsAndKeys:[post objectForKey:@"message"], @"caption", nil]

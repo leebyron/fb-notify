@@ -16,6 +16,7 @@
 #import "GlobalSession.h"
 #import "NetConnection.h"
 #import "NSImage+.h"
+#import "FBPreferenceManager.h"
 
 
 @implementation PreferencesWindow
@@ -65,7 +66,7 @@ static FacebookNotifierController* parent = nil;
 
   // Start at Login
   [startAtLogin setState:[[LoginItemManager manager] isLoginItem]];
-  [lightMode setState:[[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode]];
+  [lightMode setState:[[FBPreferenceManager manager] boolForKey:kBubbleLightMode]];
 
   // Status Update Key Shortcut
   KeyCombo hotkey;
@@ -76,7 +77,7 @@ static FacebookNotifierController* parent = nil;
   }
 
   // Notification Duration
-  [notificationDuration setIntegerValue:[[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey]];
+  [notificationDuration setIntegerValue:[[FBPreferenceManager manager] intForKey:kDisplayTimeKey]];
 
   // Setup the rest!
   [self refresh];
@@ -110,33 +111,32 @@ static FacebookNotifierController* parent = nil;
   BOOL hasGrowl = [GrowlApplicationBridge isGrowlInstalled];
   [growlNotRunning setHidden:[GrowlApplicationBridge isGrowlRunning]];
   [useGrowl setEnabled:hasGrowl];
-  [useGrowl setState:([[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_USE &&
+
+  [useGrowl setState:([[FBPreferenceManager manager] boolForKey:kUseGrowlOption] &&
                       hasGrowl)];
 }
 
-- (IBAction) logoutButtonPressed:(id) sender
+- (IBAction)logoutButtonPressed:(id)sender
 {
   if ([[NetConnection netConnection] isOnline] && [connectSession isLoggedIn]) {
     [[NSApp delegate] logout:self];
   }
 }
 
-- (IBAction) startAtLoginChanged:(id) sender
+- (IBAction)startAtLoginChanged:(id)sender
 {
   [[LoginItemManager manager] setIsLoginItem:([sender state] == NSOnState)];
 }
 
-- (IBAction) useGrowlChanged:(id)sender
+- (IBAction)useGrowlChanged:(id)sender
 {
   NSLog(@"changed use growl to %i", [sender state] == NSOnState);
-  [[NSUserDefaults standardUserDefaults] setInteger:([sender state] == NSOnState ? GROWL_USE : GROWL_DO_NOT_USE) forKey:kUseGrowlOption];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [[FBPreferenceManager manager] setBool:([sender state] == NSOnState) forKey:kUseGrowlOption];
 }
 
-- (IBAction) lightModeChanged:(id) sender
+- (IBAction)lightModeChanged:(id)sender
 {
-  [[NSUserDefaults standardUserDefaults] setBool:([sender state] == NSOnState) forKey:kBubbleLightMode];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [[FBPreferenceManager manager] setBool:([sender state] == NSOnState) forKey:kBubbleLightMode];
 }
 
 - (void)shortcutRecorder:(SRRecorderControl*)recorder keyComboDidChange:(KeyCombo)hotkey
@@ -144,10 +144,9 @@ static FacebookNotifierController* parent = nil;
   [[StatusKeyShortcut instance] registerKeyShortcutWithCode:hotkey.code flags:hotkey.flags];
 }
 
-- (IBAction) notificationDurationChanged:(id) sender
+- (IBAction)notificationDurationChanged:(id)sender
 {
-  [[NSUserDefaults standardUserDefaults] setInteger:[sender integerValue] forKey:kDisplayTimeKey];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [[FBPreferenceManager manager] setInt:[sender intValue] forKey:kDisplayTimeKey];
 }
 
 @end

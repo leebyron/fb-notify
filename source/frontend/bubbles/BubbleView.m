@@ -7,6 +7,7 @@
 
 #import "BubbleView.h"
 #import "BubbleDimensions.h"
+#import "FBPreferenceManager.h"
 #import "NSString+.h"
 
 
@@ -20,10 +21,10 @@ static NSDictionary* subAttrs = nil;
   NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
   [paraStyle setTighteningFactorForTruncation:0.0];
   [paraStyle setLineBreakMode:NSLineBreakByWordWrapping];
-  attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:12.0],
+  attrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont labelFontOfSize:12.0],
             NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.8],
             NSForegroundColorAttributeName, paraStyle, NSParagraphStyleAttributeName, nil] retain];
-  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont systemFontOfSize:10.0],
+  subAttrs = [[NSDictionary dictionaryWithObjectsAndKeys:[NSFont labelFontOfSize:10.0],
                NSFontAttributeName, [NSColor colorWithCalibratedWhite:1.0 alpha:0.8],
                NSForegroundColorAttributeName, paraStyle, NSParagraphStyleAttributeName, nil] retain];
 }
@@ -119,7 +120,7 @@ static NSDictionary* subAttrs = nil;
   NSRectFill(rect);
 
   // light mode?
-  BOOL lightMode = [[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode];
+  BOOL lightMode = [[FBPreferenceManager manager] boolForKey:kBubbleLightMode];
 
   // create shadow
   [NSGraphicsContext saveGraphicsState];

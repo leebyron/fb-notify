@@ -12,9 +12,16 @@
 @interface FBButton : NSButton {
   NSUInteger padding;
   NSUInteger minWidth;
+  BOOL isChromeless;
+  BOOL isHovering;
+  NSTrackingRectTag trackingRect;
 }
 
 @property NSUInteger padding;
 @property NSUInteger minWidth;
+@property BOOL isChromeless;
+@property(readonly) BOOL isHovering;
+
+- (void)setTextColor:(NSColor*)aColor;
 
 @end

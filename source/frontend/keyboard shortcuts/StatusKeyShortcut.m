@@ -8,6 +8,8 @@
 
 #import "StatusKeyShortcut.h"
 #import "SRCommon.h"
+#import "FBPreferenceManager.h"
+
 
 @interface StatusKeyShortcut (Private)
 
@@ -50,13 +52,13 @@ static StatusKeyShortcut* instance = nil;
     EventTypeSpec eventSpec[1] = {{kEventClassKeyboard, kEventHotKeyPressed}};//,
                                   //{kEventClassKeyboard, kEventHotKeyReleased}};
     InstallApplicationEventHandler(&globalHotKeyHandler, 2, eventSpec, (void*)self, NULL);
-
-    // do the defaults exist? register something...
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:kStatusKeyShortcutCode] == nil) {
-      [self registerKeyShortcutWithCode:49 flags:NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask];
-    } else {
-      [self registerKeyShortcut];
-    }
+    
+    [[FBPreferenceManager manager] registerForKey:kStatusKeyShortcutCode
+                                     defaultValue:[NSNumber numberWithInt:49]];
+    [[FBPreferenceManager manager] registerForKey:kStatusKeyShortcutFlags
+                                     defaultValue:[NSNumber numberWithInt:NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask]];
+    
+    [self registerKeyShortcut];
   }
   return self;
 }
@@ -92,9 +94,8 @@ static StatusKeyShortcut* instance = nil;
 - (void)registerKeyShortcutWithCode:(int)code flags:(int)flags
 {
   // remember this!
-  [[NSUserDefaults standardUserDefaults] setInteger:code  forKey:kStatusKeyShortcutCode];
-  [[NSUserDefaults standardUserDefaults] setInteger:flags forKey:kStatusKeyShortcutFlags];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [[FBPreferenceManager manager] setInt:code forKey:kStatusKeyShortcutCode];
+  [[FBPreferenceManager manager] setInt:flags forKey:kStatusKeyShortcutFlags];
 
   // invalidate the menu
   [[NSApp delegate] invalidate];
@@ -105,7 +106,7 @@ static StatusKeyShortcut* instance = nil;
 
 - (int)keyCode
 {
-  return [[NSUserDefaults standardUserDefaults] integerForKey:kStatusKeyShortcutCode];
+  return [[FBPreferenceManager manager] intForKey:kStatusKeyShortcutCode];
 }
 
 - (NSString*)keyCodeString
@@ -120,7 +121,7 @@ static StatusKeyShortcut* instance = nil;
 
 - (int)keyFlags
 {
-  return [[NSUserDefaults standardUserDefaults] integerForKey:kStatusKeyShortcutFlags];
+  return [[FBPreferenceManager manager] intForKey:kStatusKeyShortcutFlags];
 }
 
 - (int)keyCarbonFlags

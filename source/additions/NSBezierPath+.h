@@ -13,4 +13,7 @@
 
 - (void)fillWithInnerShadow:(NSShadow *)shadow;
 
+- (void)strokeInside;
+- (void)strokeInsideWithinRect:(NSRect)clipRect;
+
 @end

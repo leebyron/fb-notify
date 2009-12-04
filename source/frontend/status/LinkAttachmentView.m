@@ -14,8 +14,8 @@
 #import "NSImage+.h"
 
 #define kEmptyLinkHeight 80
-#define kMaxLinkImageHeight 130
-#define kMaxLinkImageWidth 130
+#define kMaxLinkImageHeight 150
+#define kMaxLinkImageWidth 90
 #define kMinLinkImageSize 50
 #define kLoaderSize 30
 #define kLoadingImageSize 50
@@ -434,7 +434,7 @@
   [paraStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 
   nameStyle = [[NSDictionary dictionaryWithObjectsAndKeys:
-                [NSFont systemFontOfSize:12.0], NSFontAttributeName,
+                [NSFont labelFontOfSize:12.0], NSFontAttributeName,
                 [NSColor colorWithCalibratedWhite:0.1 alpha:1.0], NSForegroundColorAttributeName,
                 paraStyle, NSParagraphStyleAttributeName,
                 nil] retain];
@@ -452,7 +452,7 @@
   [paraStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 
   captionStyle = [[NSDictionary dictionaryWithObjectsAndKeys:
-                   [NSFont systemFontOfSize:10.0], NSFontAttributeName,
+                   [NSFont labelFontOfSize:10.0], NSFontAttributeName,
                    [NSColor colorWithCalibratedWhite:0.5 alpha:1.0], NSForegroundColorAttributeName,
                    paraStyle, NSParagraphStyleAttributeName,
                    nil] retain];
@@ -470,7 +470,7 @@
   [paraStyle setLineBreakMode:NSLineBreakByWordWrapping];
 
   descriptionStyle = [[NSDictionary dictionaryWithObjectsAndKeys:
-                       [NSFont systemFontOfSize:12.0], NSFontAttributeName,
+                       [NSFont labelFontOfSize:12.0], NSFontAttributeName,
                        [NSColor colorWithCalibratedWhite:0.3 alpha:1.0], NSForegroundColorAttributeName,
                        paraStyle, NSParagraphStyleAttributeName,
                        nil] retain];

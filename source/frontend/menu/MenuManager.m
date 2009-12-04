@@ -246,6 +246,7 @@ static MenuManager* manager = nil;
           [item setOnStateImage:[NSImage imageNamed:@"bullet.png"]];
           [item setState:NSOnState];
         }
+        //[item setView:[[[NSView alloc] initWithFrame:NSMakeRect(0,0,300,30)] autorelease]];
         [item setRepresentedObject:notification];
         [item setImage:[appIcons imageForKey:[notification uidForKey:@"app_id"]]];
         [statusItemMenu addItem:item];

@@ -44,7 +44,7 @@ static LoginItemManager* instance = nil;
   return instance;
 }
 
--(id)init
+- (id)init
 {
   self = [super init];
   if (self) {
@@ -59,7 +59,7 @@ static LoginItemManager* instance = nil;
   return self;
 }
 
--(void) loginItemAsDefault:(BOOL)isDefault
+- (void)loginItemAsDefault:(BOOL)isDefault
 {
   int startupLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kStartAtLoginOption];
   if (startupLaunch == START_AT_LOGIN_UNKNOWN) {

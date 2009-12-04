@@ -10,6 +10,8 @@
 #import <ApplicationServices/ApplicationServices.h>
 #import "BubbleDimensions.h"
 #import "FacebookNotifierController.h"
+#import "FBPreferenceManager.h"
+
 
 @implementation BubbleWindow
 
@@ -74,7 +76,7 @@
     // Prep to remove it
     [self performSelector:@selector(disappear)
                withObject:nil
-               afterDelay:[[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey]];
+               afterDelay:[[FBPreferenceManager manager] intForKey:kDisplayTimeKey]];
   }
   return self;
 }

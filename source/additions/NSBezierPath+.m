@@ -42,4 +42,35 @@
 	[NSGraphicsContext restoreGraphicsState];
 }
 
+
+// Credit for the next two methods goes to Matt Gemmell
+- (void)strokeInside
+{
+  [self strokeInsideWithinRect:NSZeroRect];
+}
+
+- (void)strokeInsideWithinRect:(NSRect)clipRect
+{
+  NSGraphicsContext *thisContext = [NSGraphicsContext currentContext];
+  float lineWidth = [self lineWidth];
+
+  [thisContext saveGraphicsState];
+
+  // Double the stroke width, since -stroke centers strokes on paths.
+  [self setLineWidth:(lineWidth * 2.0)];
+
+  // Clip
+  [self setClip];
+  if (clipRect.size.width > 0 && clipRect.size.height > 0) {
+    [NSBezierPath clipRect:clipRect];
+  }
+
+  // Stroke the path.
+  [self stroke];
+
+  // Restore
+  [thisContext restoreGraphicsState];
+  [self setLineWidth:lineWidth];
+}
+
 @end

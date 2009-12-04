@@ -10,6 +10,7 @@
 #import "StatusUpdateManager.h"
 #import "PhotoAttachmentView.h"
 #import "LinkAttachmentView.h"
+#import "FBPreferenceManager.h"
 
 #define kStatusUpdateWindowX @"statusUpdateWindowX"
 #define kStatusUpdateWindowY @"statusUpdateWindowY"
@@ -42,17 +43,19 @@ static StatusUpdateWindow* currentWindow = nil;
 
 - (id)init
 {
-  // get prefered window position if set
-  NSPoint loc;
-  loc.x = [[NSUserDefaults standardUserDefaults] floatForKey:kStatusUpdateWindowX];
-  loc.y = [[NSUserDefaults standardUserDefaults] floatForKey:kStatusUpdateWindowY];
-  NSUInteger screen = [[NSUserDefaults standardUserDefaults] integerForKey:kStatusUpdateWindowScreen];
-  if (loc.x == 0 && loc.y == 0) {
-    loc.x = 0.5;
-    loc.y = 0.75;
-  }
+  FBPreferenceManager* prefs = [FBPreferenceManager manager];
+  [prefs registerForKey:kStatusUpdateWindowX
+           defaultValue:[NSNumber numberWithFloat:0.5]];
+  [prefs registerForKey:kStatusUpdateWindowY
+           defaultValue:[NSNumber numberWithFloat:0.75]];
+  [prefs registerForKey:kStatusUpdateWindowScreen
+           defaultValue:[NSNumber numberWithInt:0]];
 
-  if (self = [super initWithLocation:loc screenNum:screen]) {
+  // get prefered window position if set
+  NSPoint loc = NSMakePoint([prefs floatForKey:kStatusUpdateWindowX],
+                            [prefs floatForKey:kStatusUpdateWindowY]);
+
+  if (self = [super initWithLocation:loc screenNum:[prefs intForKey:kStatusUpdateWindowScreen]]) {
     messageBox = [[FBExpandingTextView alloc] initWithFrame:NSMakeRect(0, 0, kStatusUpdateWindowWidth, 46)];
     messageBox.delegate = self;
     [self addSubview:messageBox];
@@ -64,20 +67,23 @@ static StatusUpdateWindow* currentWindow = nil;
     [self addSubview:buttonBar];
     [buttonBar release];
 
-    NSButton* button = [[FBButton alloc] initWithFrame:NSMakeRect(kStatusUpdateWindowWidth - 60, 0, 60, 18)];
-    button.bezelStyle = NSRoundRectBezelStyle;//NSShadowlessSquareBezelStyle;//NSSmallSquareBezelStyle;
+    // share button
+    FBButton* button = [[FBButton alloc] initWithFrame:NSMakeRect(0, 0, 0, 18)];
     button.title = NSLocalizedString(@"Share", @"Button title for sending a status update");
     button.toolTip = @"⌘Enter";
     button.target = self;
     button.action = @selector(submit:);
+    NSRect buttonFrame = button.frame;
+    buttonFrame.origin.x = kStatusUpdateWindowWidth - button.frame.size.width;
+    button.frame = buttonFrame;
     [buttonBar addSubview:button];
     [button release];
 
-    removeButton = [[FBButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 18)];
+    // remove button
+    removeButton = [[FBButton alloc] initWithFrame:NSMakeRect(0, 0, 0, 18)];
     removeButton.target = self;
     removeButton.action = @selector(removeButtonPressed);
-    removeButton.showsBorderOnlyWhileMouseInside = YES;
-    removeButton.bezelStyle = NSRecessedBezelStyle;
+    removeButton.isChromeless = YES;
     [buttonBar addSubview:removeButton];
 
     // set default case
@@ -150,7 +156,9 @@ static StatusUpdateWindow* currentWindow = nil;
   if ([attachment isKindOfClass:[LinkAttachmentView class]] &&
       ((LinkAttachmentView*)attachment).link) {
     [post setObject:[((LinkAttachmentView*)attachment).link absoluteString] forKey:@"link"];
-    [post setObject:((LinkAttachmentView*)attachment).image forKey:@"image_url"];
+    if (((LinkAttachmentView*)attachment).image) {
+      [post setObject:((LinkAttachmentView*)attachment).image forKey:@"image_url"];
+    }
   }
 
   return post;
@@ -215,11 +223,10 @@ static StatusUpdateWindow* currentWindow = nil;
   [super windowDidMove:notif];
 
   // record to prefs
-  [[NSUserDefaults standardUserDefaults] setFloat:self.location.x forKey:kStatusUpdateWindowX];
-  [[NSUserDefaults standardUserDefaults] setFloat:self.location.y forKey:kStatusUpdateWindowY];
-  [[NSUserDefaults standardUserDefaults] setInteger:self.screenNum forKey:kStatusUpdateWindowScreen];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  FBPreferenceManager* prefs = [FBPreferenceManager manager];
+  [prefs setFloat:self.location.x forKey:kStatusUpdateWindowX];
+  [prefs setFloat:self.location.y forKey:kStatusUpdateWindowY];
+  [prefs setFloat:self.screenNum  forKey:kStatusUpdateWindowScreen];
 }
-
 
 @end

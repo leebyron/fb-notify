@@ -12,6 +12,7 @@
 #import "BubbleDimensions.h"
 #import "PreferencesWindow.h"
 #import "NSString+.h"
+#import "FBPreferenceManager.h"
 
 #define kGrowlTypeEmpty @"0"
 #define kGrowlTypeNotif @"Facebook Notification"
@@ -43,11 +44,7 @@ static BubbleManager* manager = nil;
     // get ready to hold onto growls
     pendingGrowls = [[NSMutableDictionary alloc] init];
 
-    // if we don't know what to set growl, set it to USE!
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_UNKNOWN) {
-      [[NSUserDefaults standardUserDefaults] setInteger:GROWL_USE forKey:kUseGrowlOption];
-      [[NSUserDefaults standardUserDefaults] synchronize];
-    }
+    [[FBPreferenceManager manager] registerForKey:kUseGrowlOption defaultValue:[NSNumber numberWithBool:YES]];
   }
   return self;
 }
@@ -62,7 +59,7 @@ static BubbleManager* manager = nil;
 - (BOOL)useGrowl
 {
   return [GrowlApplicationBridge isGrowlRunning] &&
-    [[NSUserDefaults standardUserDefaults] integerForKey:kUseGrowlOption] == GROWL_USE;
+    [[FBPreferenceManager manager] boolForKey:kUseGrowlOption];
 }
 
 - (void)addBubbleWithText:(NSString*)text

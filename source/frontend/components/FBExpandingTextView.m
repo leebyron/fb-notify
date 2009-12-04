@@ -121,7 +121,7 @@
     [self setAllowsUndo:YES];
     [self setRichText:NO];
     [self setTextContainerInset:NSMakeSize(0.0, 3.0)];
-    [self setFont:[NSFont userFontOfSize:14.0]];
+    [self setFont:[NSFont labelFontOfSize:14.0]];
     [self setContinuousSpellCheckingEnabled:YES];
     [self setAutoresizingMask:NSViewWidthSizable];
   }

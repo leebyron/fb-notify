@@ -76,6 +76,7 @@
 
     // draw the light edge first
     NSDictionary *attr = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [NSFont labelFontOfSize:12.0], NSFontAttributeName,
                           style, NSParagraphStyleAttributeName,
                           [NSColor colorWithCalibratedWhite:1.0 alpha:0.5], NSForegroundColorAttributeName, nil];
     [prompt drawInRect:promptBounds withAttributes:attr];
@@ -83,6 +84,7 @@
     // then draw the real text
     promptBounds.size.height += 1.0;
     attr = [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSFont labelFontOfSize:12.0], NSFontAttributeName,
             style, NSParagraphStyleAttributeName,
             [NSColor colorWithCalibratedWhite:0.4 alpha:1.0], NSForegroundColorAttributeName, nil];
     [prompt drawInRect:promptBounds withAttributes:attr];

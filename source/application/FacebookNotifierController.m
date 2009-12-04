@@ -7,7 +7,7 @@
 
 #import "FacebookNotifierController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "BubbleWindow.h"
+#import "BubbleManager.h"
 #import "FBNotification.h"
 #import "FBMessage.h"
 #import "GlobalSession.h"
@@ -17,6 +17,7 @@
 #import "PreferencesWindow.h"
 #import "StatusKeyShortcut.h"
 #import "BubbleDimensions.h"
+#import "FBPreferenceManager.h"
 #import "NSImage+.h"
 
 
@@ -63,6 +64,9 @@ FBConnect* connectSession;
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"note"       ofType:@"png"] forKey:@"2347471856"];
     [appIcons setImageFile:[[NSBundle mainBundle] pathForResource:@"mobile"     ofType:@"png"] forKey:@"6628568379"];
 
+    // touch the bubble manager
+    [BubbleManager manager];
+
     // setup the menu manager
     [[MenuManager manager] setProfilePics:profilePics];
     [[MenuManager manager] setAppIcons:appIcons];
@@ -106,24 +110,12 @@ FBConnect* connectSession;
 
 - (void)awakeFromNib
 {
-  // need a sync?
-  BOOL doSync = NO;
+  // make sure there is a default for some preferences
+  [[FBPreferenceManager manager] registerForKey:kDisplayTimeKey
+                                   defaultValue:[NSNumber numberWithInt:8]];
 
-  // make sure there is a default for notification display time
-  if ([[NSUserDefaults standardUserDefaults] integerForKey:kDisplayTimeKey] == 0) {
-    [[NSUserDefaults standardUserDefaults] setInteger:8 forKey:kDisplayTimeKey];
-    doSync = YES;
-  }
-
-  // make sure there is a default for notification display time
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:kBubbleLightMode] == 0) {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kBubbleLightMode];
-    doSync = YES;
-  }
-
-  if (doSync) {
-    [[NSUserDefaults standardUserDefaults] synchronize];
-  }
+  [[FBPreferenceManager manager] registerForKey:kBubbleLightMode
+                                   defaultValue:[NSNumber numberWithBool:NO]];
 
   // key shortcut please!
   [StatusKeyShortcut setupWithTarget:self selector:@selector(beginUpdateStatus:)];
@@ -199,7 +191,7 @@ FBConnect* connectSession;
 
 - (IBAction)beginUpdateStatus:(id)sender
 {
-  // if a window already exists, get rid of it!  
+  // if a window already exists, get rid of it!
   if ([StatusUpdateWindow currentWindow]) {
     [[StatusUpdateWindow currentWindow] cancel:self];
     return;

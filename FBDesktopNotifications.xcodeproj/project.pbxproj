@@ -75,6 +75,8 @@
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
+		5324150010C8A04A00454697 /* NSShadow+.m in Sources */ = {isa = PBXBuildFile; fileRef = 532414FF10C8A04A00454697 /* NSShadow+.m */; };
+		532416F810C8D47800454697 /* FBPreferenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532416F710C8D47800454697 /* FBPreferenceManager.m */; };
 		5342A9F710AC2F4D00500903 /* playbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5342A9F610AC2F4D00500903 /* playbutton.png */; };
 		5342AA6810AFC9B100500903 /* mobile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5342AA6710AFC9B100500903 /* mobile.png */; };
 		537BD73310A1895D00CDB44C /* StatusUpdateWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 537BD73210A1895D00CDB44C /* StatusUpdateWindow.m */; };
@@ -224,6 +226,10 @@
 		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetConnection.h; sourceTree = "<group>"; };
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		532414FE10C8A04A00454697 /* NSShadow+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSShadow+.h"; sourceTree = "<group>"; };
+		532414FF10C8A04A00454697 /* NSShadow+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSShadow+.m"; sourceTree = "<group>"; };
+		532416F610C8D47800454697 /* FBPreferenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBPreferenceManager.h; sourceTree = "<group>"; };
+		532416F710C8D47800454697 /* FBPreferenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBPreferenceManager.m; sourceTree = "<group>"; };
 		5342A9F610AC2F4D00500903 /* playbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playbutton.png; path = resources/images/playbutton.png; sourceTree = "<group>"; };
 		5342AA6710AFC9B100500903 /* mobile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mobile.png; path = resources/images/mobile.png; sourceTree = "<group>"; };
 		537BD69C10A175AC00CDB44C /* FBDialogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialogWindowController.h; sourceTree = "<group>"; };
@@ -390,6 +396,8 @@
 			children = (
 				53060332103D37100061C722 /* LoginItemManager.h */,
 				53060333103D37100061C722 /* LoginItemManager.m */,
+				532416F610C8D47800454697 /* FBPreferenceManager.h */,
+				532416F710C8D47800454697 /* FBPreferenceManager.m */,
 			);
 			path = system;
 			sourceTree = "<group>";
@@ -572,10 +580,12 @@
 				5397C879106737B000DAD78C /* NSEvent+.m */,
 				5381A6F110843C7B005441A3 /* NSURL+.h */,
 				5381A6F210843C7B005441A3 /* NSURL+.m */,
-				53A2A6E310A67A5E008079FB /* NSBezierPath+.h */,
-				53A2A6E410A67A5E008079FB /* NSBezierPath+.m */,
 				53A2A94610A8B4B8008079FB /* NSPasteboard+.h */,
 				53A2A94710A8B4B8008079FB /* NSPasteboard+.m */,
+				53A2A6E310A67A5E008079FB /* NSBezierPath+.h */,
+				53A2A6E410A67A5E008079FB /* NSBezierPath+.m */,
+				532414FE10C8A04A00454697 /* NSShadow+.h */,
+				532414FF10C8A04A00454697 /* NSShadow+.m */,
 			);
 			path = additions;
 			sourceTree = "<group>";
@@ -800,6 +810,8 @@
 				53A2AE7010AA1A99008079FB /* LinkAttachmentView.m in Sources */,
 				53A2AF9410AAC5D3008079FB /* RegexKitLite.m in Sources */,
 				53A2B01210AB9AE1008079FB /* AsyncImage.m in Sources */,
+				5324150010C8A04A00454697 /* NSShadow+.m in Sources */,
+				532416F810C8D47800454697 /* FBPreferenceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

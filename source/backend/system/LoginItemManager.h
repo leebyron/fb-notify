@@ -9,15 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface LoginItemManager : NSObject {
+@interface LoginItemManager : NSObject
 
-}
++ (LoginItemManager*)manager;
 
-+(LoginItemManager*) manager;
-
--(void) loginItemAsDefault:(BOOL)isDefault;
--(void) setIsLoginItem:(BOOL)status;
--(BOOL) isLoginItem;
--(BOOL) wasLaunchedAsLoginItem;
+- (void)loginItemAsDefault:(BOOL)isDefault;
+- (void)setIsLoginItem:(BOOL)status;
+- (BOOL)isLoginItem;
+- (BOOL)wasLaunchedAsLoginItem;
 
 @end

@@ -15,6 +15,6 @@
 - (NSString*)stringForKey:(NSString*)key;
 - (int)intForKey:(NSString*)key;
 - (BOOL)boolForKey:(NSString*)key;
-- (NSURL *)urlForKey:(NSString*)key;
+- (NSURL*)urlForKey:(NSString*)key;
 
 @end
