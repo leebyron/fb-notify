@@ -144,7 +144,6 @@
 
   // set attachment
   self.attachment = [req response];
-  NSLog(@"%@", self.attachment);
 
   // purge array
   [images removeAllObjects];

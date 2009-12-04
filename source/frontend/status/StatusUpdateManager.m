@@ -57,7 +57,6 @@ static StatusUpdateManager* manager = nil;
 
   // if something else is attached, bail.
   if (attachment && ![attachment isKindOfClass:[PhotoAttachmentView class]]) {
-    NSLog(@"something else is already attached");
     return NO;
   }
 
@@ -85,7 +84,6 @@ static StatusUpdateManager* manager = nil;
   if (attachment &&
       (![[attachment class] isKindOfClass:[LinkAttachmentView class]] ||
        ((LinkAttachmentView*)attachment).link != nil)) {
-    NSLog(@"something else is already attached");
     return NO;
   }
 
