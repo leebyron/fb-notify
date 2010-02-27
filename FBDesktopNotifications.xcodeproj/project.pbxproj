@@ -22,8 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		5300C17410BBCF2E00C42F60 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5300C17310BBCF2E00C42F60 /* FBCocoa.framework */; };
-		5300C17710BBCF3B00C42F60 /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5300C17310BBCF2E00C42F60 /* FBCocoa.framework */; };
 		53060002103CFAF70061C722 /* ImageDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060001103CFAF70061C722 /* ImageDictionary.m */; };
 		53060106103D16D10061C722 /* FBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53060105103D16D10061C722 /* FBObject.m */; };
 		5306016B103D1C940061C722 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306016A103D1C940061C722 /* QueryManager.m */; };
@@ -74,6 +72,8 @@
 		5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5306FCC2103BC6E40061C722 /* Sparkle.framework */; };
 		5306FCFE103BCA860061C722 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 5306FCFD103BCA860061C722 /* dsa_pub.pem */; };
 		5306FDEE103CDF370061C722 /* NetConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5306FDEC103CDF370061C722 /* NetConnection.m */; };
+		53167AC61139234900A972E8 /* FBCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 53167AC51139234100A972E8 /* FBCocoa.framework */; };
+		53167ACA1139235B00A972E8 /* FBCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53167AC51139234100A972E8 /* FBCocoa.framework */; };
 		53184DD0103444A700C0FFA4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53184DCF103444A700C0FFA4 /* Carbon.framework */; };
 		5324150010C8A04A00454697 /* NSShadow+.m in Sources */ = {isa = PBXBuildFile; fileRef = 532414FF10C8A04A00454697 /* NSShadow+.m */; };
 		532416F810C8D47800454697 /* FBPreferenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 532416F710C8D47800454697 /* FBPreferenceManager.m */; };
@@ -125,6 +125,13 @@
 			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = FBDesktopNotifications;
 		};
+		53167AC41139234100A972E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53167AC01139234100A972E8 /* FBCocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216 /* FBCocoa.framework */;
+			remoteInfo = FBCocoa;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -134,7 +141,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5300C17710BBCF3B00C42F60 /* FBCocoa.framework in CopyFiles */,
+				53167AC61139234900A972E8 /* FBCocoa.framework in CopyFiles */,
 				53DAD1D210574F9200E664D2 /* Growl.framework in CopyFiles */,
 				5306FCCC103BC6EC0061C722 /* Sparkle.framework in CopyFiles */,
 			);
@@ -147,7 +154,6 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		5300C17310BBCF2E00C42F60 /* FBCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBCocoa.framework; path = "/Users/leebyron/Projects/fb-cocoa/build/Release/FBCocoa.framework"; sourceTree = "<absolute>"; };
 		53060000103CFAF70061C722 /* ImageDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDictionary.h; sourceTree = "<group>"; };
 		53060001103CFAF70061C722 /* ImageDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDictionary.m; sourceTree = "<group>"; };
 		53060104103D16D10061C722 /* FBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBObject.h; sourceTree = "<group>"; };
@@ -225,6 +231,7 @@
 		5306FDEC103CDF370061C722 /* NetConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetConnection.m; sourceTree = "<group>"; };
 		5306FDED103CDF370061C722 /* NetConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetConnection.h; sourceTree = "<group>"; };
 		5313063310577CB4004F797A /* Growl Registration Ticket.growlRegDict */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Growl Registration Ticket.growlRegDict"; path = "resources/Growl Registration Ticket.growlRegDict"; sourceTree = "<group>"; };
+		53167AC01139234100A972E8 /* FBCocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBCocoa.xcodeproj; path = "../fb-cocoa/FBCocoa.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		53184DCF103444A700C0FFA4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		532414FE10C8A04A00454697 /* NSShadow+.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSShadow+.h"; sourceTree = "<group>"; };
 		532414FF10C8A04A00454697 /* NSShadow+.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSShadow+.m"; sourceTree = "<group>"; };
@@ -294,6 +301,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53167ACA1139235B00A972E8 /* FBCocoa.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				935340461017F5CB002C6CBD /* QuartzCore.framework in Frameworks */,
 				935340E81018CCAF002C6CBD /* ApplicationServices.framework in Frameworks */,
@@ -302,7 +310,6 @@
 				5306FCC3103BC6E40061C722 /* Sparkle.framework in Frameworks */,
 				53DAD1CA10574F1100E664D2 /* Growl.framework in Frameworks */,
 				53A2AFBC10AAD41B008079FB /* libicucore.dylib in Frameworks */,
-				5300C17410BBCF2E00C42F60 /* FBCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,9 +347,9 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53167AC01139234100A972E8 /* FBCocoa.xcodeproj */,
 				53DAD1C910574F1100E664D2 /* Growl.framework */,
 				5306FCC2103BC6E40061C722 /* Sparkle.framework */,
-				5300C17310BBCF2E00C42F60 /* FBCocoa.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -590,6 +597,14 @@
 			path = additions;
 			sourceTree = "<group>";
 		};
+		53167AC11139234100A972E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53167AC51139234100A972E8 /* FBCocoa.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		53A2A28110A50594008079FB /* components */ = {
 			isa = PBXGroup;
 			children = (
@@ -691,6 +706,12 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Facebook */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 53167AC11139234100A972E8 /* Products */;
+					ProjectRef = 53167AC01139234100A972E8 /* FBCocoa.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Facebook Notifications */,
@@ -698,6 +719,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		53167AC51139234100A972E8 /* FBCocoa.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FBCocoa.framework;
+			remoteRef = 53167AC41139234100A972E8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D1107290486CEB800E47090 /* Resources */ = {

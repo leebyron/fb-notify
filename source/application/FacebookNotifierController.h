@@ -6,8 +6,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <Sparkle/Sparkle.h>
 #import <FBCocoa/FBCocoa.h>
+#import <Sparkle/Sparkle.h>
 #import "BubbleManager.h"
 #import "MenuManager.h"
 #import "NotificationManager.h"
@@ -20,7 +20,8 @@
 
 @class StatusUpdateWindow;
 
-@interface FacebookNotifierController : NSObject {
+@interface FacebookNotifierController : NSObject <FBConnectDelegate>
+{
   IBOutlet SUUpdater*  updater;
 
   NotificationManager* notifications;

@@ -41,6 +41,7 @@ FBConnect* connectSession;
   if (self) {
     connectSession = [[FBConnect sessionWithAPIKey:@"4a280b1a1f1e4dae116484d677d7ed25"
                                           delegate:self] retain];
+
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
 
@@ -310,13 +311,18 @@ FBConnect* connectSession;
 }
 
 #pragma mark FB Session delegate methods
-- (void)FBConnectLoggedIn:(FBConnect *)fbc
+- (void)facebookConnectLoggedIn:(FBConnect*)connect withError:(NSError*)err
 {
-  NSLog(@"fb connect success");
-
   // refresh ui
   [self updateMenu];
   [PreferencesWindow refresh];
+
+  if (err) {
+    NSLog(@"couldn't login to facebook");    
+    return;
+  }
+
+  NSLog(@"fb connect success");
 
   // setup login manager
   [[LoginItemManager manager] loginItemAsDefault:YES];
@@ -324,28 +330,16 @@ FBConnect* connectSession;
   [queryManager start];
 }
 
-- (void)FBConnectLoggedOut:(FBConnect *)fbc
+- (void)facebookConnectLoggedOut:(FBConnect*)connect withError:(NSError*)err
 {
+  // refresh ui
+  [self updateMenu];
+
+  if (err) {
+    NSLog(@"couldn't log out of fb servers, at least locally logged out");
+  }
+
   NSLog(@"logged out");
-
-  // show a default menu
-  [self updateMenu];
-}
-
-- (void)FBConnectErrorLoggingIn:(FBConnect *)fbc
-{
-  NSLog(@"couldn't login to facebook");
-
-  // show a default menu
-  [self updateMenu];
-}
-
-- (void)FBConnectErrorLoggingOut:(FBConnect *)fbc
-{
-  NSLog(@"couldn't log out, locally logged out");
-
-  // show a default menu
-  [self updateMenu];
 }
 
 @end
