@@ -31,6 +31,8 @@
   NSMutableDictionary* names;
   ImageDictionary*     profilePics;
   ImageDictionary*     appIcons;
+
+  NSURL*               baseURL;
 }
 
 @property(retain) NotificationManager*  notifications;
@@ -38,6 +40,7 @@
 @property(retain) NSMutableDictionary*  names;
 @property(retain) ImageDictionary*      profilePics;
 @property(retain) ImageDictionary*      appIcons;
+@property(copy, nonatomic) NSURL*       baseURL;
 
 - (void)invalidate;
 - (void)markEverythingSeen;
