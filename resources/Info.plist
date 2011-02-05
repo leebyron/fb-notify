@@ -11,7 +11,7 @@
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
-	<string>http://www.facebook.com/fbdesknotify/appcast.php</string>
+	<string>https://www.facebook.com/fbdesknotify/appcast.php</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
