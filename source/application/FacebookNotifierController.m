@@ -31,7 +31,7 @@
 
 @implementation FacebookNotifierController
 
-@synthesize notifications, messages, names, profilePics, appIcons;
+@synthesize notifications, messages, names, profilePics, appIcons, baseURL;
 
 FBConnect* connectSession;
 
@@ -41,6 +41,8 @@ FBConnect* connectSession;
   if (self) {
     connectSession = [[FBConnect sessionWithAPIKey:@"4a280b1a1f1e4dae116484d677d7ed25"
                                           delegate:self] retain];
+    NSString* baseURLString = [NSString stringWithFormat:@"%@://www.facebook.com", [connectSession scheme]];
+    [self setBaseURL:[NSURL URLWithString:baseURLString]];
 
     notifications = [[NotificationManager alloc] init];
     messages      = [[MessageManager alloc] init];
@@ -92,6 +94,8 @@ FBConnect* connectSession;
   [names          release];
   [profilePics    release];
   [appIcons       release];
+
+  [baseURL        release];
 
   [super dealloc];
 }
@@ -169,7 +173,7 @@ FBConnect* connectSession;
 - (IBAction)menuShowNewsFeed:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:
-   [NSURL URLWithString:@"http://www.facebook.com/home.php"]];
+   [NSURL URLWithString:@"/home.php" relativeToURL:baseURL]];
 }
 
 - (IBAction)menuShowProfile:(id)sender
@@ -181,13 +185,13 @@ FBConnect* connectSession;
 - (IBAction)menuShowInbox:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:
-   [NSURL URLWithString:@"http://www.facebook.com/inbox"]];
+   [NSURL URLWithString:@"/inbox" relativeToURL:baseURL]];
 }
 
 - (IBAction)menuComposeMessage:(id)sender
 {
   [[NSWorkspace sharedWorkspace] openURL:
-   [NSURL URLWithString:@"http://www.facebook.com/inbox?compose"]];
+   [NSURL URLWithString:@"/inbox?compose" relativeToURL:baseURL]];
 }
 
 - (IBAction)beginUpdateStatus:(id)sender
@@ -224,14 +228,14 @@ FBConnect* connectSession;
   [message markAsRead];
 
   // load inbox url
-  NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.facebook.com/inbox/?tid=%@",
-                                                                    [message objectForKey:@"thread_id"]]];
+  NSURL *inboxURL = [NSURL URLWithString:[NSString stringWithFormat:@"/inbox/?tid=%@",
+                                                                    [message objectForKey:@"thread_id"]] relativeToURL:baseURL];
   [[NSWorkspace sharedWorkspace] openURL:inboxURL];
 }
 
 - (IBAction)menuShowAllNotifications:(id)sender
 {
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.facebook.com/notifications.php"]];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"/notifications.php" relativeToURL:baseURL]];
 }
 
 - (IBAction)menuMarkAsReadAllNotifications:(id)sender

@@ -80,7 +80,7 @@
 
   if (![NSString exists:hrefString]) {
     // fine, use the default notification url
-    hrefString = @"http://www.facebook.com/notifications.php";
+    hrefString = @"https://www.facebook.com/notifications.php";
   }
 
   if (hrefString) {
